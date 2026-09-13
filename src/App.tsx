@@ -11,10 +11,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/portal" element={<RoleSelection />} />
-        <Route path="/*" element={<CustomerApp />} />
         <Route path="/staff/*" element={<StaffApp />} />
         <Route path="/admin/*" element={<AdminApp />} />
         <Route path="/payos-return" element={<PayOSReturnPage />} />
+        <Route path="/*" element={<CustomerApp />} />
       </Routes>
     </Router>
   );

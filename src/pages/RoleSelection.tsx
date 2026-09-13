@@ -11,10 +11,11 @@ export default function RoleSelection() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'admin123') {
+    const user = username.trim().toLowerCase();
+    if (user === 'admin' && password === 'admin123') {
       localStorage.setItem('auth_role', 'admin');
       navigate('/admin');
-    } else if (username === 'staff' && password === 'staff123') {
+    } else if (user === 'staff' && password === 'staff123') {
       localStorage.setItem('auth_role', 'staff');
       navigate('/staff');
     } else {
