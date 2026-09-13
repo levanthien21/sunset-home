@@ -19,7 +19,12 @@ export default function BookingPage() {
   const [lightbox, setLightbox] = useState<{images: string[], currentIndex: number} | null>(null);
   
   // Thời gian & Combo
-  const [bookingDate, setBookingDate] = useState('');
+  const [bookingDate, setBookingDate] = useState(() => {
+    const d = new Date();
+    // Adjust to Vietnam timezone (UTC+7) for accurate local date
+    const vnTime = new Date(d.getTime() + (7 * 60 * 60 * 1000));
+    return vnTime.toISOString().split('T')[0];
+  });
   const [expectedTime, setExpectedTime] = useState('');
   const [combo, setCombo] = useState('');
   const [extraHours, setExtraHours] = useState(0);
@@ -423,110 +428,112 @@ export default function BookingPage() {
                 {/* Left Column: Form */}
                 <div className="lg:col-span-2 space-y-6 md:space-y-8">
                   {/* Section 1: Thời gian & Combo */}
-                  <div className="bg-white rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-sm border border-stone-200">
-                    <h2 className="text-xl md:text-2xl font-serif font-bold text-stone-900 mb-5 md:mb-6 flex items-center">
-                      <span className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center mr-3 text-sm">1</span> 
+                  <div className="bg-white rounded-xl md:rounded-3xl p-4 md:p-8 shadow-sm border border-stone-200">
+                    <h2 className="text-lg md:text-2xl font-serif font-bold text-stone-900 mb-4 md:mb-6 flex items-center">
+                      <span className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center mr-2 md:mr-3 text-xs md:text-sm">1</span> 
                       Thời gian & Gói phòng
                     </h2>
                     
-                    <div className="space-y-6">
+                    <div className="space-y-4 md:space-y-6">
                       <div>
-                        <label className="block text-sm font-semibold text-stone-900 mb-2">Chọn gói (Combo)</label>
-                        <div className="grid grid-cols-2 gap-3">
+                        <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2">Chọn gói (Combo)</label>
+                        <div className="grid grid-cols-2 gap-2 md:gap-3">
                           {selectedRoomDetails?.combos.map((c: any) => (
                             <button
                               key={c.id}
                               onClick={() => setCombo(c.id)}
-                              className={`relative p-3 md:p-4 rounded-xl border-2 text-left transition-all overflow-hidden ${combo === c.id ? 'border-yellow-600 bg-yellow-50 shadow-sm' : 'border-stone-200 bg-white hover:border-stone-300'}`}
+                              className={`relative p-2.5 md:p-4 rounded-xl border-2 text-left transition-all overflow-hidden ${combo === c.id ? 'border-yellow-600 bg-yellow-50 shadow-sm' : 'border-stone-200 bg-white hover:border-stone-300'}`}
                             >
                               {combo === c.id && (
-                                <div className="absolute top-2 right-2 text-yellow-600">
-                                  <CheckCircle2 className="w-4 h-4" />
+                                <div className="absolute top-1 right-1 md:top-2 md:right-2 text-yellow-600">
+                                  <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
                                 </div>
                               )}
-                              <div className={`font-bold text-sm md:text-base ${combo === c.id ? 'text-yellow-700' : 'text-stone-900'}`}>{c.name}</div>
-                              <div className={`${combo === c.id ? 'text-yellow-600' : 'text-stone-500'} font-semibold mt-0.5`}>{c.price.toLocaleString()}đ</div>
+                              <div className={`font-bold text-xs md:text-base ${combo === c.id ? 'text-yellow-700' : 'text-stone-900'}`}>{c.name}</div>
+                              <div className={`${combo === c.id ? 'text-yellow-600' : 'text-stone-500'} font-semibold text-[10px] md:text-sm mt-0.5`}>{c.price.toLocaleString()}đ</div>
                             </button>
                           ))}
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 gap-3 md:gap-4">
                         <div>
-                          <label className="block text-sm font-semibold text-stone-900 mb-2">Giờ đến dự kiến</label>
+                          <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2">Giờ đến</label>
                           <div className="relative w-full max-w-full overflow-hidden rounded-xl">
-                            <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 pointer-events-none" />
+                            <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4 md:w-5 md:h-5 pointer-events-none" />
                             <input
                               type="time"
                               value={expectedTime}
                               onChange={(e) => setExpectedTime(e.target.value)}
-                              className="w-full min-w-0 pl-11 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border"
+                              className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border text-xs md:text-base"
                             />
                           </div>
                         </div>
                         <div>
-                          <label className="block text-sm font-semibold text-stone-900 mb-2">Thêm giờ (+{(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ/h)</label>
+                          <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2 truncate" title={`Thêm giờ (+${(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ/h)`}>
+                            Thêm giờ (+{(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ)
+                          </label>
                           <div className="relative w-full max-w-full overflow-hidden rounded-xl">
-                            <PlusCircle className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 pointer-events-none" />
+                            <PlusCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4 md:w-5 md:h-5 pointer-events-none" />
                             <input
                               type="number"
                               min="0"
                               max="10"
                               value={extraHours}
                               onChange={(e) => setExtraHours(parseInt(e.target.value) || 0)}
-                              className="w-full min-w-0 pl-11 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border"
+                              className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border text-xs md:text-base"
                             />
                           </div>
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-semibold text-stone-900 mb-2">Số khách (Phụ thu 100k/người từ khách thứ 3)</label>
+                        <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2">Số khách (Phụ thu 100k từ người thứ 3)</label>
                         <div className="flex items-center bg-stone-50 p-1 rounded-xl border border-stone-200 w-fit shadow-sm">
-                          <button onClick={() => guests > 1 && setGuests(guests - 1)} className="w-10 h-10 rounded-lg bg-white shadow-sm border border-stone-100 flex items-center justify-center font-bold text-stone-600 hover:text-stone-900 transition-colors">-</button>
-                          <span className="w-14 text-center font-bold text-stone-900">{guests}</span>
-                          <button onClick={() => setGuests(guests + 1)} className="w-10 h-10 rounded-lg bg-white shadow-sm border border-stone-100 flex items-center justify-center font-bold text-stone-600 hover:text-stone-900 transition-colors">+</button>
+                          <button onClick={() => guests > 1 && setGuests(guests - 1)} className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-white shadow-sm border border-stone-100 flex items-center justify-center font-bold text-stone-600 hover:text-stone-900 transition-colors">-</button>
+                          <span className="w-12 md:w-14 text-center font-bold text-stone-900 text-sm md:text-base">{guests}</span>
+                          <button onClick={() => setGuests(guests + 1)} className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-white shadow-sm border border-stone-100 flex items-center justify-center font-bold text-stone-600 hover:text-stone-900 transition-colors">+</button>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Section 2: Thông tin liên hệ */}
-                  <div className={`bg-white rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-sm border transition-all ${!isStep2Valid ? 'opacity-50 pointer-events-none border-stone-200' : 'border-stone-200'}`}>
-                    <h2 className="text-xl md:text-2xl font-serif font-bold text-stone-900 mb-5 md:mb-6 flex items-center">
-                      <span className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm ${isStep2Valid ? 'bg-yellow-100 text-yellow-700' : 'bg-stone-100 text-stone-400'}`}>2</span> 
+                  <div className={`bg-white rounded-xl md:rounded-3xl p-4 md:p-8 shadow-sm border transition-all ${!isStep2Valid ? 'opacity-50 pointer-events-none border-stone-200' : 'border-stone-200'}`}>
+                    <h2 className="text-lg md:text-2xl font-serif font-bold text-stone-900 mb-4 md:mb-6 flex items-center">
+                      <span className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mr-2 md:mr-3 text-xs md:text-sm ${isStep2Valid ? 'bg-yellow-100 text-yellow-700' : 'bg-stone-100 text-stone-400'}`}>2</span> 
                       Thông tin liên hệ
                     </h2>
-                    <div className="space-y-4">
+                    <div className="space-y-3 md:space-y-4">
                       <div>
-                        <label className="block text-sm font-semibold text-stone-700 mb-2">Họ và tên *</label>
+                        <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Họ và tên *</label>
                         <input
                           type="text"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           placeholder="Nguyễn Văn A"
-                          className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all"
+                          className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-sm md:text-base"
                         />
                       </div>
-                      <div className="grid md:grid-cols-2 gap-4">
+                      <div className="grid md:grid-cols-2 gap-3 md:gap-4">
                         <div>
-                          <label className="block text-sm font-semibold text-stone-700 mb-2">Số điện thoại *</label>
+                          <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Số điện thoại *</label>
                           <input
                             type="tel"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="0901234567"
-                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all"
+                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-sm md:text-base"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-semibold text-stone-700 mb-2">Email * (Để nhận vé điện tử)</label>
+                          <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Email * (Để nhận vé điện tử)</label>
                           <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="nguyenvana@gmail.com"
-                            className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all"
+                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-sm md:text-base"
                           />
                         </div>
                       </div>
@@ -536,42 +543,42 @@ export default function BookingPage() {
 
                 {/* Right Column: Order Summary & Checkout */}
                 <div className="lg:col-span-1">
-                  <div className="bg-stone-900 text-white rounded-2xl md:rounded-3xl p-5 md:p-6 sticky top-24 shadow-xl">
-                    <h3 className="font-serif font-bold text-xl mb-5 flex items-center">
-                      <span className="w-8 h-8 rounded-full bg-yellow-600/20 text-yellow-500 flex items-center justify-center mr-3 text-sm">3</span> 
+                  <div className="bg-stone-900 text-white rounded-xl md:rounded-3xl p-4 md:p-6 sticky top-24 shadow-xl">
+                    <h3 className="font-serif font-bold text-lg md:text-xl mb-4 md:mb-5 flex items-center">
+                      <span className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-yellow-600/20 text-yellow-500 flex items-center justify-center mr-2 md:mr-3 text-xs md:text-sm">3</span> 
                       Thanh toán
                     </h3>
                     
-                    <div className="space-y-3 text-sm text-stone-300 mb-6 bg-stone-800/50 p-4 rounded-xl border border-stone-700">
+                    <div className="space-y-2.5 md:space-y-3 text-[11px] md:text-sm text-stone-300 mb-5 md:mb-6 bg-stone-800/50 p-3 md:p-4 rounded-xl border border-stone-700">
                       <div className="flex items-start">
-                        <MapPin className="w-4 h-4 mr-3 mt-0.5 text-yellow-500 shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 md:mr-3 mt-0.5 text-yellow-500 shrink-0" />
                         <div>
-                          <p className="font-bold text-white text-base">{selectedRoomDetails?.name}</p>
-                          <p className="text-xs mt-0.5">{selectedBranchDetails?.name}</p>
+                          <p className="font-bold text-white text-sm md:text-base">{selectedRoomDetails?.name}</p>
+                          <p className="text-[10px] md:text-xs mt-0.5">{selectedBranchDetails?.name}</p>
                         </div>
                       </div>
-                      <div className="h-px bg-stone-700 my-2"></div>
+                      <div className="h-px bg-stone-700 my-1.5 md:my-2"></div>
                       <div className="flex items-start">
-                        <CalendarDays className="w-4 h-4 mr-3 mt-0.5 text-yellow-500 shrink-0" />
+                        <CalendarDays className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 md:mr-3 mt-0.5 text-yellow-500 shrink-0" />
                         <div>
                           <p className="font-semibold text-white">{new Date(bookingDate).toLocaleDateString('vi-VN')}</p>
-                          <p className="text-xs mt-0.5">Giờ đến: {expectedTime}</p>
+                          <p className="text-[10px] md:text-xs mt-0.5">Giờ đến: {expectedTime}</p>
                         </div>
                       </div>
                       <div className="flex items-start">
-                        <Clock className="w-4 h-4 mr-3 mt-0.5 text-yellow-500 shrink-0" />
+                        <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 md:mr-3 mt-0.5 text-yellow-500 shrink-0" />
                         <div>
                           <p className="font-semibold text-white">Gói: {selectedComboDetails?.name || 'Chưa chọn'}</p>
-                          {extraHours > 0 && <p className="text-xs mt-0.5">Thêm giờ: {extraHours}h</p>}
+                          {extraHours > 0 && <p className="text-[10px] md:text-xs mt-0.5">Thêm giờ: {extraHours}h</p>}
                         </div>
                       </div>
                       <div className="flex items-center">
-                        <Users className="w-4 h-4 mr-3 text-yellow-500 shrink-0" />
+                        <Users className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 md:mr-3 text-yellow-500 shrink-0" />
                         <span className="font-semibold text-white">{guests} khách</span>
                       </div>
                     </div>
                     
-                    <div className="border-t border-stone-700 pt-4 mb-5 space-y-2 text-sm">
+                    <div className="border-t border-stone-700 pt-3 md:pt-4 mb-4 md:mb-5 space-y-1.5 md:space-y-2 text-[11px] md:text-sm">
                       <div className="flex justify-between text-stone-400">
                         <span>Giá gói:</span>
                         <span className="text-white">{comboPrice.toLocaleString()}đ</span>
@@ -595,32 +602,32 @@ export default function BookingPage() {
                         </div>
                       )}
                       
-                      <div className="flex justify-between items-end pt-2">
+                      <div className="flex justify-between items-end pt-1.5 md:pt-2">
                         <span className="text-white font-bold">Tổng thanh toán:</span>
-                        <span className="text-yellow-500 font-bold text-2xl leading-none">{amountToPay.toLocaleString()}đ</span>
+                        <span className="text-yellow-500 font-bold text-xl md:text-2xl leading-none">{amountToPay.toLocaleString()}đ</span>
                       </div>
                     </div>
 
                     {isStep2Valid && isStep3Valid ? (
-                      <div className="bg-white rounded-xl p-4 mb-6 flex flex-col items-center text-stone-900 animate-in fade-in duration-500 relative">
-                        <p className="text-[11px] font-bold text-center mb-2 text-stone-500">Quét mã QR để tự động thanh toán</p>
+                      <div className="bg-white rounded-xl p-3 md:p-4 mb-5 md:mb-6 flex flex-col items-center text-stone-900 animate-in fade-in duration-500 relative">
+                        <p className="text-[10px] md:text-[11px] font-bold text-center mb-1.5 md:mb-2 text-stone-500">Quét mã QR để tự động thanh toán</p>
                         {/* Using standard vietqr URL format with a placeholder bank bin and account */}
                         <img 
                           src={`https://img.vietqr.io/image/970415-0123456789-compact.png?amount=${amountToPay}&addInfo=THANHTOANSUNSET%20${phone}&accountName=SUNSET%20HOMESTAY`}
                           alt="VietQR" 
-                          className="w-full max-w-[200px] aspect-square rounded-lg mb-3 shadow-sm border border-stone-100"
+                          className="w-full max-w-[140px] md:max-w-[200px] aspect-square rounded-lg mb-2 md:mb-3 shadow-sm border border-stone-100"
                         />
-                        <div className="w-full bg-stone-50 rounded-lg p-2.5 text-center">
-                          <p className="text-[10px] text-stone-500 uppercase tracking-wider mb-1">Số tiền thanh toán</p>
-                          <p className="font-bold text-lg text-yellow-600">{amountToPay.toLocaleString()}đ</p>
+                        <div className="w-full bg-stone-50 rounded-lg p-2 md:p-2.5 text-center">
+                          <p className="text-[9px] md:text-[10px] text-stone-500 uppercase tracking-wider mb-0.5 md:mb-1">Số tiền thanh toán</p>
+                          <p className="font-bold text-base md:text-lg text-yellow-600">{amountToPay.toLocaleString()}đ</p>
                         </div>
                       </div>
                     ) : (
-                      <div className="bg-stone-800 rounded-xl p-6 mb-6 flex flex-col items-center text-center border border-stone-700">
-                        <div className="w-12 h-12 rounded-full bg-stone-700 flex items-center justify-center mb-3">
-                          <CheckCircle2 className="w-6 h-6 text-stone-500" />
+                      <div className="bg-stone-800 rounded-xl p-4 md:p-6 mb-5 md:mb-6 flex flex-col items-center text-center border border-stone-700">
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-stone-700 flex items-center justify-center mb-2 md:mb-3">
+                          <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-stone-500" />
                         </div>
-                        <p className="text-sm text-stone-400">Vui lòng điền đầy đủ thông tin bên trái để tự động tạo mã QR thanh toán.</p>
+                        <p className="text-xs md:text-sm text-stone-400">Vui lòng điền đầy đủ thông tin bên trái để tự động tạo mã QR thanh toán.</p>
                       </div>
                     )}
 
