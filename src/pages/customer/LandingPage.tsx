@@ -38,7 +38,7 @@ export default function LandingPage() {
           />
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1C1A17] via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1128] via-transparent to-transparent"></div>
         </div>
         
         <div className="relative z-10 text-center px-6 w-full max-w-4xl mx-auto mt-10">
@@ -47,7 +47,7 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <h2 className="text-[10px] md:text-xs uppercase tracking-[0.5em] text-white/60 mb-6 font-medium">Welcome to Sunset</h2>
+            <h2 className="text-[10px] md:text-xs uppercase tracking-[0.5em] text-[#D4AF37] mb-6 font-medium">Welcome to Sunset</h2>
             <h1 className="text-5xl md:text-7xl font-serif text-white mb-8 tracking-tight leading-tight">
               Nơi khởi nguồn<br/><span className="italic font-light">những cảm xúc</span>
             </h1>
@@ -104,7 +104,7 @@ export default function LandingPage() {
       </section>
 
       {/* 1. Intro Section: The Bridge */}
-      <section className="py-24 md:py-32 bg-[#EAE6DF] text-[#1C1A17] overflow-hidden">
+      <section className="py-24 md:py-32 bg-[#0A1128] text-white overflow-hidden">
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -112,9 +112,9 @@ export default function LandingPage() {
           transition={{ duration: 1, ease: "easeOut" }}
           className="max-w-4xl mx-auto px-6 text-center"
         >
-          <h3 className="text-[10px] font-bold tracking-[0.3em] text-[#8B6E4E] uppercase mb-6">Câu chuyện của chúng tôi</h3>
-          <h2 className="text-3xl md:text-5xl font-serif leading-tight mb-8">Nơi những <span className="italic font-light text-gray-500">cảm xúc</span> được trân trọng</h2>
-          <p className="text-sm md:text-base text-gray-700 font-light leading-relaxed max-w-2xl mx-auto">
+          <h3 className="text-[10px] font-bold tracking-[0.3em] text-[#D4AF37] uppercase mb-6">Câu chuyện của chúng tôi</h3>
+          <h2 className="text-3xl md:text-5xl font-serif leading-tight mb-8">Nơi những <span className="italic font-light text-white/50">cảm xúc</span> được trân trọng</h2>
+          <p className="text-sm md:text-base text-white/70 font-light leading-relaxed max-w-2xl mx-auto">
             Không chỉ là một nơi lưu trú, Sunset Home là sự kết tinh của nghệ thuật thiết kế và lòng hiếu khách. 
             Mỗi chi nhánh được chúng tôi chăm chút tỉ mỉ từng ánh đèn, từng góc nhỏ để mang lại cho bạn những phút giây thư giãn tuyệt đối giữa lòng phố thị.
           </p>
@@ -122,7 +122,7 @@ export default function LandingPage() {
       </section>
 
       {/* 2. Amenities Section: The Utility */}
-      <section className="py-20 bg-[#F4F1EA]">
+      <section className="py-20 bg-[#F4F6F9]">
         <div className="max-w-5xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
             {[
@@ -139,11 +139,11 @@ export default function LandingPage() {
                 transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
                 className="flex flex-col items-center"
               >
-                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center mb-4 text-[#1C1A17] hover:bg-[#1C1A17] hover:text-white transition-colors duration-500 shadow-sm">
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center mb-4 text-[#0A1128] hover:bg-[#0A1128] hover:text-white transition-colors duration-500 shadow-sm border border-[#0A1128]/5">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">{item.icon}</svg>
                 </div>
-                <h4 className="text-[11px] font-bold uppercase tracking-[0.15em] mb-1">{item.title}</h4>
-                <p className="text-xs text-gray-500 font-light">{item.desc}</p>
+                <h4 className="text-[11px] font-bold uppercase tracking-[0.15em] mb-1 text-[#0A1128]">{item.title}</h4>
+                <p className="text-xs text-[#0A1128]/60 font-light">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -160,8 +160,8 @@ export default function LandingPage() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="text-center mb-16"
           >
-            <h3 className="text-[10px] font-bold tracking-[0.3em] text-[#8B6E4E] uppercase mb-4">Lưu ý quan trọng</h3>
-            <h2 className="text-3xl md:text-4xl font-serif text-[#1C1A17]">Chính sách lưu trú</h2>
+            <h3 className="text-[10px] font-bold tracking-[0.3em] text-[#D4AF37] uppercase mb-4">Lưu ý quan trọng</h3>
+            <h2 className="text-3xl md:text-4xl font-serif text-[#0A1128]">Chính sách lưu trú</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
@@ -171,8 +171,8 @@ export default function LandingPage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
             >
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-5">Thời gian</h4>
-              <ul className="text-sm text-gray-700 space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#0A1128] mb-5">Thời gian</h4>
+              <ul className="text-sm text-[#0A1128]/70 space-y-3">
                 <li>Check-in: Từ 14:00</li>
                 <li>Check-out: Trước 12:00</li>
                 <li>Nhận phòng sớm (tùy tình trạng)</li>
@@ -185,8 +185,8 @@ export default function LandingPage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             >
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-5">Không gian</h4>
-              <ul className="text-sm text-gray-700 space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#0A1128] mb-5">Không gian</h4>
+              <ul className="text-sm text-[#0A1128]/70 space-y-3">
                 <li>Không hút thuốc trong phòng</li>
                 <li>Không mang theo thú cưng</li>
                 <li>Giữ gìn không gian chung</li>
@@ -199,8 +199,8 @@ export default function LandingPage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             >
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-5">Hoàn hủy</h4>
-              <ul className="text-sm text-gray-700 space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#0A1128] mb-5">Hoàn hủy</h4>
+              <ul className="text-sm text-[#0A1128]/70 space-y-3">
                 <li>Hủy miễn phí trước 48h</li>
                 <li>Hỗ trợ dời lịch linh hoạt</li>
                 <li>Bảo lưu giá trị tiền cọc</li>
@@ -217,7 +217,7 @@ export default function LandingPage() {
           >
             <Link 
               to="/customer/policies" 
-              className="inline-flex items-center text-[10px] uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:text-[#8B6E4E] transition-colors pb-1 border-b border-black/20 hover:border-[#8B6E4E]"
+              className="inline-flex items-center text-[10px] uppercase tracking-[0.2em] font-bold text-[#0A1128] hover:text-[#D4AF37] transition-colors pb-1 border-b border-[#0A1128]/20 hover:border-[#D4AF37]"
             >
               Xem chi tiết chính sách
             </Link>
