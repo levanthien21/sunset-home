@@ -34,12 +34,13 @@ export default function LandingPage() {
       <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1522771731478-4a1e948c3b99?auto=format&fit=crop&w=2000&q=80" 
+            src="https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&w=2000&q=80" 
             alt="Hero" 
             className="w-full h-full object-cover scale-105"
           />
-          <div className="absolute inset-0 bg-black/40"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1C1A17]/80 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1C1A17] via-transparent to-transparent"></div>
         </div>
         
         <div className="relative z-10 text-center px-6 w-full max-w-4xl mx-auto mt-10">

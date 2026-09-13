@@ -20,26 +20,34 @@ function Navbar() {
   const isSolid = !isHome || scrolled;
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-700 ${isSolid ? 'bg-white shadow-sm border-b border-gray-100 py-4 text-gray-900' : 'bg-transparent py-8 text-white'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-700 ${isSolid ? 'bg-white shadow-sm border-b border-gray-100 py-4 text-gray-900' : 'bg-transparent py-6 text-white'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
-        {/* Left - Navigation */}
-        <div className="flex-1 flex items-center space-x-6">
-          <Link to="/customer" className="hidden md:block text-xs uppercase tracking-[0.2em] font-medium hover:opacity-70 transition-opacity">
+        {/* Left - Logo */}
+        <Link to="/customer" className="flex-shrink-0 flex flex-col">
+          <h1 className="text-xl md:text-2xl font-serif tracking-[0.25em] uppercase font-light">Sunset</h1>
+          <span className="text-[9px] uppercase tracking-[0.3em] opacity-70 mt-1">Boutique Homestay</span>
+        </Link>
+
+        {/* Center - Navigation */}
+        <div className="hidden md:flex flex-1 justify-center items-center space-x-12">
+          <Link to="/customer" className="text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
             Trang chủ
           </Link>
-          <Link to="/customer/policies" className="hidden md:block text-xs uppercase tracking-[0.2em] font-medium hover:opacity-70 transition-opacity">
+          <Link to="/customer/policies" className="text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
             Chính sách
           </Link>
         </div>
 
-        {/* Center - Logo */}
-        <Link to="/customer" className="flex flex-col items-center">
-          <h1 className="text-xl md:text-2xl font-serif tracking-[0.3em] uppercase font-light">Sunset Home</h1>
-        </Link>
-
         {/* Right - Action */}
-        <div className="flex-1 flex justify-end items-center space-x-6">
-          <Link to="/customer/booking" className={`px-6 py-2.5 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold transition-all shadow-sm ${isSolid ? 'bg-yellow-600 text-white hover:bg-yellow-700' : 'bg-white text-[#1C1A17] hover:bg-white/90'}`}>
+        <div className="flex-shrink-0 flex justify-end items-center">
+          <Link 
+            to="/customer/booking" 
+            className={`px-7 py-3 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold transition-all border ${
+              isSolid 
+                ? 'bg-[#1C1A17] text-white border-[#1C1A17] hover:bg-yellow-600 hover:border-yellow-600' 
+                : 'bg-white text-[#1C1A17] border-white hover:bg-transparent hover:text-white'
+            }`}
+          >
             Đặt Phòng
           </Link>
         </div>
