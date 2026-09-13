@@ -301,9 +301,9 @@ export default function BookingPage() {
                   const isSelected = room === r.id;
                   
                   return (
-                    <div key={r.id} className={`bg-white rounded-3xl transition-all overflow-hidden shadow-sm hover:shadow-xl border flex flex-col ${isSelected ? 'border-yellow-600 ring-1 ring-yellow-600' : 'border-stone-200'}`}>
-                      <div className="flex flex-col md:flex-row h-full">
-                        <div className="md:w-5/12 lg:w-2/5 h-64 md:h-auto min-h-[280px] relative group shrink-0 w-full overflow-hidden">
+                    <div key={r.id} className={`bg-white rounded-2xl md:rounded-3xl transition-all overflow-hidden shadow-sm hover:shadow-xl border flex flex-col ${isSelected ? 'border-yellow-600 ring-1 ring-yellow-600' : 'border-stone-200'}`}>
+                      <div className="flex flex-row h-full items-stretch">
+                        <div className="w-[42%] md:w-5/12 lg:w-2/5 min-h-[220px] md:min-h-[280px] relative group shrink-0 overflow-hidden">
                           <img 
                             src={r.images[0]} 
                             onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
@@ -313,85 +313,85 @@ export default function BookingPage() {
                           {r.images.length > 1 && (
                             <button 
                               onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
-                              className="absolute bottom-3 right-3 bg-black/60 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-black/80 transition-colors flex items-center shadow-lg backdrop-blur-md z-10"
+                              className="absolute bottom-2 right-2 md:bottom-3 md:right-3 bg-black/60 text-white px-2 py-1 md:px-3 md:py-1.5 rounded-lg text-[9px] md:text-xs font-semibold hover:bg-black/80 transition-colors flex items-center shadow-lg backdrop-blur-md z-10"
                             >
                               Xem {r.images.length} ảnh
                             </button>
                           )}
-                          <div className="absolute top-3 left-3 z-10">
+                          <div className="absolute top-2 left-2 md:top-3 md:left-3 z-10">
                             {isAvailable ? (
-                              <span className="px-3 py-1.5 bg-green-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-md">
+                              <span className="px-2 py-1 md:px-3 md:py-1.5 bg-green-500/90 text-white backdrop-blur-md text-[8px] md:text-[10px] uppercase tracking-wider font-bold rounded-full shadow-md">
                                 {bookingDate ? 'Đang trống' : 'Hôm nay: Trống'}
                               </span>
                             ) : (
-                              <span className="px-3 py-1.5 bg-red-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-md">
+                              <span className="px-2 py-1 md:px-3 md:py-1.5 bg-red-500/90 text-white backdrop-blur-md text-[8px] md:text-[10px] uppercase tracking-wider font-bold rounded-full shadow-md">
                                 Kín lịch
                               </span>
                             )}
                           </div>
                         </div>
-                        <div className="p-5 md:p-6 flex flex-col justify-between flex-1 md:w-7/12 lg:w-3/5">
+                        <div className="p-3 md:p-5 lg:p-6 flex flex-col justify-between flex-1 w-[58%] md:w-7/12 lg:w-3/5">
                           <div>
-                            <div className="flex justify-between items-start mb-4">
-                              <div className="flex-1 pr-2">
-                                <h3 className="text-2xl font-serif font-bold text-stone-900 leading-tight">{r.name}</h3>
-                                <div className="flex flex-wrap gap-2 mt-2.5">
-                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1.5 rounded-lg flex items-center">
-                                    <Users className="w-3 h-3 mr-1" /> Tối đa 4 Khách
+                            <div className="flex justify-between items-start mb-2 md:mb-4 gap-2">
+                              <div className="flex-1">
+                                <h3 className="text-lg md:text-2xl font-serif font-bold text-stone-900 leading-tight">{r.name}</h3>
+                                <div className="flex flex-wrap gap-1.5 md:gap-2 mt-1 md:mt-2.5">
+                                  <span className="text-[8px] md:text-[10px] font-medium bg-stone-100 text-stone-600 px-1.5 py-1 md:px-2 md:py-1.5 rounded-lg flex items-center">
+                                    <Users className="w-2.5 h-2.5 md:w-3 md:h-3 mr-1" /> Tối đa 4 Khách
                                   </span>
-                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1.5 rounded-lg flex items-center">
-                                    <BedDouble className="w-3 h-3 mr-1" /> 1 Giường lớn
+                                  <span className="text-[8px] md:text-[10px] font-medium bg-stone-100 text-stone-600 px-1.5 py-1 md:px-2 md:py-1.5 rounded-lg flex items-center">
+                                    <BedDouble className="w-2.5 h-2.5 md:w-3 md:h-3 mr-1" /> 1 Giường lớn
                                   </span>
                                 </div>
                               </div>
                               {r.combos && r.combos.length > 0 && (
-                                <div className="text-right shrink-0 bg-stone-50 p-2 rounded-xl border border-stone-100">
-                                  <div className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded mb-1 inline-block shadow-sm">Ưu đãi 25%</div>
-                                  <p className="text-xs text-stone-400 line-through">
+                                <div className="text-right shrink-0 bg-stone-50 p-1.5 md:p-2 rounded-lg md:rounded-xl border border-stone-100">
+                                  <div className="bg-red-500 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded mb-1 inline-block shadow-sm">Ưu đãi 25%</div>
+                                  <p className="text-[9px] md:text-xs text-stone-400 line-through">
                                     {(Math.min(...r.combos.map((c: any) => c.price)) * 1.33).toLocaleString()}đ
                                   </p>
-                                  <p className="text-yellow-600 font-bold text-lg leading-none mt-0.5">
+                                  <p className="text-yellow-600 font-bold text-sm md:text-lg leading-none mt-0.5">
                                     {Math.min(...r.combos.map((c: any) => c.price)).toLocaleString()}đ
                                   </p>
                                 </div>
                               )}
                             </div>
 
-                            <div className="flex flex-col gap-3 mb-5">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center text-stone-500 text-[11px]">
-                                  <MapPin className="w-3 h-3 mr-1 text-stone-400" />
-                                  <span>{selectedBranchDetails?.name}</span>
+                            <div className="flex flex-col gap-2 md:gap-3 mb-3 md:mb-5">
+                              <div className="flex flex-wrap items-center justify-between gap-1">
+                                <div className="flex items-center text-stone-500 text-[9px] md:text-[11px]">
+                                  <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3 mr-1 text-stone-400" />
+                                  <span className="line-clamp-1">{selectedBranchDetails?.name}</span>
                                 </div>
                                 <button 
                                   onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails?.address || ''), '_blank')}
-                                  className="text-[11px] font-bold text-blue-600 hover:underline flex items-center bg-blue-50 px-2 py-1 rounded-md"
+                                  className="text-[9px] md:text-[11px] font-bold text-blue-600 hover:underline flex items-center bg-blue-50 px-1.5 py-1 md:px-2 md:py-1 rounded-md shrink-0"
                                 >
                                   Xem bản đồ <ChevronRight className="w-2.5 h-2.5 ml-0.5" />
                                 </button>
                               </div>
-                              <div className="bg-green-50 border border-green-100 rounded-xl p-3 w-full shadow-sm">
-                                 <p className="text-[11px] text-green-700 font-bold flex items-center mb-1.5">
-                                   <Check className="w-3.5 h-3.5 mr-1.5"/> Miễn phí hủy phòng trước 7 ngày
+                              <div className="bg-green-50 border border-green-100 rounded-lg md:rounded-xl p-2 md:p-3 w-full shadow-sm">
+                                 <p className="text-[9px] md:text-[11px] text-green-700 font-bold flex items-start mb-1">
+                                   <Check className="w-3 h-3 md:w-3.5 md:h-3.5 mr-1 md:mr-1.5 mt-0.5 shrink-0"/> Miễn phí hủy phòng trước 7 ngày
                                  </p>
-                                 <p className="text-[11px] text-green-700 font-bold flex items-center">
-                                   <Check className="w-3.5 h-3.5 mr-1.5"/> Giữ chỗ thanh toán qua QR
+                                 <p className="text-[9px] md:text-[11px] text-green-700 font-bold flex items-start">
+                                   <Check className="w-3 h-3 md:w-3.5 md:h-3.5 mr-1 md:mr-1.5 mt-0.5 shrink-0"/> Giữ chỗ thanh toán qua QR
                                  </p>
                               </div>
                             </div>
 
-                            <ul className="grid grid-cols-2 gap-x-2 gap-y-3 mt-2">
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-1.5 md:gap-y-3 mt-1 md:mt-2">
                               {r.features.map((f: any, i: any) => (
-                                <li key={i} className="flex items-center text-[12px] text-stone-600">
-                                  <div className="w-4 h-4 rounded-full bg-yellow-50 flex items-center justify-center mr-2 shrink-0">
-                                    <CheckCircle2 className="w-3 h-3 text-yellow-600" />
+                                <li key={i} className="flex items-center text-[9px] md:text-[12px] text-stone-600">
+                                  <div className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-yellow-50 flex items-center justify-center mr-1.5 md:mr-2 shrink-0">
+                                    <CheckCircle2 className="w-2 h-2 md:w-3 md:h-3 text-yellow-600" />
                                   </div>
                                   <span className="truncate" title={f}>{f}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div className="mt-8 flex justify-end">
+                          <div className="mt-3 md:mt-8 flex justify-end">
                             <button
                               onClick={() => {
                                 if (!bookingDate) {
@@ -402,7 +402,7 @@ export default function BookingPage() {
                                 setCombo(''); 
                                 setStep(3); 
                               }}
-                              className="w-full sm:w-auto px-8 py-3.5 bg-stone-900 text-white font-bold rounded-xl hover:bg-stone-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                              className="w-full sm:w-auto px-4 py-2 md:px-8 md:py-3.5 bg-stone-900 text-white text-xs md:text-sm font-bold rounded-lg md:rounded-xl hover:bg-stone-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                             >
                               Chọn phòng này
                             </button>
