@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, Check, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function BookingPage() {
@@ -188,22 +188,22 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9F8F6] pt-16 md:pt-20 pb-12">
+    <div className="min-h-screen bg-stone-50 pt-28 md:pt-32 pb-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Steps */}
-        <div className="mb-6 md:mb-8">
-          <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="flex items-center text-gray-500 hover:text-[#1C1A17] mb-6 text-sm font-medium transition-colors w-fit">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+        <div className="mb-8">
+          <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="flex items-center text-stone-500 hover:text-stone-900 mb-6">
+            <ArrowLeft className="w-5 h-5 mr-2" />
             Quay lại
           </button>
           
-          <div className="flex items-center justify-between relative px-2">
-            <div className="absolute left-0 top-1/2 w-full h-[1px] bg-gray-200 -z-10" />
+          <div className="flex items-center justify-between mb-8 relative">
+            <div className="absolute left-0 top-1/2 w-full h-0.5 bg-stone-200 -z-10" />
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className={`flex flex-col items-center bg-[#F9F8F6] px-1 md:px-2 ${step >= i ? 'text-[#B8860B]' : 'text-gray-300'}`}>
-                <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-[10px] md:text-xs font-bold transition-colors ${step >= i ? 'bg-[#1C1A17] text-white ring-4 ring-[#F9F8F6]' : 'bg-gray-200 text-gray-500 ring-4 ring-[#F9F8F6]'}`}>
-                  {step > i ? <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4" /> : i}
+              <div key={i} className={`flex flex-col items-center bg-stone-50 px-1 md:px-2 ${step >= i ? 'text-yellow-600' : 'text-stone-400'}`}>
+                <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center font-semibold mb-2 text-[10px] md:text-base ${step >= i ? 'bg-yellow-600 text-white' : 'bg-stone-200 text-stone-500'}`}>
+                  {step > i ? <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5" /> : i}
                 </div>
               </div>
             ))}
@@ -220,7 +220,7 @@ export default function BookingPage() {
                   <div className="w-10 h-10 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin"></div>
                 </div>
               ) : (
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-2">
                   {branches.map((b: any) => (
                     <button
                       key={b.id}
@@ -230,21 +230,20 @@ export default function BookingPage() {
                         setRoom(null);
                         setStep(2);
                       }}
-                      className={`group text-left rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 transition-all duration-300 ${!b.has_rooms ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl hover:-translate-y-1'}`}
+                      className={`text-left rounded-2xl overflow-hidden border-2 transition-all ${!b.has_rooms ? 'opacity-50 cursor-not-allowed' : 'hover:border-yellow-600 border-stone-200 bg-white'}`}
                     >
-                      <div className="h-48 relative overflow-hidden">
-                        <img src={b.img} alt={b.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                      <div className="h-40 relative">
+                        <img src={b.img} alt={b.name} className="w-full h-full object-cover" />
                         {!b.has_rooms && (
                           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                            <span className="text-white text-xs font-bold tracking-widest uppercase px-4 py-2 bg-[#1C1A17]/80 rounded-sm">Sắp ra mắt</span>
+                            <span className="text-white font-semibold px-4 py-2 bg-stone-900/80 rounded-full">Sắp ra mắt</span>
                           </div>
                         )}
                       </div>
-                      <div className="p-6">
-                        <h3 className="font-serif font-bold text-xl text-[#1C1A17]">{b.name}</h3>
-                        <p className="text-gray-500 text-sm flex items-start mt-3">
-                          <MapPin className="w-4 h-4 mr-1.5 shrink-0 mt-0.5 text-[#B8860B]" />
+                      <div className="p-5">
+                        <h3 className="font-bold text-lg text-stone-900">{b.name}</h3>
+                        <p className="text-stone-500 text-sm flex items-start mt-2">
+                          <MapPin className="w-4 h-4 mr-1 shrink-0 mt-0.5" />
                           {b.address}
                         </p>
                       </div>
@@ -273,64 +272,64 @@ export default function BookingPage() {
                   const isSelected = room === r.id;
                   
                   return (
-                    <div key={r.id} className={`bg-white rounded-xl transition-all overflow-hidden border ${isSelected ? 'border-[#1C1A17] shadow-lg ring-1 ring-[#1C1A17]' : 'border-gray-100 shadow-sm hover:shadow-md'}`}>
+                    <div key={r.id} className={`bg-white rounded-2xl border-2 transition-all overflow-hidden ${isSelected ? 'border-yellow-600 shadow-md' : 'border-stone-200'}`}>
                       <div className="flex flex-col md:flex-row">
-                        <div className="md:w-2/5 p-4">
-                          <div className="relative h-56 md:h-full group rounded-lg overflow-hidden">
+                        <div className="md:w-2/5 p-3">
+                          <div className="relative h-48 md:h-full group">
                             <img 
                               src={r.images[0]} 
                               onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
-                              className="w-full h-full object-cover cursor-pointer transition-transform duration-700 group-hover:scale-105" 
+                              className="w-full h-full object-cover rounded-xl cursor-pointer" 
                               alt={r.name} 
                             />
                             {r.images.length > 1 && (
                               <button 
                                 onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
-                                className="absolute bottom-3 right-3 bg-[#1C1A17]/80 text-white px-3 py-1.5 rounded-sm text-[10px] uppercase tracking-widest font-bold hover:bg-[#1C1A17] transition-colors flex items-center shadow-lg backdrop-blur-sm"
+                                className="absolute bottom-3 right-3 bg-black/70 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors flex items-center shadow-lg backdrop-blur-sm"
                               >
-                                Xem {r.images.length} ảnh
+                                Xem tất cả {r.images.length} ảnh
                               </button>
                             )}
                           </div>
                         </div>
-                        <div className="p-6 md:w-3/5 flex flex-col justify-between">
+                        <div className="p-5 md:w-3/5 flex flex-col justify-between">
                           <div>
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
+                            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2 mb-2">
                               <div>
-                                <h3 className="text-xl md:text-2xl font-serif font-bold text-[#1C1A17]">{r.name}</h3>
+                                <h3 className="text-xl font-bold text-stone-900">{r.name}</h3>
                                 {r.combos && r.combos.length > 0 && (
-                                  <p className="text-[#B8860B] font-medium text-sm mt-1">
+                                  <p className="text-yellow-600 font-medium text-sm mt-1">
                                     Giá từ: {Math.min(...r.combos.map((c: any) => c.price)).toLocaleString()}đ
                                   </p>
                                 )}
                               </div>
-                              <div className="w-fit">
+                              <div className="w-fit shrink-0">
                                 {isAvailable ? (
-                                  <span className="px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 text-[9px] md:text-[10px] uppercase tracking-wider font-bold rounded-sm inline-flex items-center">
+                                  <span className="px-3 py-1 bg-green-50 text-green-700 border border-green-200 text-[10px] uppercase tracking-wider font-bold rounded-sm inline-flex items-center">
                                     Hôm nay: Trống
                                   </span>
                                 ) : (
-                                  <span className="px-2.5 py-1 bg-red-50 text-red-700 border border-red-200 text-[9px] md:text-[10px] uppercase tracking-wider font-bold rounded-sm inline-flex items-center">
+                                  <span className="px-3 py-1 bg-red-50 text-red-700 border border-red-200 text-[10px] uppercase tracking-wider font-bold rounded-sm inline-flex items-center">
                                     Kín lịch
                                   </span>
                                 )}
                               </div>
                             </div>
-                            <ul className="space-y-2.5 mt-4 md:mt-6">
+                            <ul className="space-y-2 mt-3 md:mt-4">
                               {r.features.map((f: any, i: any) => (
-                                <li key={i} className="flex items-center text-sm text-gray-600 font-light">
-                                  <CheckCircle2 className="w-4 h-4 text-[#B8860B] mr-2.5 shrink-0" />
+                                <li key={i} className="flex items-center text-sm text-stone-600">
+                                  <CheckCircle2 className="w-4 h-4 text-yellow-600 mr-2 shrink-0" />
                                   {f}
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div className="mt-8 flex gap-3">
+                          <div className="mt-6 flex gap-3">
                             <button
                               onClick={() => { setRoom(r.id); setCombo(''); setStep(3); }}
-                              className="w-full py-3.5 bg-[#1C1A17] text-white text-sm uppercase tracking-widest font-bold rounded-sm hover:bg-[#B8860B] transition-colors duration-300"
+                              className="w-full py-3 bg-stone-900 text-white font-semibold rounded-xl hover:bg-stone-800 transition"
                             >
-                              Chọn không gian này
+                              Chọn phòng này
                             </button>
                           </div>
                         </div>
@@ -345,117 +344,116 @@ export default function BookingPage() {
 
           {step === 3 && (
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <div className="bg-white rounded-xl p-6 md:p-10 shadow-sm border border-gray-100">
-                <h2 className="text-2xl font-serif font-bold text-[#1C1A17] mb-8">Thiết lập thời gian</h2>
+              <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-stone-200">
+                <h2 className="text-2xl font-serif font-bold text-stone-900 mb-6">Chọn thời gian (Combo)</h2>
                 
-                <div className="space-y-8">
+                <div className="space-y-6">
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase text-gray-500 mb-3">Ngày nhận phòng</label>
+                    <label className="block text-sm font-semibold text-stone-700 mb-2">Ngày nhận phòng</label>
                     <div className="relative">
-                      <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5" />
                       <input
                         type="date"
                         min={new Date().toISOString().split('T')[0]}
                         value={bookingDate}
                         onChange={(e) => setBookingDate(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#1C1A17] focus:border-[#1C1A17] outline-none transition-colors"
+                        className="w-full pl-12 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-yellow-600 outline-none"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase text-gray-500 mb-3">Gói Combo ({selectedRoomDetails?.name})</label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <label className="block text-sm font-semibold text-stone-700 mb-2">Gói Combo của {selectedRoomDetails?.name}</label>
+                    <div className="grid grid-cols-2 gap-3">
                       {selectedRoomDetails?.combos.map((c: any) => (
                         <button
                           key={c.id}
                           onClick={() => setCombo(c.id)}
-                          className={`p-4 rounded-sm border transition-all text-left ${combo === c.id ? 'border-[#1C1A17] bg-gray-50 ring-1 ring-[#1C1A17]' : 'border-gray-200 hover:border-gray-300'}`}
+                          className={`p-3 rounded-xl border-2 text-left transition-all ${combo === c.id ? 'border-yellow-600 bg-yellow-50' : 'border-stone-200 hover:border-stone-300'}`}
                         >
-                          <div className="font-bold text-[#1C1A17] mb-1">{c.name}</div>
-                          <div className="text-[#B8860B] font-medium text-sm">{c.price.toLocaleString()}đ</div>
+                          <div className="font-bold text-stone-900">{c.name}</div>
+                          <div className="text-yellow-600 font-semibold">{c.price.toLocaleString()}đ</div>
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold tracking-widest uppercase text-gray-500 mb-3">Giờ đến dự kiến</label>
+                      <label className="block text-sm font-semibold text-stone-700 mb-2">Giờ đến dự kiến</label>
                       <div className="relative">
-                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5" />
                         <input
                           type="time"
                           value={expectedTime}
                           onChange={(e) => setExpectedTime(e.target.value)}
-                          className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#1C1A17] focus:border-[#1C1A17] outline-none transition-colors"
+                          className="w-full pl-12 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-yellow-600 outline-none"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold tracking-widest uppercase text-gray-500 mb-3">Thêm giờ (+{(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ/h)</label>
+                      <label className="block text-sm font-semibold text-stone-700 mb-2">Thêm giờ (+{(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ/h)</label>
                       <div className="relative">
-                        <PlusCircle className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <PlusCircle className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5" />
                         <input
                           type="number"
                           min="0"
                           max="10"
                           value={extraHours}
                           onChange={(e) => setExtraHours(parseInt(e.target.value) || 0)}
-                          className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-sm focus:ring-1 focus:ring-[#1C1A17] focus:border-[#1C1A17] outline-none transition-colors"
+                          className="w-full pl-12 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-yellow-600 outline-none"
                         />
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase text-gray-500 mb-3">Số lượng khách <span className="normal-case tracking-normal font-normal text-gray-400">(Phụ thu 100k/người từ khách thứ 3)</span></label>
-                    <div className="flex items-center space-x-4 bg-gray-50 p-2 rounded-sm border border-gray-200 w-fit">
-                      <button onClick={() => guests > 1 && setGuests(guests - 1)} className="w-10 h-10 rounded-sm bg-white shadow-sm border border-gray-100 flex items-center justify-center font-bold text-[#1C1A17] hover:bg-gray-50 transition-colors">-</button>
-                      <span className="w-12 text-center font-bold text-[#1C1A17]">{guests}</span>
-                      <button onClick={() => setGuests(guests + 1)} className="w-10 h-10 rounded-sm bg-white shadow-sm border border-gray-100 flex items-center justify-center font-bold text-[#1C1A17] hover:bg-gray-50 transition-colors">+</button>
+                    <label className="block text-sm font-semibold text-stone-700 mb-2">Số khách (Phụ thu 100k/người từ khách thứ 3)</label>
+                    <div className="flex items-center space-x-4 bg-stone-50 p-2 rounded-xl border border-stone-200 w-fit">
+                      <button onClick={() => guests > 1 && setGuests(guests - 1)} className="w-10 h-10 rounded-lg bg-white shadow flex items-center justify-center font-bold">-</button>
+                      <span className="w-12 text-center font-bold">{guests}</span>
+                      <button onClick={() => setGuests(guests + 1)} className="w-10 h-10 rounded-lg bg-white shadow flex items-center justify-center font-bold">+</button>
                     </div>
                   </div>
                   
-                  <div className="bg-gray-50 p-6 rounded-sm border border-gray-100 space-y-3 text-sm text-gray-600">
-                    <div className="flex justify-between items-center">
-                      <span>Giá Combo <span className="font-medium">({selectedComboDetails?.name || 'Chưa chọn'})</span></span>
-                      <span className="font-semibold text-[#1C1A17]">{comboPrice.toLocaleString()}đ</span>
+                  <div className="bg-stone-50 p-4 rounded-xl space-y-2 text-sm text-stone-600">
+                    <div className="flex justify-between">
+                      <span>Giá Combo ({selectedComboDetails?.name || 'Chưa chọn'}):</span>
+                      <span className="font-semibold text-stone-900">{comboPrice.toLocaleString()}đ</span>
                     </div>
                     {extraHourTotal > 0 && (
-                      <div className="flex justify-between items-center">
-                        <span>Thêm {extraHours} giờ</span>
-                        <span className="font-semibold text-[#1C1A17]">{extraHourTotal.toLocaleString()}đ</span>
+                      <div className="flex justify-between">
+                        <span>Thêm {extraHours} giờ:</span>
+                        <span className="font-semibold text-stone-900">{extraHourTotal.toLocaleString()}đ</span>
                       </div>
                     )}
                     {weekendSurcharge > 0 && (
-                      <div className="flex justify-between items-center">
-                        <span>Phụ thu cuối tuần (T7, CN)</span>
-                        <span className="font-semibold text-[#1C1A17]">{weekendSurcharge.toLocaleString()}đ</span>
+                      <div className="flex justify-between">
+                        <span>Phụ thu cuối tuần (T7, CN):</span>
+                        <span className="font-semibold text-stone-900">{weekendSurcharge.toLocaleString()}đ</span>
                       </div>
                     )}
                     {guestSurcharge > 0 && (
-                      <div className="flex justify-between items-center">
-                        <span>Phụ thu thêm {guests - 2} khách</span>
-                        <span className="font-semibold text-[#1C1A17]">{guestSurcharge.toLocaleString()}đ</span>
+                      <div className="flex justify-between">
+                        <span>Phụ thu thêm {guests - 2} khách:</span>
+                        <span className="font-semibold text-stone-900">{guestSurcharge.toLocaleString()}đ</span>
                       </div>
                     )}
-                    <div className="pt-4 mt-2 border-t border-gray-200 flex justify-between items-center font-bold text-lg text-[#1C1A17]">
-                      <span>Tổng tạm tính</span>
-                      <span className="text-[#B8860B]">{totalPrice.toLocaleString()}đ</span>
+                    <div className="pt-2 border-t border-stone-200 flex justify-between font-bold text-lg text-stone-900">
+                      <span>Tổng tạm tính:</span>
+                      <span className="text-yellow-600">{totalPrice.toLocaleString()}đ</span>
                     </div>
                   </div>
 
                   <button
                     onClick={() => isStep2Valid && setStep(4)}
                     disabled={!isStep2Valid}
-                    className={`w-full py-4 rounded-sm font-bold text-sm uppercase tracking-widest flex items-center justify-center transition-all duration-300 ${
-                      isStep2Valid 
-                        ? 'bg-[#1C1A17] text-white hover:bg-[#B8860B] shadow-md hover:shadow-lg' 
-                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    className={`w-full py-4 rounded-xl font-bold flex items-center justify-center transition-all ${
+                      isStep2Valid ? 'bg-stone-900 text-white hover:bg-stone-800' : 'bg-stone-200 text-stone-400 cursor-not-allowed'
                     }`}
                   >
-                    Tiếp tục điền thông tin <ArrowRight className="w-4 h-4 ml-2" />
+                    Tiếp tục
+                    <ArrowRight className="w-5 h-5 ml-2" />
                   </button>
                 </div>
               </div>
