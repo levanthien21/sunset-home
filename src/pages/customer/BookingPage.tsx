@@ -272,17 +272,21 @@ export default function BookingPage() {
                 <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Chọn không gian của bạn</h2>
               </div>
 
-              <div className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-stone-200 mb-8 max-w-lg mx-auto">
-                <label className="block text-sm font-semibold text-stone-900 mb-2">Ngày nhận phòng</label>
-                <div className="relative w-full max-w-full overflow-hidden rounded-xl">
-                  <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 pointer-events-none" />
-                  <input
-                    type="date"
-                    min={new Date().toISOString().split('T')[0]}
-                    value={bookingDate}
-                    onChange={(e) => setBookingDate(e.target.value)}
-                    className="w-full min-w-0 pl-12 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border"
-                  />
+              <div className="bg-white rounded-3xl p-3 shadow-md border border-stone-100 mb-10 max-w-2xl mx-auto">
+                <div className="flex-1 w-full bg-stone-50 hover:bg-stone-100 transition-colors rounded-2xl p-4 flex items-center relative cursor-pointer group">
+                  <div className="bg-white p-2.5 rounded-xl shadow-sm text-yellow-600 mr-4 group-hover:scale-110 transition-transform">
+                    <CalendarDays className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 flex flex-col">
+                     <span className="text-[11px] uppercase font-bold text-stone-500 tracking-wider mb-0.5">Ngày nhận phòng</span>
+                     <input
+                       type="date"
+                       min={new Date().toISOString().split('T')[0]}
+                       value={bookingDate}
+                       onChange={(e) => setBookingDate(e.target.value)}
+                       className="w-full bg-transparent border-none outline-none text-stone-900 font-bold text-base md:text-lg cursor-pointer appearance-none"
+                     />
+                  </div>
                 </div>
               </div>
 
@@ -291,95 +295,94 @@ export default function BookingPage() {
                   <div className="w-10 h-10 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin"></div>
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[...filteredRooms].sort((a, b) => a.name.localeCompare(b.name)).map(r => {
-                  const isAvailable = bookingDate ? true : isRoomAvailableToday(r.name); // Actually we should pass bookingDate to isRoomAvailable if we had the logic, for now it's fine.
+                  const isAvailable = bookingDate ? true : isRoomAvailableToday(r.name);
                   const isSelected = room === r.id;
                   
                   return (
-                    <div key={r.id} className={`bg-white rounded-2xl transition-all overflow-hidden shadow-sm hover:shadow-md border flex flex-col ${isSelected ? 'border-yellow-600 ring-1 ring-yellow-600' : 'border-stone-200'}`}>
-                      <div className="flex flex-col md:flex-row h-full">
-                        <div className="md:w-1/2 h-56 md:h-auto min-h-[240px] relative group shrink-0">
+                    <div key={r.id} className={`bg-white rounded-3xl transition-all overflow-hidden shadow-sm hover:shadow-xl border flex flex-col ${isSelected ? 'border-yellow-600 ring-1 ring-yellow-600' : 'border-stone-200'}`}>
+                      <div className="flex flex-col h-full">
+                        <div className="h-64 relative group shrink-0 w-full overflow-hidden">
                           <img 
                             src={r.images[0]} 
                             onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
-                            className="w-full h-full object-cover cursor-pointer" 
+                            className="w-full h-full object-cover cursor-pointer group-hover:scale-105 transition-transform duration-700" 
                             alt={r.name} 
                           />
                           {r.images.length > 1 && (
                             <button 
                               onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
-                              className="absolute bottom-3 right-3 bg-black/60 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-black/80 transition-colors flex items-center shadow-lg backdrop-blur-md"
+                              className="absolute bottom-3 right-3 bg-black/60 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-black/80 transition-colors flex items-center shadow-lg backdrop-blur-md z-10"
                             >
                               Xem {r.images.length} ảnh
                             </button>
                           )}
-                          <div className="absolute top-3 left-3">
+                          <div className="absolute top-3 left-3 z-10">
                             {isAvailable ? (
-                              <span className="px-3 py-1 bg-green-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-sm">
+                              <span className="px-3 py-1.5 bg-green-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-md">
                                 {bookingDate ? 'Đang trống' : 'Hôm nay: Trống'}
                               </span>
                             ) : (
-                              <span className="px-3 py-1 bg-red-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-sm">
+                              <span className="px-3 py-1.5 bg-red-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-md">
                                 Kín lịch
                               </span>
                             )}
                           </div>
                         </div>
-                        <div className="p-5 md:p-6 md:w-1/2 flex flex-col justify-between">
+                        <div className="p-6 flex flex-col justify-between flex-1">
                           <div>
                             <div className="flex justify-between items-start mb-4">
-                              <div className="flex-1 pr-3">
-                                <h3 className="text-xl md:text-2xl font-serif font-bold text-stone-900 leading-tight">{r.name}</h3>
+                              <div className="flex-1 pr-2">
+                                <h3 className="text-2xl font-serif font-bold text-stone-900 leading-tight">{r.name}</h3>
                                 <div className="flex flex-wrap gap-2 mt-2.5">
-                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1 rounded flex items-center">
+                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1.5 rounded-lg flex items-center">
                                     <Users className="w-3 h-3 mr-1" /> Tối đa 4 Khách
                                   </span>
-                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1 rounded flex items-center">
+                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1.5 rounded-lg flex items-center">
                                     <BedDouble className="w-3 h-3 mr-1" /> 1 Giường lớn
                                   </span>
                                 </div>
                               </div>
                               {r.combos && r.combos.length > 0 && (
-                                <div className="text-right shrink-0">
+                                <div className="text-right shrink-0 bg-stone-50 p-2 rounded-xl border border-stone-100">
                                   <div className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded mb-1 inline-block shadow-sm">Ưu đãi 25%</div>
                                   <p className="text-xs text-stone-400 line-through">
                                     {(Math.min(...r.combos.map((c: any) => c.price)) * 1.33).toLocaleString()}đ
                                   </p>
-                                  <p className="text-yellow-600 font-bold text-lg md:text-xl leading-none mt-0.5">
+                                  <p className="text-yellow-600 font-bold text-lg leading-none mt-0.5">
                                     {Math.min(...r.combos.map((c: any) => c.price)).toLocaleString()}đ
                                   </p>
-                                  <p className="text-[9px] text-stone-400 mt-1">Chưa bao gồm thuế & phí</p>
                                 </div>
                               )}
                             </div>
 
-                            <div className="flex flex-col gap-3 mb-4">
+                            <div className="flex flex-col gap-3 mb-5">
                               <div className="flex items-center justify-between">
-                                <div className="flex items-center text-stone-500 text-xs">
-                                  <MapPin className="w-3.5 h-3.5 mr-1 text-stone-400" />
+                                <div className="flex items-center text-stone-500 text-[11px]">
+                                  <MapPin className="w-3 h-3 mr-1 text-stone-400" />
                                   <span>{selectedBranchDetails?.name}</span>
                                 </div>
                                 <button 
                                   onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails?.address || ''), '_blank')}
-                                  className="text-xs font-semibold text-blue-600 hover:underline flex items-center"
+                                  className="text-[11px] font-bold text-blue-600 hover:underline flex items-center bg-blue-50 px-2 py-1 rounded-md"
                                 >
-                                  Xem bản đồ <ChevronRight className="w-3 h-3 ml-0.5" />
+                                  Xem bản đồ <ChevronRight className="w-2.5 h-2.5 ml-0.5" />
                                 </button>
                               </div>
-                              <div className="bg-green-50 border border-green-100 rounded-lg p-2.5 w-full">
-                                 <p className="text-[11px] text-green-700 font-medium flex items-center mb-1.5">
+                              <div className="bg-green-50 border border-green-100 rounded-xl p-3 w-full shadow-sm">
+                                 <p className="text-[11px] text-green-700 font-bold flex items-center mb-1.5">
                                    <Check className="w-3.5 h-3.5 mr-1.5"/> Miễn phí hủy phòng trước 7 ngày
                                  </p>
-                                 <p className="text-[11px] text-green-700 font-medium flex items-center">
-                                   <Check className="w-3.5 h-3.5 mr-1.5"/> Giữ chỗ thanh toán tiện lợi qua QR
+                                 <p className="text-[11px] text-green-700 font-bold flex items-center">
+                                   <Check className="w-3.5 h-3.5 mr-1.5"/> Giữ chỗ thanh toán qua QR
                                  </p>
                               </div>
                             </div>
 
-                            <ul className="grid grid-cols-2 gap-x-2 gap-y-2.5 mt-2">
+                            <ul className="grid grid-cols-2 gap-x-2 gap-y-3 mt-2">
                               {r.features.map((f: any, i: any) => (
-                                <li key={i} className="flex items-center text-[12px] md:text-[13px] text-stone-600">
+                                <li key={i} className="flex items-center text-[12px] text-stone-600">
                                   <div className="w-4 h-4 rounded-full bg-yellow-50 flex items-center justify-center mr-2 shrink-0">
                                     <CheckCircle2 className="w-3 h-3 text-yellow-600" />
                                   </div>
@@ -388,7 +391,7 @@ export default function BookingPage() {
                               ))}
                             </ul>
                           </div>
-                          <div className="mt-6 md:mt-8 flex gap-3">
+                          <div className="mt-8 flex gap-3">
                             <button
                               onClick={() => {
                                 if (!bookingDate) {

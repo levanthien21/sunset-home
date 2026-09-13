@@ -94,13 +94,13 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
+            className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full"
           >
             {branches.map((branch) => (
               <Link 
                 key={branch.id}
                 to={`/customer/booking?branch=${branch.id}`}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/5 backdrop-blur-md border border-white/20 text-white text-[10px] uppercase tracking-[0.2em] font-medium hover:bg-white hover:text-black hover:scale-105 transition-all duration-300"
+                className="w-full sm:w-auto px-10 py-4 rounded-full bg-[#D4AF37] text-white text-[11px] uppercase tracking-[0.25em] font-bold hover:bg-white hover:text-[#1C1A17] transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] hover:-translate-y-1 hover:scale-105 animate-[pulse_3s_infinite] hover:animate-none flex justify-center items-center"
               >
                 {branch.name}
               </Link>
