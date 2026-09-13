@@ -73,12 +73,20 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
+            className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
           >
             <Link 
-              to="/customer/booking" 
-              className="inline-flex items-center space-x-4 px-10 py-4 bg-yellow-600 text-white uppercase tracking-[0.2em] text-xs font-bold hover:bg-yellow-500 shadow-xl shadow-yellow-600/30 transition-all rounded-sm"
+              to="/customer/booking?branch=1" 
+              className="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-yellow-600 text-white uppercase tracking-[0.1em] text-xs font-bold hover:bg-yellow-500 shadow-xl shadow-yellow-600/30 transition-all rounded-sm w-full sm:w-auto"
             >
-              <span>Đặt phòng ngay</span>
+              <span>Cơ sở 1 (Bến Lức)</span>
+              <ArrowRight size={16} strokeWidth={2} />
+            </Link>
+            <Link 
+              to="/customer/booking?branch=2" 
+              className="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white uppercase tracking-[0.1em] text-xs font-bold hover:bg-white/20 transition-all rounded-sm w-full sm:w-auto"
+            >
+              <span>Cơ sở 2 (Hậu Nghĩa)</span>
               <ArrowRight size={16} strokeWidth={2} />
             </Link>
           </motion.div>

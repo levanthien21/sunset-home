@@ -12,7 +12,12 @@ const ROOMS = [
   {
     id: 101, branchId: 1, name: 'P_Sun2',
     features: ['Bồn tắm', 'Máy chiếu', 'Bếp (hạn chế dụng cụ)'],
-    images: ['https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80'],
+    images: [
+       '/images/room3_1.png',
+       '/images/room3_2.png',
+       '/images/room3_3.jpg',
+       '/images/room3_4.png'
+    ],
     extraHourPrice: 50000,
     combos: [
       { id: '3h', name: 'Combo 3h', price: 270000 },
@@ -90,6 +95,14 @@ export default function BookingPage() {
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
 
   useEffect(() => {
+    // Read branch from URL if present
+    const params = new URLSearchParams(window.location.search);
+    const branchParam = params.get('branch');
+    if (branchParam) {
+      setBranch(parseInt(branchParam));
+      setStep(2); // Skip directly to room selection
+    }
+
     const fetchDB = async () => {
       try {
         const { getBookings } = await import('../../utils/db');
