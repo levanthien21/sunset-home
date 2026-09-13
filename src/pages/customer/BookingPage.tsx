@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, Check, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const BRANCHES = [
@@ -24,7 +24,12 @@ const ROOMS = [
   {
     id: 102, branchId: 1, name: 'P_506 room 2',
     features: ['View ban công', 'Tivi lớn', 'Bếp'],
-    images: ['https://images.unsplash.com/photo-1588665046200-a4f664a781b0?auto=format&fit=crop&w=800&q=80'],
+    images: [
+       '/images/room2_1.jpg',
+       '/images/room2_2.jpg',
+       '/images/room2_3.png',
+       '/images/room2_4.jpg'
+    ],
     extraHourPrice: 55000,
     combos: [
       { id: '2h', name: 'Combo 2h', price: 249000 },
@@ -58,6 +63,9 @@ export default function BookingPage() {
   const [branch, setBranch] = useState<number | null>(null);
   const [room, setRoom] = useState<number | null>(null);
   
+  // Modal hiển thị ảnh
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  
   // Thời gian & Combo
   const [bookingDate, setBookingDate] = useState('');
   const [expectedTime, setExpectedTime] = useState('');
@@ -71,7 +79,6 @@ export default function BookingPage() {
   const [email, setEmail] = useState('');
   
   const [bookingId, setBookingId] = useState('');
-  const [bookingType, setBookingType] = useState('full'); // 'reserve', 'deposit', 'full'
   const [isProcessing, setIsProcessing] = useState(false);
   
   // Data Logic
@@ -115,7 +122,8 @@ export default function BookingPage() {
     };
   }, [bookingDate, extraHours, guests, selectedRoomDetails, selectedComboDetails]);
 
-  const amountToPay = bookingType === 'reserve' ? 0 : (bookingType === 'deposit' ? totalPrice * 0.5 : totalPrice);
+  // Luôn luôn thanh toán 100%
+  const amountToPay = totalPrice;
 
   const isPhoneValid = /^(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(phone);
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -146,10 +154,10 @@ export default function BookingPage() {
         addons: [],
         total: totalPrice,
         amountPaid: amountToPay,
-        bookingType,
+        bookingType: 'full',
         status: 'pending',
         date: new Date().toISOString(),
-        paymentMethod: bookingType === 'reserve' ? 'none' : 'qr'
+        paymentMethod: 'qr'
       };
       
       try {
@@ -188,11 +196,10 @@ export default function BookingPage() {
     }, 1500);
   };
 
-  // Availability check (mocked based on today's bookings for the room)
   const isRoomAvailableToday = (roomName: string) => {
     const today = new Date().toISOString().split('T')[0];
     const bookingsToday = existingBookings.filter(b => b.roomName === roomName && b.checkIn?.startsWith(today) && b.status !== 'cancelled');
-    return bookingsToday.length < 3; // Mock logic: if fewer than 3 combos booked today, it's "available"
+    return bookingsToday.length < 3; 
   };
 
   return (
@@ -274,11 +281,22 @@ export default function BookingPage() {
                           {r.images.length > 1 ? (
                             <div className="grid grid-cols-2 gap-2 h-full">
                               {r.images.slice(0,4).map((img, idx) => (
-                                <img key={idx} src={img} className="w-full h-24 object-cover rounded-lg" alt={r.name} />
+                                <img 
+                                  key={idx} 
+                                  src={img} 
+                                  onClick={() => setSelectedImage(img)}
+                                  className="w-full h-24 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity" 
+                                  alt={r.name} 
+                                />
                               ))}
                             </div>
                           ) : (
-                            <img src={r.images[0]} alt={r.name} className="w-full h-48 md:h-full object-cover rounded-xl" />
+                            <img 
+                              src={r.images[0]} 
+                              onClick={() => setSelectedImage(r.images[0])}
+                              alt={r.name} 
+                              className="w-full h-48 md:h-full object-cover rounded-xl cursor-pointer hover:opacity-90 transition-opacity" 
+                            />
                           )}
                         </div>
                         <div className="p-5 md:w-3/5 flex flex-col justify-between">
@@ -480,34 +498,21 @@ export default function BookingPage() {
                       </div>
                     </div>
                   </div>
-
+                  
+                  {/* Bỏ lựa chọn cọc/giữ chỗ, mặc định hiển thị thông báo thanh toán 100% */}
                   <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-stone-200">
-                    <h2 className="text-xl font-serif font-bold text-stone-900 mb-6">Phương thức xác nhận</h2>
-                    <div className="space-y-3">
-                      {[
-                        { id: 'reserve', title: 'Đặt chỗ trước (Thanh toán tại quầy)', desc: 'Không cần thanh toán ngay. Giữ phòng trong 2 giờ.', amount: 0 },
-                        { id: 'deposit', title: 'Cọc 50% giữ phòng (Khuyên dùng)', desc: 'Thanh toán 50% qua QR để đảm bảo 100% giữ phòng.', amount: totalPrice * 0.5 },
-                        { id: 'full', title: 'Thanh toán 100%', desc: 'Thanh toán toàn bộ qua QR. Nhận phòng nhanh chóng.', amount: totalPrice },
-                      ].map((type) => (
-                        <button
-                          key={type.id}
-                          onClick={() => setBookingType(type.id)}
-                          className={`w-full p-4 rounded-xl border-2 text-left flex items-start transition-all ${bookingType === type.id ? 'border-yellow-600 bg-yellow-50' : 'border-stone-200 hover:border-stone-300'}`}
-                        >
-                          <div className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3 shrink-0 ${bookingType === type.id ? 'border-yellow-600' : 'border-stone-300'}`}>
-                            {bookingType === type.id && <div className="w-2.5 h-2.5 rounded-full bg-yellow-600" />}
-                          </div>
-                          <div>
-                            <div className="font-bold text-stone-900">{type.title}</div>
-                            <div className="text-sm text-stone-500 mt-1">{type.desc}</div>
-                          </div>
-                          <div className="ml-auto text-right font-bold text-yellow-600">
-                            {type.amount.toLocaleString()}đ
-                          </div>
-                        </button>
-                      ))}
+                    <h2 className="text-xl font-serif font-bold text-stone-900 mb-4">Phương thức thanh toán</h2>
+                    <div className="w-full p-4 rounded-xl border-2 border-yellow-600 bg-yellow-50 text-left flex items-start transition-all">
+                      <div className="mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3 shrink-0 border-yellow-600">
+                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-600" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-stone-900">Thanh toán 100%</div>
+                        <div className="text-sm text-stone-500 mt-1">Quý khách vui lòng thanh toán toàn bộ qua mã QR để được giữ phòng chắc chắn nhất.</div>
+                      </div>
                     </div>
                   </div>
+
                 </div>
 
                 <div className="lg:col-span-1">
@@ -543,25 +548,19 @@ export default function BookingPage() {
                     
                     <div className="border-t border-stone-700 pt-4 mb-6">
                       <div className="flex justify-between text-lg font-bold text-white mb-2">
-                        <span>Tổng cộng</span>
-                        <span className="text-yellow-500">{totalPrice.toLocaleString()}đ</span>
-                      </div>
-                      <div className="flex justify-between text-sm text-stone-400">
-                        <span>Cần thanh toán ngay</span>
-                        <span className="text-white font-bold">{amountToPay.toLocaleString()}đ</span>
+                        <span>Cần thanh toán</span>
+                        <span className="text-yellow-500">{amountToPay.toLocaleString()}đ</span>
                       </div>
                     </div>
 
-                    {bookingType !== 'reserve' && (
-                      <div className="bg-white rounded-xl p-4 mb-6 flex flex-col items-center text-stone-900">
-                        <img 
-                          src={`https://api.vietqr.io/image/970436-0909123456-11kRsXo.jpg?amount=${amountToPay}&addInfo=Thanh toan Sunset Home`}
-                          alt="VietQR" 
-                          className="w-48 h-48 rounded-lg mb-2"
-                        />
-                        <p className="text-xs font-bold text-center">Quét mã QR để thanh toán {amountToPay.toLocaleString()}đ</p>
-                      </div>
-                    )}
+                    <div className="bg-white rounded-xl p-4 mb-6 flex flex-col items-center text-stone-900">
+                      <img 
+                        src={`https://api.vietqr.io/image/970436-0909123456-11kRsXo.jpg?amount=${amountToPay}&addInfo=Thanh toan Sunset Home`}
+                        alt="VietQR" 
+                        className="w-48 h-48 rounded-lg mb-2"
+                      />
+                      <p className="text-xs font-bold text-center">Quét mã QR để thanh toán {amountToPay.toLocaleString()}đ</p>
+                    </div>
 
                     <button
                       onClick={handlePaymentSubmit}
@@ -570,7 +569,7 @@ export default function BookingPage() {
                         isStep3Valid && !isProcessing ? 'bg-yellow-600 text-white hover:bg-yellow-500' : 'bg-stone-700 text-stone-500 cursor-not-allowed'
                       }`}
                     >
-                      {isProcessing ? 'Đang xử lý...' : (bookingType === 'reserve' ? 'Hoàn tất đặt chỗ' : 'Tôi đã thanh toán xong')}
+                      {isProcessing ? 'Đang xử lý...' : 'Tôi đã chuyển khoản'}
                     </button>
                     {!isStep3Valid && (
                       <p className="text-xs text-center text-red-400 mt-3">* Vui lòng điền đầy đủ và chính xác thông tin liên hệ</p>
@@ -601,6 +600,35 @@ export default function BookingPage() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Modal Zoom Ảnh */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <button 
+              className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors"
+              onClick={() => setSelectedImage(null)}
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <motion.img 
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              src={selectedImage} 
+              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+              alt="Phong To" 
+              onClick={(e) => e.stopPropagation()} 
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
