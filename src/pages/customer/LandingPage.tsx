@@ -151,7 +151,7 @@ export default function LandingPage() {
       </section>
 
       {/* 3. Policies Section */}
-      <section className="py-24 bg-white border-t border-gray-100">
+      <section className="py-24 bg-[#F9F8F6]">
         <div className="max-w-5xl mx-auto px-6 lg:px-12">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -160,7 +160,7 @@ export default function LandingPage() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="text-center mb-16"
           >
-            <h3 className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-4">Lưu ý quan trọng</h3>
+            <h3 className="text-[10px] font-bold tracking-[0.3em] text-yellow-600 uppercase mb-4">Lưu ý quan trọng</h3>
             <h2 className="text-3xl md:text-4xl font-serif text-[#1C1A17]">Chính sách lưu trú</h2>
           </motion.div>
 
@@ -171,11 +171,11 @@ export default function LandingPage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
             >
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-4">Thời gian</h4>
-              <ul className="text-sm text-gray-500 font-light space-y-2">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-5">Thời gian</h4>
+              <ul className="text-sm text-gray-700 space-y-3">
                 <li>Check-in: Từ 14:00</li>
                 <li>Check-out: Trước 12:00</li>
-                <li>Hỗ trợ nhận phòng sớm (tùy tình trạng)</li>
+                <li>Nhận phòng sớm (tùy tình trạng)</li>
               </ul>
             </motion.div>
 
@@ -185,8 +185,8 @@ export default function LandingPage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             >
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-4">Không gian</h4>
-              <ul className="text-sm text-gray-500 font-light space-y-2">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-5">Không gian</h4>
+              <ul className="text-sm text-gray-700 space-y-3">
                 <li>Không hút thuốc trong phòng</li>
                 <li>Không mang theo thú cưng</li>
                 <li>Giữ gìn không gian chung</li>
@@ -199,8 +199,8 @@ export default function LandingPage() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             >
-              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-4">Hoàn hủy</h4>
-              <ul className="text-sm text-gray-500 font-light space-y-2">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-5">Hoàn hủy</h4>
+              <ul className="text-sm text-gray-700 space-y-3">
                 <li>Hủy miễn phí trước 48h</li>
                 <li>Hỗ trợ dời lịch linh hoạt</li>
                 <li>Bảo lưu giá trị tiền cọc</li>
