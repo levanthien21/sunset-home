@@ -5,13 +5,16 @@ import { useState, useEffect } from 'react';
 function AdminDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [rooms, setRooms] = useState<any[]>([]);
+  const [branches, setBranches] = useState<any[]>([]);
   const [uploadingRoomId, setUploadingRoomId] = useState<string | null>(null);
+  const [uploadingBranchId, setUploadingBranchId] = useState<number | null>(null);
 
   useEffect(() => {
     const load = async () => {
-      const { getBookings, getRooms } = await import('../../utils/db');
+      const { getBookings, getRooms, getBranches } = await import('../../utils/db');
       setBookings(await getBookings());
       setRooms(await getRooms());
+      setBranches(await getBranches());
     };
     load();
   }, []);
@@ -42,6 +45,27 @@ function AdminDashboard() {
       alert("Đã xảy ra lỗi khi tải ảnh lên.");
     } finally {
       setUploadingRoomId(null);
+    }
+  };
+
+  const handleBranchUpload = async (e: React.ChangeEvent<HTMLInputElement>, branchId: number) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    
+    setUploadingBranchId(branchId);
+    try {
+      const { uploadRoomImage, updateBranch } = await import('../../utils/db');
+      // Tạm dùng chung uploadRoomImage cho nhánh vì đều upload ảnh
+      const url = await uploadRoomImage(files[0]);
+      if (url) {
+        await updateBranch(branchId, { img: url });
+        setBranches(branches.map(b => b.id === branchId ? { ...b, img: url } : b));
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Đã xảy ra lỗi khi tải ảnh cơ sở lên.");
+    } finally {
+      setUploadingBranchId(null);
     }
   };
 
@@ -101,6 +125,41 @@ function AdminDashboard() {
       </div>
 
       <div className="mt-10 grid grid-cols-1 gap-8">
+        <div className="bg-white p-8 rounded-sm shadow-sm border border-gray-100">
+          <h2 className="text-xl font-serif text-gray-900 mb-6 flex justify-between items-center">
+            Quản lý Cơ sở (Chi nhánh)
+            {branches.length === 0 && <span className="text-xs text-red-500">Chưa có dữ liệu cơ sở. Hãy chạy SQL!</span>}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {branches.map(branch => (
+              <div key={branch.id} className="p-5 bg-gray-50 rounded-sm border border-gray-100 flex gap-4">
+                <div className="w-1/3 relative aspect-[4/3] rounded-sm overflow-hidden bg-gray-200">
+                  <img src={branch.img} alt={branch.name} className="w-full h-full object-cover" />
+                  <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+                    <span className="text-white text-xs font-bold bg-black/50 px-2 py-1 rounded-sm">
+                      {uploadingBranchId === branch.id ? 'Đang tải...' : 'Đổi Ảnh'}
+                    </span>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      className="hidden" 
+                      onChange={(e) => handleBranchUpload(e, branch.id)}
+                      disabled={uploadingBranchId === branch.id}
+                    />
+                  </label>
+                </div>
+                <div className="w-2/3 flex flex-col justify-center">
+                  <h3 className="font-bold text-lg text-gray-900">{branch.name}</h3>
+                  <p className="text-sm text-gray-500 mt-1">{branch.address}</p>
+                  <p className="text-xs font-semibold mt-2 text-yellow-600 uppercase tracking-wider">
+                    Trạng thái: {branch.has_rooms ? 'Đang hoạt động' : 'Sắp ra mắt'}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="bg-white p-8 rounded-sm shadow-sm border border-gray-100">
           <h2 className="text-xl font-serif text-gray-900 mb-6 flex justify-between items-center">
             Quản lý Ảnh Phòng

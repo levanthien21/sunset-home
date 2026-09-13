@@ -3,16 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, Check, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const BRANCHES = [
-  { id: 1, name: 'Chi nhánh 1 (Bến Lức)', address: 'Số 06 Block A3 Ehome Waterpoint Bến Lức', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80', hasRooms: true },
-  { id: 2, name: 'Chi nhánh 2 (Hậu Nghĩa)', address: 'Số A3 Kdc Young Town Hậu Nghĩa', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80', hasRooms: false },
-];
-
 export default function BookingPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [branch, setBranch] = useState<number | null>(null);
   const [room, setRoom] = useState<string | null>(null);
+  
+  const [branches, setBranches] = useState<any[]>([]);
+  const [isLoadingBranches, setIsLoadingBranches] = useState(false);
+  
   const [rooms, setRooms] = useState<any[]>([]);
   const [isLoadingRooms, setIsLoadingRooms] = useState(false);
   
@@ -36,7 +35,7 @@ export default function BookingPage() {
   
   // Data Logic
   const filteredRooms = rooms.filter(r => r.branchId === branch);
-  const selectedBranchDetails = BRANCHES.find(b => b.id === branch);
+  const selectedBranchDetails = branches.find(b => b.id === branch);
   const selectedRoomDetails = rooms.find(r => r.id === room);
   const selectedComboDetails = selectedRoomDetails?.combos.find((c: any) => c.id === combo);
 
@@ -53,9 +52,17 @@ export default function BookingPage() {
 
     const fetchDB = async () => {
       setIsLoadingRooms(true);
+      setIsLoadingBranches(true);
       try {
-        const { getBookings, getRooms } = await import('../../utils/db');
+        const { getBookings, getRooms, getBranches } = await import('../../utils/db');
+        
         setExistingBookings(await getBookings());
+        
+        const dbBranches = await getBranches();
+        if (dbBranches && dbBranches.length > 0) {
+          setBranches(dbBranches);
+        }
+        
         const dbRooms = await getRooms();
         if (dbRooms && dbRooms.length > 0) {
           const formattedRooms = dbRooms.map((r: any) => ({
@@ -69,6 +76,7 @@ export default function BookingPage() {
         console.error(e);
       } finally {
         setIsLoadingRooms(false);
+        setIsLoadingBranches(false);
       }
     };
     fetchDB();
@@ -202,36 +210,43 @@ export default function BookingPage() {
           {step === 1 && (
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h2 className="text-2xl font-serif font-bold text-stone-900 mb-6 text-center">Bạn muốn đến cơ sở nào?</h2>
-              <div className="grid gap-4 md:grid-cols-2">
-                {BRANCHES.map(b => (
-                  <button
-                    key={b.id}
-                    onClick={() => {
-                      if (!b.hasRooms) return;
-                      setBranch(b.id);
-                      setRoom(null);
-                      setStep(2);
-                    }}
-                    className={`text-left rounded-2xl overflow-hidden border-2 transition-all ${!b.hasRooms ? 'opacity-50 cursor-not-allowed' : 'hover:border-yellow-600 border-stone-200 bg-white'}`}
-                  >
-                    <div className="h-40 relative">
-                      <img src={b.img} alt={b.name} className="w-full h-full object-cover" />
-                      {!b.hasRooms && (
-                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                          <span className="text-white font-semibold px-4 py-2 bg-stone-900/80 rounded-full">Sắp ra mắt</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-5">
-                      <h3 className="font-bold text-lg text-stone-900">{b.name}</h3>
-                      <p className="text-stone-500 text-sm flex items-start mt-2">
-                        <MapPin className="w-4 h-4 mr-1 shrink-0 mt-0.5" />
-                        {b.address}
-                      </p>
-                    </div>
-                  </button>
-                ))}
-              </div>
+              
+              {isLoadingBranches ? (
+                <div className="flex justify-center items-center py-20">
+                  <div className="w-10 h-10 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin"></div>
+                </div>
+              ) : (
+                <div className="grid gap-4 md:grid-cols-2">
+                  {branches.map((b: any) => (
+                    <button
+                      key={b.id}
+                      onClick={() => {
+                        if (!b.has_rooms) return;
+                        setBranch(b.id);
+                        setRoom(null);
+                        setStep(2);
+                      }}
+                      className={`text-left rounded-2xl overflow-hidden border-2 transition-all ${!b.has_rooms ? 'opacity-50 cursor-not-allowed' : 'hover:border-yellow-600 border-stone-200 bg-white'}`}
+                    >
+                      <div className="h-40 relative">
+                        <img src={b.img} alt={b.name} className="w-full h-full object-cover" />
+                        {!b.has_rooms && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <span className="text-white font-semibold px-4 py-2 bg-stone-900/80 rounded-full">Sắp ra mắt</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-5">
+                        <h3 className="font-bold text-lg text-stone-900">{b.name}</h3>
+                        <p className="text-stone-500 text-sm flex items-start mt-2">
+                          <MapPin className="w-4 h-4 mr-1 shrink-0 mt-0.5" />
+                          {b.address}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </motion.div>
           )}
 

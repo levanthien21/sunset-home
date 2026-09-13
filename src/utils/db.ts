@@ -115,3 +115,48 @@ export const updateRoomImages = async (roomId: string, images: string[]) => {
     console.error("Lỗi cập nhật ảnh phòng:", e);
   }
 };
+
+export const getBranches = async () => {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('branches')
+        .select('*')
+        .order('id', { ascending: true });
+        
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error("Lỗi lấy dữ liệu chi nhánh:", e);
+      return [];
+    }
+  }
+  return [];
+};
+
+export const updateBranch = async (branchId: number, updateData: any) => {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase
+      .from('branches')
+      .update(updateData)
+      .match({ id: branchId });
+      
+    if (error) throw error;
+  } catch (e) {
+    console.error("Lỗi cập nhật chi nhánh:", e);
+  }
+};
+
+export const addBranch = async (branchData: any) => {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase
+      .from('branches')
+      .insert([branchData]);
+      
+    if (error) throw error;
+  } catch (e) {
+    console.error("Lỗi thêm chi nhánh mới:", e);
+  }
+};

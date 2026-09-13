@@ -1,8 +1,27 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Wine, Tv } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function LandingPage() {
+  const [branches, setBranches] = useState<any[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      const { getBranches } = await import('../../utils/db');
+      const data = await getBranches();
+      if (data && data.length > 0) {
+        setBranches(data);
+      } else {
+        // Fallback demo data
+        setBranches([
+          { id: 1, name: 'Chi nhánh 1 (Bến Lức)', address: 'Số 06 Block A3 Ehome Waterpoint', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80' },
+          { id: 2, name: 'Chi nhánh 2 (Hậu Nghĩa)', address: 'Số A3 Kdc young town Hậu Nghĩa', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80' }
+        ]);
+      }
+    };
+    load();
+  }, []);
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -73,20 +92,21 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 w-full max-w-[280px] sm:max-w-none mx-auto"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 w-full max-w-[280px] sm:max-w-none mx-auto flex-wrap"
           >
-            <Link 
-              to="/customer/booking?branch=1" 
-              className="inline-flex items-center justify-center px-6 py-4 bg-yellow-600 text-white uppercase tracking-[0.1em] text-[11px] font-bold hover:bg-yellow-500 shadow-xl shadow-yellow-600/30 transition-all rounded-sm w-full sm:w-auto"
-            >
-              Cơ sở 1 (Bến Lức) <ArrowRight size={14} className="ml-2" />
-            </Link>
-            <Link 
-              to="/customer/booking?branch=2" 
-              className="inline-flex items-center justify-center px-6 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white uppercase tracking-[0.1em] text-[11px] font-bold hover:bg-white/20 transition-all rounded-sm w-full sm:w-auto"
-            >
-              Cơ sở 2 (Hậu Nghĩa) <ArrowRight size={14} className="ml-2" />
-            </Link>
+            {branches.map((branch, idx) => (
+              <Link 
+                key={branch.id}
+                to={`/customer/booking?branch=${branch.id}`}
+                className={`inline-flex items-center justify-center px-6 py-4 uppercase tracking-[0.1em] text-[11px] font-bold shadow-xl transition-all rounded-sm w-full sm:w-auto ${
+                  idx === 0 
+                    ? 'bg-yellow-600 text-white hover:bg-yellow-500 shadow-yellow-600/30' 
+                    : 'bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-white/20'
+                }`}
+              >
+                {branch.name} <ArrowRight size={14} className="ml-2" />
+              </Link>
+            ))}
           </motion.div>
         </div>
       </section>
@@ -136,17 +156,14 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {[
-              { id: 1, name: 'Chi nhánh 1 (Bến Lức)', desc: 'Số 06 Block A3 Ehome Waterpoint', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80' },
-              { id: 2, name: 'Chi nhánh 2 (Hậu Nghĩa)', desc: 'Số A3 Kdc young town Hậu Nghĩa', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80' }
-            ].map(branch => (
+            {branches.map((branch: any) => (
               <Link to="/customer/booking" key={branch.id} className="group block">
                 <div className="aspect-[4/3] overflow-hidden rounded-sm mb-6 relative">
                   <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-1000 ease-out" alt={branch.name} />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                 </div>
                 <h3 className="text-2xl font-serif text-white mb-2 group-hover:text-yellow-500 transition-colors">{branch.name}</h3>
-                <p className="text-white/60 text-sm">{branch.desc}</p>
+                <p className="text-white/60 text-sm">{branch.address}</p>
               </Link>
             ))}
           </div>
