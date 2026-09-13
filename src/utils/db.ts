@@ -59,3 +59,59 @@ export const updateBookingStatus = async (bookingId: string, status: string) => 
     localStorage.setItem('sunset_bookings', JSON.stringify(updated));
   }
 };
+
+export const getRooms = async () => {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .order('branch_id', { ascending: true })
+        .order('created_at', { ascending: true });
+        
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error("Lỗi lấy dữ liệu phòng Supabase:", e);
+      return [];
+    }
+  }
+  return [];
+};
+
+export const uploadRoomImage = async (file: File) => {
+  if (!supabase) return null;
+  try {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from('room-images')
+      .upload(fileName, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage
+      .from('room-images')
+      .getPublicUrl(fileName);
+
+    return data.publicUrl;
+  } catch (e) {
+    console.error("Lỗi upload ảnh:", e);
+    return null;
+  }
+};
+
+export const updateRoomImages = async (roomId: string, images: string[]) => {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase
+      .from('rooms')
+      .update({ images })
+      .match({ id: roomId });
+      
+    if (error) throw error;
+  } catch (e) {
+    console.error("Lỗi cập nhật ảnh phòng:", e);
+  }
+};

@@ -4,14 +4,58 @@ import { useState, useEffect } from 'react';
 
 function AdminDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [uploadingRoomId, setUploadingRoomId] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
-      const { getBookings } = await import('../../utils/db');
+      const { getBookings, getRooms } = await import('../../utils/db');
       setBookings(await getBookings());
+      setRooms(await getRooms());
     };
     load();
   }, []);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, roomId: string, existingImages: string[]) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    
+    setUploadingRoomId(roomId);
+    
+    try {
+      const { uploadRoomImage, updateRoomImages } = await import('../../utils/db');
+      
+      const newUrls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const url = await uploadRoomImage(files[i]);
+        if (url) newUrls.push(url);
+      }
+      
+      if (newUrls.length > 0) {
+        const combinedImages = [...existingImages, ...newUrls];
+        await updateRoomImages(roomId, combinedImages);
+        // Cập nhật lại UI tạm thời
+        setRooms(rooms.map(r => r.id === roomId ? { ...r, images: combinedImages } : r));
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Đã xảy ra lỗi khi tải ảnh lên.");
+    } finally {
+      setUploadingRoomId(null);
+    }
+  };
+
+  const handleRemoveImage = async (roomId: string, imgIndex: number, existingImages: string[]) => {
+    if (!window.confirm("Bạn có chắc muốn xóa ảnh này?")) return;
+    try {
+      const { updateRoomImages } = await import('../../utils/db');
+      const updatedImages = existingImages.filter((_, idx) => idx !== imgIndex);
+      await updateRoomImages(roomId, updatedImages);
+      setRooms(rooms.map(r => r.id === roomId ? { ...r, images: updatedImages } : r));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const approvedBookings = bookings.filter(b => b.status === 'approved');
   const expectedRevenue = approvedBookings.reduce((sum, b) => sum + b.total, 0);
@@ -34,7 +78,7 @@ function AdminDashboard() {
         </div>
         <div className="bg-white p-6 rounded-sm shadow-sm border border-gray-100">
           <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Tổng phòng</h3>
-          <p className="text-3xl font-serif mt-2">5</p>
+          <p className="text-3xl font-serif mt-2">{rooms.length}</p>
         </div>
         <div className="bg-white p-6 rounded-sm shadow-sm border border-gray-100">
           <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Nhân sự</h3>
@@ -42,25 +86,53 @@ function AdminDashboard() {
         </div>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="mt-10 grid grid-cols-1 gap-8">
         <div className="bg-white p-8 rounded-sm shadow-sm border border-gray-100">
-          <h2 className="text-xl font-serif text-gray-900 mb-6">Quản lý cơ sở & phòng</h2>
-          <ul className="space-y-4">
-            <li className="flex justify-between items-center p-4 bg-gray-50 rounded-sm border border-gray-100">
-              <div>
-                <p className="font-semibold text-gray-900">Chi nhánh 1 (Bến Lức)</p>
-                <p className="text-sm text-gray-500">Số 06 Block A3 Ehome Waterpoint Bến Lức • 3 Phòng</p>
+          <h2 className="text-xl font-serif text-gray-900 mb-6 flex justify-between items-center">
+            Quản lý Ảnh Phòng
+            {rooms.length === 0 && <span className="text-xs text-red-500">Chưa có dữ liệu phòng. Hãy chạy SQL!</span>}
+          </h2>
+          <div className="space-y-8">
+            {rooms.map(room => (
+              <div key={room.id} className="p-5 bg-gray-50 rounded-sm border border-gray-100">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <h3 className="font-bold text-lg text-gray-900">{room.name}</h3>
+                    <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Cơ sở {room.branch_id}</p>
+                  </div>
+                  <div>
+                    <label className={`cursor-pointer px-4 py-2 text-xs font-bold tracking-wider uppercase rounded-sm transition-colors ${uploadingRoomId === room.id ? 'bg-gray-300 text-gray-600' : 'bg-yellow-600 text-white hover:bg-yellow-700'}`}>
+                      {uploadingRoomId === room.id ? 'Đang Upload...' : 'Thêm Ảnh'}
+                      <input 
+                        type="file" 
+                        multiple 
+                        accept="image/*" 
+                        className="hidden" 
+                        onChange={(e) => handleFileUpload(e, room.id, room.images || [])}
+                        disabled={uploadingRoomId === room.id}
+                      />
+                    </label>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  {room.images && room.images.map((img: string, idx: number) => (
+                    <div key={idx} className="relative group aspect-square rounded-sm overflow-hidden border border-gray-200">
+                      <img src={img} alt={`Room ${idx}`} className="w-full h-full object-cover" />
+                      <button 
+                        onClick={() => handleRemoveImage(room.id, idx, room.images)}
+                        className="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs transition-opacity"
+                      >
+                        X
+                      </button>
+                    </div>
+                  ))}
+                  {(!room.images || room.images.length === 0) && (
+                    <div className="col-span-full text-sm text-gray-400 italic">Chưa có ảnh nào cho phòng này.</div>
+                  )}
+                </div>
               </div>
-              <button className="text-yellow-600 text-sm font-semibold uppercase tracking-wider hover:text-yellow-700">Sửa</button>
-            </li>
-            <li className="flex justify-between items-center p-4 bg-gray-50 rounded-sm border border-gray-100">
-              <div>
-                <p className="font-semibold text-gray-900">Chi nhánh 2 (Hậu Nghĩa)</p>
-                <p className="text-sm text-gray-500">Số A3 Kdc Young Town Hậu Nghĩa • Đang cập nhật</p>
-              </div>
-              <button className="text-yellow-600 text-sm font-semibold uppercase tracking-wider hover:text-yellow-700">Sửa</button>
-            </li>
-          </ul>
+            ))}
+          </div>
         </div>
         <div className="bg-white p-8 rounded-sm shadow-sm border border-gray-100 flex items-center justify-center min-h-[300px]">
           <div className="text-center text-gray-400">

@@ -8,68 +8,13 @@ const BRANCHES = [
   { id: 2, name: 'Chi nhánh 2 (Hậu Nghĩa)', address: 'Số A3 Kdc Young Town Hậu Nghĩa', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80', hasRooms: false },
 ];
 
-const ROOMS = [
-  {
-    id: 101, branchId: 1, name: 'Room 3',
-    features: ['Bồn tắm', 'Máy chiếu', 'Bếp (hạn chế dụng cụ)'],
-    images: [
-       '/images/room3_1.png',
-       '/images/room3_2.png',
-       '/images/room3_3.jpg',
-       '/images/room3_4.png',
-       '/images/room3_5.png',
-       '/images/room3_6.jpg',
-       '/images/room3_7.png'
-    ],
-    extraHourPrice: 50000,
-    combos: [
-      { id: '3h', name: 'Combo 3h', price: 270000 },
-      { id: '5h', name: 'Combo 5h', price: 370000 },
-      { id: '8h', name: '8 tiếng ngày', price: 529000 },
-      { id: '10h', name: '10 tiếng đêm', price: 379000 },
-    ]
-  },
-  {
-    id: 102, branchId: 1, name: 'Room 2',
-    features: ['View ban công', 'Tivi lớn', 'Bếp'],
-    images: [
-       '/images/room2_1.jpg',
-       '/images/room2_2.jpg',
-       '/images/room2_3.png',
-       '/images/room2_4.jpg'
-    ],
-    extraHourPrice: 55000,
-    combos: [
-      { id: '2h', name: 'Combo 2h', price: 249000 },
-      { id: '5h', name: 'Combo 5h', price: 409000 },
-      { id: '8h', name: '8 tiếng ngày', price: 649000 },
-      { id: '10h', name: '10 tiếng đêm', price: 519000 },
-    ]
-  },
-  {
-    id: 103, branchId: 1, name: 'Room 1',
-    features: ['Tivi lớn', 'Gương toàn thân', 'KHÔNG bếp'],
-    images: [
-       '/images/room1_1.png',
-       '/images/room1_2.png',
-       '/images/room1_3.png',
-       '/images/room1_4.png'
-    ],
-    extraHourPrice: 45000,
-    combos: [
-      { id: '3h', name: 'Combo 3h', price: 249000 },
-      { id: '5h', name: 'Combo 5h', price: 339000 },
-      { id: '8h', name: '8 tiếng ngày', price: 499000 },
-      { id: '10h', name: '10 tiếng đêm', price: 355000 },
-    ]
-  }
-];
-
 export default function BookingPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [branch, setBranch] = useState<number | null>(null);
-  const [room, setRoom] = useState<number | null>(null);
+  const [room, setRoom] = useState<string | null>(null);
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [isLoadingRooms, setIsLoadingRooms] = useState(false);
   
   // Modal hiển thị ảnh
   const [lightbox, setLightbox] = useState<{images: string[], currentIndex: number} | null>(null);
@@ -90,10 +35,10 @@ export default function BookingPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   
   // Data Logic
-  const filteredRooms = ROOMS.filter(r => r.branchId === branch);
+  const filteredRooms = rooms.filter(r => r.branchId === branch);
   const selectedBranchDetails = BRANCHES.find(b => b.id === branch);
-  const selectedRoomDetails = ROOMS.find(r => r.id === room);
-  const selectedComboDetails = selectedRoomDetails?.combos.find(c => c.id === combo);
+  const selectedRoomDetails = rooms.find(r => r.id === room);
+  const selectedComboDetails = selectedRoomDetails?.combos.find((c: any) => c.id === combo);
 
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
 
@@ -107,11 +52,23 @@ export default function BookingPage() {
     }
 
     const fetchDB = async () => {
+      setIsLoadingRooms(true);
       try {
-        const { getBookings } = await import('../../utils/db');
+        const { getBookings, getRooms } = await import('../../utils/db');
         setExistingBookings(await getBookings());
+        const dbRooms = await getRooms();
+        if (dbRooms && dbRooms.length > 0) {
+          const formattedRooms = dbRooms.map((r: any) => ({
+            ...r,
+            branchId: r.branch_id,
+            extraHourPrice: Number(r.extra_hour_price)
+          }));
+          setRooms(formattedRooms);
+        }
       } catch (e) {
         console.error(e);
+      } finally {
+        setIsLoadingRooms(false);
       }
     };
     fetchDB();
@@ -285,8 +242,13 @@ export default function BookingPage() {
                 <p className="text-stone-500">{selectedBranchDetails?.name}</p>
               </div>
 
-              <div className="space-y-6">
-                {filteredRooms.map(r => {
+              {isLoadingRooms ? (
+                <div className="flex justify-center items-center py-20">
+                  <div className="w-10 h-10 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin"></div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {filteredRooms.map(r => {
                   const isAvailable = isRoomAvailableToday(r.name);
                   const isSelected = room === r.id;
                   
@@ -326,7 +288,7 @@ export default function BookingPage() {
                               )}
                             </div>
                             <ul className="space-y-2 mt-4">
-                              {r.features.map((f, i) => (
+                              {r.features.map((f: any, i: any) => (
                                 <li key={i} className="flex items-center text-sm text-stone-600">
                                   <CheckCircle2 className="w-4 h-4 text-yellow-600 mr-2 shrink-0" />
                                   {f}
@@ -348,6 +310,7 @@ export default function BookingPage() {
                   );
                 })}
               </div>
+              )}
             </motion.div>
           )}
 
@@ -374,7 +337,7 @@ export default function BookingPage() {
                   <div>
                     <label className="block text-sm font-semibold text-stone-700 mb-2">Gói Combo của {selectedRoomDetails?.name}</label>
                     <div className="grid grid-cols-2 gap-3">
-                      {selectedRoomDetails?.combos.map(c => (
+                      {selectedRoomDetails?.combos.map((c: any) => (
                         <button
                           key={c.id}
                           onClick={() => setCombo(c.id)}
