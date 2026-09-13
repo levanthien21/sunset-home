@@ -121,15 +121,51 @@ export default function BookingPage() {
   // Luôn luôn thanh toán 100%
   const amountToPay = totalPrice;
 
+  const isTimeValid = useMemo(() => {
+    if (!bookingDate || !expectedTime) return false;
+    const now = new Date();
+    const [year, month, day] = bookingDate.split('-').map(Number);
+    const [hours, minutes] = expectedTime.split(':').map(Number);
+    const selectedDate = new Date(year, month - 1, day, hours, minutes);
+    return selectedDate >= now;
+  }, [bookingDate, expectedTime]);
+
   const isPhoneValid = /^(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(phone);
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const isStep2Valid = bookingDate && expectedTime && combo;
+  const isStep2Valid = bookingDate && expectedTime && combo && isTimeValid;
   const isStep3Valid = name.trim().length > 2 && isPhoneValid && isEmailValid;
 
-  const handlePaymentSubmit = () => {
+  const handlePaymentSubmit = async () => {
     setIsProcessing(true);
     
-    setTimeout(async () => {
+    try {
+      const { getBookings, addBooking } = await import('../../utils/db');
+      
+      // 1. Kiểm tra chống đặt trùng phòng (Double Booking)
+      const allBookings = await getBookings();
+      const sameDayBookings = allBookings.filter((b: any) => 
+        b.roomName === selectedRoomDetails?.name && 
+        b.checkIn?.startsWith(bookingDate) && 
+        b.status !== 'cancelled'
+      );
+
+      // Nếu phòng đã được đặt 3 lần trong ngày, coi như kín lịch
+      if (sameDayBookings.length >= 3) {
+        alert('Rất tiếc! Phòng này vừa được khách khác đặt hết lịch trong ngày. Vui lòng chọn phòng hoặc ngày khác.');
+        setIsProcessing(false);
+        setStep(2);
+        return;
+      }
+
+      // Nếu trùng chính xác giờ nhận phòng
+      const hasExactTimeOverlap = sameDayBookings.some((b: any) => b.checkIn === `${bookingDate} ${expectedTime}`);
+      if (hasExactTimeOverlap) {
+        alert('Rất tiếc! Đã có khách khác vừa nhanh tay đặt phòng vào khung giờ này. Vui lòng chọn giờ đến khác.');
+        setIsProcessing(false);
+        return;
+      }
+      
+      // 2. Tạo Booking
       const datePart = new Date().toISOString().slice(2,10).replace(/-/g, '');
       const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
       const newBookingId = `SUN-${datePart}-${randomPart}`;
@@ -144,8 +180,8 @@ export default function BookingPage() {
         customerName: name,
         phone,
         email,
-        checkIn: `${bookingDate} ${expectedTime}`, // Packed for old schema
-        checkOut: `${selectedComboDetails?.name}${extraHours > 0 ? ` (+${extraHours}h)` : ''}`, // Packed for old schema
+        checkIn: `${bookingDate} ${expectedTime}`, 
+        checkOut: `${selectedComboDetails?.name}${extraHours > 0 ? ` (+${extraHours}h)` : ''}`, 
         guests,
         addons: [],
         total: totalPrice,
@@ -156,12 +192,9 @@ export default function BookingPage() {
         paymentMethod: 'qr'
       };
       
-      try {
-        const { addBooking } = await import('../../utils/db');
-        await addBooking(newBooking);
-      } catch(e) {}
+      await addBooking(newBooking);
 
-      // Tích hợp Gửi Email tự động bằng EmailJS
+      // 3. Gửi Email
       try {
         if (import.meta.env.VITE_EMAILJS_SERVICE_ID) {
           const emailjs = (await import('@emailjs/browser')).default;
@@ -189,7 +222,11 @@ export default function BookingPage() {
 
       setIsProcessing(false);
       setStep(4); // Success step
-    }, 1500);
+    } catch (e) {
+      console.error(e);
+      alert('Có lỗi xảy ra trong quá trình đặt phòng. Vui lòng thử lại!');
+      setIsProcessing(false);
+    }
   };
 
   const isRoomAvailableToday = (roomName: string) => {
@@ -465,9 +502,12 @@ export default function BookingPage() {
                               type="time"
                               value={expectedTime}
                               onChange={(e) => setExpectedTime(e.target.value)}
-                              className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border text-xs md:text-base"
+                              className={`w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border ${expectedTime && !isTimeValid ? 'border-red-400 focus:ring-red-500' : 'border-stone-200 focus:ring-yellow-600'} rounded-xl focus:bg-white focus:ring-2 outline-none transition-all block box-border text-xs md:text-base`}
                             />
                           </div>
+                          {expectedTime && !isTimeValid && (
+                            <p className="text-[10px] md:text-xs text-red-500 mt-1 font-medium">* Giờ đã qua</p>
+                          )}
                         </div>
                         <div>
                           <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2 truncate" title={`Thêm giờ (+${(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ/h)`}>
