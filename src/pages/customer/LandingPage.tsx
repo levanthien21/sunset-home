@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function LandingPage() {
@@ -127,7 +126,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
             {[
-              { icon: <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline>, title: "Smart TV", desc: "Tích hợp Netflix 4K" },
+              { icon: <><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></>, title: "Smart TV", desc: "Tích hợp Netflix 4K" },
               { icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>, title: "Bồn Tắm", desc: "Thư giãn tối đa" },
               { icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>, title: "Riêng Tư", desc: "An ninh 24/7" },
               { icon: <><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></>, title: "Linh Hoạt", desc: "Check-in mọi lúc" }
@@ -151,59 +150,26 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3. Branches Layout: The Destination */}
-      <section className="py-24 bg-gray-50 overflow-hidden" id="experiences">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col md:flex-row md:items-end justify-between mb-16"
+      {/* 3. Final Call to Action */}
+      <section className="py-32 bg-white text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="max-w-3xl mx-auto px-6"
+        >
+          <h2 className="text-4xl md:text-5xl font-serif text-[#1C1A17] mb-6">Trải nghiệm sự khác biệt</h2>
+          <p className="text-gray-500 font-light mb-12 text-sm md:text-base">
+            Mọi khoảnh khắc đều xứng đáng được nâng niu. Hãy để Sunset Home chuẩn bị cho bạn một không gian hoàn hảo nhất.
+          </p>
+          <Link 
+            to="/customer/booking" 
+            className="inline-block px-10 py-4 bg-[#1C1A17] text-white uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-yellow-600 transition-colors duration-500 rounded-full shadow-xl hover:shadow-yellow-600/30 hover:-translate-y-1 transform"
           >
-            <div className="max-w-2xl">
-              <h3 className="text-xs font-bold tracking-[0.2em] text-yellow-600 uppercase mb-4">Các chi nhánh</h3>
-              <h2 className="text-4xl md:text-5xl font-serif text-[#1C1A17] leading-tight">Lựa chọn<br/><span className="italic text-gray-400">chốn về</span></h2>
-            </div>
-            <Link to="/customer/booking" className="hidden md:flex items-center text-xs uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:text-yellow-600 transition-colors pb-2 border-b border-black/20 hover:border-yellow-600 mt-8 md:mt-0">
-              Xem tất cả <ArrowRight size={14} className="ml-2" />
-            </Link>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            {branches.map((branch: any, index: number) => (
-              <motion.div
-                key={branch.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: index * 0.15, ease: "easeOut" }}
-                className="group block bg-white p-4 md:p-6 rounded-sm shadow-sm hover:shadow-xl transition-all duration-500"
-              >
-                <Link to={`/customer/booking?branch=${branch.id}`} className="block">
-                  <div className="aspect-[16/10] overflow-hidden mb-6 relative rounded-sm">
-                    <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700 ease-out" alt={branch.name} />
-                    <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500"></div>
-                    {!branch.has_rooms && (
-                      <div className="absolute top-4 left-4">
-                        <span className="text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-sm">Sắp ra mắt</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-serif text-[#1C1A17] mb-2 group-hover:text-yellow-600 transition-colors duration-300">{branch.name}</h3>
-                      <p className="text-gray-500 text-xs md:text-sm font-light max-w-[250px] md:max-w-sm truncate">{branch.address}</p>
-                    </div>
-                    <div className="w-10 h-10 flex-shrink-0 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-[#1C1A17] group-hover:text-white transition-all duration-300">
-                      <ArrowRight size={16} className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+            Bắt đầu đặt phòng
+          </Link>
+        </motion.div>
       </section>
 
     </motion.div>
