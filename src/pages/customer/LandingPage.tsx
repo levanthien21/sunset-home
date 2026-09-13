@@ -5,19 +5,24 @@ import { useState, useEffect } from 'react';
 
 export default function LandingPage() {
   const [branches, setBranches] = useState<any[]>([]);
+  const [featuredRooms, setFeaturedRooms] = useState<any[]>([]);
 
   useEffect(() => {
     const load = async () => {
-      const { getBranches } = await import('../../utils/db');
+      const { getBranches, getRooms } = await import('../../utils/db');
       const data = await getBranches();
       if (data && data.length > 0) {
         setBranches(data);
       } else {
-        // Fallback demo data
         setBranches([
           { id: 1, name: 'Chi nhánh 1 (Bến Lức)', address: 'Số 06 Block A3 Ehome Waterpoint', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80' },
           { id: 2, name: 'Chi nhánh 2 (Hậu Nghĩa)', address: 'Số A3 Kdc young town Hậu Nghĩa', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80' }
         ]);
+      }
+      
+      const roomsData = await getRooms();
+      if (roomsData && roomsData.length > 0) {
+        setFeaturedRooms(roomsData.slice(0, 3));
       }
     };
     load();
@@ -81,7 +86,7 @@ export default function LandingPage() {
             </a>
             {/* TikTok */}
             <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-black hover:border-black transition-all duration-300">
-              <svg fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v7.2c0 1.66-.6 3.32-1.72 4.54-1.12 1.22-2.73 1.95-4.42 2.05-1.68.1-3.41-.33-4.78-1.34-1.37-1.02-2.31-2.58-2.61-4.28-.29-1.68-.01-3.48.9-4.96.9-1.47 2.4-2.5 4.09-2.91 1.68-.4 3.48-.19 5.01.62V9.75c-2.45-.66-5.18-.36-7.39 1.1-2.2 1.45-3.56 3.9-3.79 6.49-.22 2.58.74 5.2 2.62 7.03 1.88 1.83 4.55 2.72 7.15 2.45 2.59-.28 5.01-1.63 6.64-3.66 1.63-2.03 2.43-4.66 2.24-7.25V.02h-4.01z"/></svg>
+              <svg viewBox="0 0 448 512" fill="currentColor" className="w-4 h-4"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
             </a>
           </motion.div>
 
@@ -138,6 +143,45 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Featured Rooms */}
+      {featuredRooms.length > 0 && (
+        <section className="py-24 bg-white" id="rooms">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12">
+            <div className="text-center mb-16">
+              <h3 className="text-xs font-bold tracking-[0.2em] text-yellow-600 uppercase mb-4">Không Gian Đặc Sắc</h3>
+              <h2 className="text-4xl lg:text-5xl font-serif text-[#1C1A17]">Các Hạng Phòng Nổi Bật</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredRooms.map((room) => (
+                <div key={room.id} className="bg-white rounded-sm overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300 group">
+                  <div className="aspect-[4/3] overflow-hidden relative">
+                    <img 
+                      src={room.images?.[0] || "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"} 
+                      alt={room.name} 
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"
+                    />
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-sm shadow-sm">
+                      <span className="text-xs font-bold text-gray-900">{room.price_extra_hour.toLocaleString()}đ / <span className="font-light">Thêm</span></span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-serif text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors">{room.name}</h3>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {room.features && room.features.slice(0, 3).map((f: string, i: number) => (
+                        <span key={i} className="text-[10px] uppercase tracking-wider bg-gray-50 text-gray-600 px-2 py-1 rounded-sm">{f}</span>
+                      ))}
+                    </div>
+                    <Link to={`/customer/booking?room=${room.id}`} className="block text-center w-full bg-[#1C1A17] text-white py-3 text-xs uppercase tracking-widest font-bold hover:bg-yellow-600 transition-colors">
+                      Đặt Phòng Ngay
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
     </motion.div>
   );

@@ -42,10 +42,10 @@ function Navbar() {
         <div className="flex-shrink-0 flex justify-end items-center">
           <Link 
             to="/customer/booking" 
-            className={`px-4 py-2 md:px-7 md:py-2.5 text-[9px] md:text-[11px] uppercase tracking-[0.2em] transition-all border ${
+            className={`px-5 py-2.5 md:px-8 md:py-3 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold rounded-full transition-all duration-300 border ${
               isSolid 
-                ? 'border-[#1C1A17] text-[#1C1A17] hover:bg-[#1C1A17] hover:text-white' 
-                : 'border-white/60 text-white hover:bg-white hover:text-[#1C1A17]'
+                ? 'bg-[#1C1A17] text-white border-[#1C1A17] hover:bg-yellow-600 hover:border-yellow-600 hover:shadow-lg hover:shadow-yellow-600/30 hover:-translate-y-0.5' 
+                : 'bg-white/10 backdrop-blur-md text-white border-white/50 hover:bg-white hover:text-[#1C1A17] hover:shadow-lg hover:shadow-white/20 hover:-translate-y-0.5'
             }`}
           >
             Đặt Phòng
