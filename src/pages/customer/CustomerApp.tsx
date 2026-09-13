@@ -74,35 +74,53 @@ export default function CustomerApp() {
       
       {/* Footer */}
       {/* Minimalist Luxury Footer */}
-      <footer className="bg-[#1C1A17] text-white pt-24 pb-12 border-t border-[#1C1A17]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="col-span-1 md:col-span-2">
-            <h3 className="text-xl font-serif mb-2 tracking-[0.2em] uppercase text-white">Sunset</h3>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 mb-8">Boutique Homestay</p>
-            <p className="text-white/60 font-light max-w-sm leading-relaxed text-sm">
+      <footer className="bg-[#1C1A17] text-white pt-16 md:pt-24 pb-8 md:pb-12 border-t border-[#1C1A17]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12">
+          
+          {/* Brand - 5 cols on desktop */}
+          <div className="md:col-span-5">
+            <h3 className="text-xl md:text-2xl font-serif mb-2 tracking-[0.2em] uppercase text-white">Sunset</h3>
+            <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/50 mb-6">Boutique Homestay</p>
+            <p className="text-white/60 font-light max-w-sm leading-relaxed text-xs md:text-sm">
               Đánh thức mọi giác quan trong không gian lãng mạn, nơi mỗi góc nhỏ đều được chăm chút tỉ mỉ để tạo nên những kỷ niệm khó quên tại trung tâm thành phố.
             </p>
           </div>
-          <div>
-            <h4 className="font-bold mb-6 text-xs tracking-widest uppercase text-white/40">Liên Hệ</h4>
-            <ul className="space-y-4 text-white/70 text-sm font-medium">
-              <li><a href="tel:1900xxxx" className="hover:text-[#B8860B] transition-colors">1900 xxxx</a></li>
-              <li><a href="mailto:hello@sunsethome.vn" className="hover:text-[#B8860B] transition-colors">hello@sunsethome.vn</a></li>
-              <li><a href="#" className="hover:text-[#B8860B] transition-colors">Zalo Official</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-6 text-xs tracking-widest uppercase text-white/40">Khám Phá</h4>
-            <ul className="space-y-4 text-white/70 text-sm font-medium">
+          
+          {/* Khám Phá - 3 cols on desktop */}
+          <div className="md:col-span-3">
+            <h4 className="font-bold mb-5 text-[10px] md:text-xs tracking-widest uppercase text-white/40">Khám Phá</h4>
+            <ul className="space-y-3 text-white/70 text-xs md:text-sm font-medium">
               <li><Link to="/customer" className="hover:text-[#B8860B] transition-colors">Trang chủ</Link></li>
-              <li><Link to="/customer/booking" className="hover:text-[#B8860B] transition-colors">Đặt phòng</Link></li>
-              <li><Link to="/customer/policies" className="hover:text-[#B8860B] transition-colors">Chính sách</Link></li>
+              <li><Link to="/customer/booking" className="hover:text-[#B8860B] transition-colors">Hệ thống phòng</Link></li>
+              <li><Link to="/customer/policies" className="hover:text-[#B8860B] transition-colors">Quy định chung</Link></li>
             </ul>
           </div>
+
+          {/* Liên Hệ - 4 cols on desktop */}
+          <div className="md:col-span-4">
+            <h4 className="font-bold mb-5 text-[10px] md:text-xs tracking-widest uppercase text-white/40">Liên Hệ</h4>
+            <ul className="space-y-3 text-white/70 text-xs md:text-sm font-light">
+              <li className="flex items-start">
+                <span className="w-16 flex-shrink-0 font-medium text-white/40">Hotline:</span>
+                <a href="tel:1900xxxx" className="hover:text-[#B8860B] transition-colors font-medium">1900 xxxx</a>
+              </li>
+              <li className="flex items-start">
+                <span className="w-16 flex-shrink-0 font-medium text-white/40">Email:</span>
+                <a href="mailto:hello@sunsethome.vn" className="hover:text-[#B8860B] transition-colors">hello@sunsethome.vn</a>
+              </li>
+              <li className="flex items-start">
+                <span className="w-16 flex-shrink-0 font-medium text-white/40">Zalo:</span>
+                <a href="#" className="hover:text-[#B8860B] transition-colors">Zalo Official</a>
+              </li>
+            </ul>
+          </div>
+          
         </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/40 text-[10px] tracking-widest uppercase">
-          <p>© 2024 Sunset. All rights reserved.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
+        
+        {/* Bottom Bar */}
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-16 md:mt-20 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/40 text-[9px] md:text-[10px] tracking-widest uppercase gap-4">
+          <p>© 2024 Sunset Homestay. All rights reserved.</p>
+          <div className="flex space-x-6">
             <a href="#" className="hover:text-white transition-colors">Instagram</a>
             <a href="#" className="hover:text-white transition-colors">Facebook</a>
             <a href="#" className="hover:text-white transition-colors">TikTok</a>
