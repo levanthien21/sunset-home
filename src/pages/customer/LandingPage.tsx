@@ -49,7 +49,7 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <h2 className="text-xs uppercase tracking-[0.4em] text-yellow-500 mb-6 font-bold">Boutique Homestay</h2>
+            <h2 className="text-[10px] md:text-xs uppercase tracking-[0.5em] text-white/60 mb-6 font-medium">Welcome to Sunset</h2>
             <h1 className="text-5xl md:text-7xl font-serif text-white mb-8 tracking-tight leading-tight">
               Nơi khởi nguồn<br/><span className="italic font-light">những cảm xúc</span>
             </h1>
