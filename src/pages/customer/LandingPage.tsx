@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { PhoneCall, MessageCircle, ChevronUp } from 'lucide-react';
+import { PhoneCall, ChevronUp } from 'lucide-react';
 
 export default function LandingPage() {
   const [branches, setBranches] = useState<any[]>([]);
