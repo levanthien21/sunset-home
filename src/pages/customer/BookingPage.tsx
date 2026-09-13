@@ -262,10 +262,37 @@ export default function BookingPage() {
 
           {step === 2 && (
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <div className="text-center mb-8">
+              <div className="text-center mb-6">
                 <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Chọn không gian của bạn</h2>
-                <p className="text-stone-500">{selectedBranchDetails?.name}</p>
               </div>
+
+              {/* Branch Info & Mini Map */}
+              {selectedBranchDetails && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-stone-200 mb-8 flex flex-col md:flex-row gap-6">
+                  <div className="md:w-1/2 flex flex-col justify-center">
+                    <h3 className="text-xl font-bold text-stone-900 mb-2">{selectedBranchDetails.name}</h3>
+                    <p className="text-stone-500 text-sm flex items-start mb-5">
+                      <MapPin className="w-4 h-4 mr-1.5 shrink-0 mt-0.5 text-stone-400" />
+                      {selectedBranchDetails.address}
+                    </p>
+                    <div className="bg-stone-50 p-4 rounded-xl text-sm text-stone-600 space-y-3">
+                       <p className="flex items-center"><Clock className="w-4 h-4 mr-3 text-stone-400"/> Mở cửa 24/7</p>
+                       <p className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-3 text-green-500"/> Hỗ trợ lễ tân trực tuyến</p>
+                       <p className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-3 text-green-500"/> Dọn phòng hằng ngày</p>
+                    </div>
+                  </div>
+                  <div className="md:w-1/2 h-48 md:h-auto min-h-[200px] rounded-xl overflow-hidden relative bg-stone-100 border border-stone-200">
+                    <iframe 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.038487399478!2d106.47167667480436!3d10.654572289487532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310aed004e76a6e7%3A0x8995a97dd50020d2!2sEHome%20Southgate!5e0!3m2!1svi!2s!4v1714457718011!5m2!1svi!2s" 
+                      className="absolute inset-0 w-full h-full"
+                      style={{ border: 0 }} 
+                      allowFullScreen={false} 
+                      loading="lazy" 
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
+                </motion.div>
+              )}
 
               {isLoadingRooms ? (
                 <div className="flex justify-center items-center py-20">
@@ -354,14 +381,14 @@ export default function BookingPage() {
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-semibold text-stone-900 mb-2">Ngày nhận phòng</label>
-                    <div className="relative">
-                      <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5" />
+                    <div className="relative w-full max-w-full overflow-hidden rounded-xl">
+                      <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 pointer-events-none" />
                       <input
                         type="date"
                         min={new Date().toISOString().split('T')[0]}
                         value={bookingDate}
                         onChange={(e) => setBookingDate(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all"
+                        className="w-full min-w-0 pl-12 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border"
                       />
                     </div>
                   </div>
@@ -373,10 +400,15 @@ export default function BookingPage() {
                         <button
                           key={c.id}
                           onClick={() => setCombo(c.id)}
-                          className={`p-4 rounded-xl border-2 text-left transition-all ${combo === c.id ? 'border-yellow-600 bg-yellow-50 ring-1 ring-yellow-600' : 'border-stone-200 bg-white hover:border-stone-300'}`}
+                          className={`relative p-4 rounded-xl border-2 text-left transition-all overflow-hidden ${combo === c.id ? 'border-yellow-600 bg-yellow-50 shadow-sm transform scale-[1.02]' : 'border-stone-200 bg-white hover:border-stone-300'}`}
                         >
-                          <div className="font-bold text-stone-900 text-sm md:text-base">{c.name}</div>
-                          <div className="text-yellow-600 font-semibold mt-1">{c.price.toLocaleString()}đ</div>
+                          {combo === c.id && (
+                            <div className="absolute top-2 right-2 text-yellow-600">
+                              <CheckCircle2 className="w-4 h-4" />
+                            </div>
+                          )}
+                          <div className={`font-bold text-sm md:text-base ${combo === c.id ? 'text-yellow-700' : 'text-stone-900'}`}>{c.name}</div>
+                          <div className={`${combo === c.id ? 'text-yellow-600' : 'text-stone-500'} font-semibold mt-1`}>{c.price.toLocaleString()}đ</div>
                         </button>
                       ))}
                     </div>
@@ -385,27 +417,27 @@ export default function BookingPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-stone-900 mb-2">Giờ đến dự kiến</label>
-                      <div className="relative">
-                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5" />
+                      <div className="relative w-full max-w-full overflow-hidden rounded-xl">
+                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 pointer-events-none" />
                         <input
                           type="time"
                           value={expectedTime}
                           onChange={(e) => setExpectedTime(e.target.value)}
-                          className="w-full pl-12 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all"
+                          className="w-full min-w-0 pl-12 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border"
                         />
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-stone-900 mb-2">Thêm giờ (+{(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ/h)</label>
-                      <div className="relative">
-                        <PlusCircle className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5" />
+                      <div className="relative w-full max-w-full overflow-hidden rounded-xl">
+                        <PlusCircle className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 pointer-events-none" />
                         <input
                           type="number"
                           min="0"
                           max="10"
                           value={extraHours}
                           onChange={(e) => setExtraHours(parseInt(e.target.value) || 0)}
-                          className="w-full pl-12 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all"
+                          className="w-full min-w-0 pl-12 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border"
                         />
                       </div>
                     </div>
@@ -413,14 +445,14 @@ export default function BookingPage() {
 
                   <div>
                     <label className="block text-sm font-semibold text-stone-900 mb-2">Số khách (Phụ thu 100k/người từ khách thứ 3)</label>
-                    <div className="flex items-center bg-stone-50 p-1.5 rounded-xl border border-stone-200 w-fit">
+                    <div className="flex items-center bg-stone-50 p-1.5 rounded-xl border border-stone-200 w-fit shadow-sm">
                       <button onClick={() => guests > 1 && setGuests(guests - 1)} className="w-10 h-10 rounded-lg bg-white shadow-sm border border-stone-100 flex items-center justify-center font-bold text-stone-600 hover:text-stone-900 transition-colors">-</button>
                       <span className="w-14 text-center font-bold text-stone-900">{guests}</span>
                       <button onClick={() => setGuests(guests + 1)} className="w-10 h-10 rounded-lg bg-white shadow-sm border border-stone-100 flex items-center justify-center font-bold text-stone-600 hover:text-stone-900 transition-colors">+</button>
                     </div>
                   </div>
                   
-                  <div className="bg-stone-900 text-white p-5 md:p-6 rounded-2xl space-y-3 text-sm">
+                  <div className="bg-gradient-to-br from-stone-900 to-stone-800 text-white p-5 md:p-6 rounded-2xl space-y-3 text-sm shadow-md">
                     <div className="flex justify-between items-center text-stone-300">
                       <span>Giá Combo ({selectedComboDetails?.name || 'Chưa chọn'}):</span>
                       <span className="font-medium text-white">{comboPrice.toLocaleString()}đ</span>
