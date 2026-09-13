@@ -68,10 +68,7 @@ export async function createPayOSPaymentLink(amount: number, orderCode: number, 
 export async function verifyPayOSReturn(queryString: string): Promise<boolean> {
   const urlParams = new URLSearchParams(queryString);
   const code = urlParams.get('code');
-  const id = urlParams.get('id');
-  const cancel = urlParams.get('cancel');
   const status = urlParams.get('status');
-  const orderCode = urlParams.get('orderCode');
   
   // Mock logic check
   if (status === 'PAID' || code === '00') {
