@@ -162,7 +162,7 @@ export default function LandingPage() {
                       className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"
                     />
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-sm shadow-sm">
-                      <span className="text-xs font-bold text-gray-900">{room.price_extra_hour.toLocaleString()}đ / <span className="font-light">Thêm</span></span>
+                      <span className="text-xs font-bold text-gray-900">{room.price_extra_hour ? room.price_extra_hour.toLocaleString() : '0'}đ / <span className="font-light">Thêm</span></span>
                     </div>
                   </div>
                   <div className="p-6">
