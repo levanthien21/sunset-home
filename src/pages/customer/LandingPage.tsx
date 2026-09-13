@@ -150,26 +150,79 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3. Final Call to Action */}
-      <section className="py-32 bg-white text-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="max-w-3xl mx-auto px-6"
-        >
-          <h2 className="text-4xl md:text-5xl font-serif text-[#1C1A17] mb-6">Trải nghiệm sự khác biệt</h2>
-          <p className="text-gray-500 font-light mb-12 text-sm md:text-base">
-            Mọi khoảnh khắc đều xứng đáng được nâng niu. Hãy để Sunset Home chuẩn bị cho bạn một không gian hoàn hảo nhất.
-          </p>
-          <Link 
-            to="/customer/booking" 
-            className="inline-block px-10 py-4 bg-[#1C1A17] text-white uppercase tracking-[0.2em] text-[11px] font-bold hover:bg-yellow-600 transition-colors duration-500 rounded-full shadow-xl hover:shadow-yellow-600/30 hover:-translate-y-1 transform"
+      {/* 3. Policies Section */}
+      <section className="py-24 bg-white border-t border-gray-100">
+        <div className="max-w-5xl mx-auto px-6 lg:px-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="text-center mb-16"
           >
-            Bắt đầu đặt phòng
-          </Link>
-        </motion.div>
+            <h3 className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-4">Lưu ý quan trọng</h3>
+            <h2 className="text-3xl md:text-4xl font-serif text-[#1C1A17]">Chính sách lưu trú</h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+            >
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-4">Thời gian</h4>
+              <ul className="text-sm text-gray-500 font-light space-y-2">
+                <li>Check-in: Từ 14:00</li>
+                <li>Check-out: Trước 12:00</li>
+                <li>Hỗ trợ nhận phòng sớm (tùy tình trạng)</li>
+              </ul>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            >
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-4">Không gian</h4>
+              <ul className="text-sm text-gray-500 font-light space-y-2">
+                <li>Không hút thuốc trong phòng</li>
+                <li>Không mang theo thú cưng</li>
+                <li>Giữ gìn không gian chung</li>
+              </ul>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+            >
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-4">Hoàn hủy</h4>
+              <ul className="text-sm text-gray-500 font-light space-y-2">
+                <li>Hủy miễn phí trước 48h</li>
+                <li>Hỗ trợ dời lịch linh hoạt</li>
+                <li>Bảo lưu giá trị tiền cọc</li>
+              </ul>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+            className="mt-16 text-center"
+          >
+            <Link 
+              to="/customer/policies" 
+              className="inline-flex items-center text-[10px] uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:text-yellow-600 transition-colors pb-1 border-b border-black/20 hover:border-yellow-600"
+            >
+              Xem chi tiết chính sách
+            </Link>
+          </motion.div>
+        </div>
       </section>
 
     </motion.div>
