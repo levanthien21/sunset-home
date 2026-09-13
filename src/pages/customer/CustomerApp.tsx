@@ -1,7 +1,7 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { Menu } from 'lucide-react';
+
 import LandingPage from './LandingPage';
 import BookingPage from './BookingPage';
 import PoliciesPage from './PoliciesPage';
@@ -22,12 +22,14 @@ function Navbar() {
   return (
     <nav className={`fixed w-full z-50 transition-all duration-700 ${isSolid ? 'bg-white shadow-sm border-b border-gray-100 py-4 text-gray-900' : 'bg-transparent py-8 text-white'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
-        {/* Left - Menu */}
-        <div className="flex-1 flex items-center">
-          <button className="flex items-center space-x-2 text-xs uppercase tracking-[0.2em] font-medium hover:opacity-70 transition-opacity">
-            <Menu size={16} />
-            <span className="hidden md:inline">Menu</span>
-          </button>
+        {/* Left - Navigation */}
+        <div className="flex-1 flex items-center space-x-6">
+          <Link to="/customer" className="hidden md:block text-xs uppercase tracking-[0.2em] font-medium hover:opacity-70 transition-opacity">
+            Trang chủ
+          </Link>
+          <Link to="/customer/policies" className="hidden md:block text-xs uppercase tracking-[0.2em] font-medium hover:opacity-70 transition-opacity">
+            Chính sách
+          </Link>
         </div>
 
         {/* Center - Logo */}

@@ -10,13 +10,16 @@ const BRANCHES = [
 
 const ROOMS = [
   {
-    id: 101, branchId: 1, name: 'P_Sun2',
+    id: 101, branchId: 1, name: 'Room 3',
     features: ['Bồn tắm', 'Máy chiếu', 'Bếp (hạn chế dụng cụ)'],
     images: [
        '/images/room3_1.png',
        '/images/room3_2.png',
        '/images/room3_3.jpg',
-       '/images/room3_4.png'
+       '/images/room3_4.png',
+       '/images/room3_5.png',
+       '/images/room3_6.jpg',
+       '/images/room3_7.png'
     ],
     extraHourPrice: 50000,
     combos: [
@@ -27,7 +30,7 @@ const ROOMS = [
     ]
   },
   {
-    id: 102, branchId: 1, name: 'P_506 room 2',
+    id: 102, branchId: 1, name: 'Room 2',
     features: ['View ban công', 'Tivi lớn', 'Bếp'],
     images: [
        '/images/room2_1.jpg',
@@ -44,7 +47,7 @@ const ROOMS = [
     ]
   },
   {
-    id: 103, branchId: 1, name: 'P_506 room 1',
+    id: 103, branchId: 1, name: 'Room 1',
     features: ['Tivi lớn', 'Gương toàn thân', 'KHÔNG bếp'],
     images: [
        '/images/room1_1.png',
@@ -69,7 +72,7 @@ export default function BookingPage() {
   const [room, setRoom] = useState<number | null>(null);
   
   // Modal hiển thị ảnh
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<{images: string[], currentIndex: number} | null>(null);
   
   // Thời gian & Combo
   const [bookingDate, setBookingDate] = useState('');
@@ -291,26 +294,22 @@ export default function BookingPage() {
                     <div key={r.id} className={`bg-white rounded-2xl border-2 transition-all overflow-hidden ${isSelected ? 'border-yellow-600 shadow-md' : 'border-stone-200'}`}>
                       <div className="flex flex-col md:flex-row">
                         <div className="md:w-2/5 p-3">
-                          {r.images.length > 1 ? (
-                            <div className="grid grid-cols-2 gap-2 h-full">
-                              {r.images.slice(0,4).map((img, idx) => (
-                                <img 
-                                  key={idx} 
-                                  src={img} 
-                                  onClick={() => setSelectedImage(img)}
-                                  className="w-full h-24 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity" 
-                                  alt={r.name} 
-                                />
-                              ))}
-                            </div>
-                          ) : (
+                          <div className="relative h-48 md:h-full group">
                             <img 
                               src={r.images[0]} 
-                              onClick={() => setSelectedImage(r.images[0])}
+                              onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
+                              className="w-full h-full object-cover rounded-xl cursor-pointer" 
                               alt={r.name} 
-                              className="w-full h-48 md:h-full object-cover rounded-xl cursor-pointer hover:opacity-90 transition-opacity" 
                             />
-                          )}
+                            {r.images.length > 1 && (
+                              <button 
+                                onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
+                                className="absolute bottom-3 right-3 bg-black/70 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-black/90 transition-colors flex items-center shadow-lg backdrop-blur-sm"
+                              >
+                                Xem tất cả {r.images.length} ảnh
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <div className="p-5 md:w-3/5 flex flex-col justify-between">
                           <div>
@@ -318,11 +317,11 @@ export default function BookingPage() {
                               <h3 className="text-xl font-bold text-stone-900">{r.name}</h3>
                               {isAvailable ? (
                                 <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full flex items-center">
-                                  <Check className="w-3 h-3 mr-1" /> Có phòng trống
+                                  <Check className="w-3 h-3 mr-1" /> Hôm nay ({new Date().toLocaleDateString('vi-VN').substring(0,5)}): Trống
                                 </span>
                               ) : (
                                 <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">
-                                  Kín lịch hôm nay
+                                  Hôm nay: Kín lịch
                                 </span>
                               )}
                             </div>
@@ -615,30 +614,68 @@ export default function BookingPage() {
       </div>
 
       {/* Modal Zoom Ảnh */}
+      {/* Modal Zoom Ảnh */}
       <AnimatePresence>
-        {selectedImage && (
+        {lightbox && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+            onClick={() => setLightbox(null)}
           >
             <button 
-              className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors"
-              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-50"
+              onClick={() => setLightbox(null)}
             >
               <X className="w-8 h-8" />
             </button>
+
+            {lightbox.images.length > 1 && (
+              <button 
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-2 z-50"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightbox({
+                    ...lightbox,
+                    currentIndex: lightbox.currentIndex === 0 ? lightbox.images.length - 1 : lightbox.currentIndex - 1
+                  });
+                }}
+              >
+                <ArrowLeft className="w-10 h-10" />
+              </button>
+            )}
+
             <motion.img 
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              src={selectedImage} 
+              key={lightbox.currentIndex}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              src={lightbox.images[lightbox.currentIndex]} 
               className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
               alt="Phong To" 
               onClick={(e) => e.stopPropagation()} 
             />
+
+            {lightbox.images.length > 1 && (
+              <button 
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-2 z-50"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightbox({
+                    ...lightbox,
+                    currentIndex: lightbox.currentIndex === lightbox.images.length - 1 ? 0 : lightbox.currentIndex + 1
+                  });
+                }}
+              >
+                <ArrowRight className="w-10 h-10" />
+              </button>
+            )}
+            
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 text-sm font-medium tracking-widest bg-black/50 px-4 py-2 rounded-full">
+              {lightbox.currentIndex + 1} / {lightbox.images.length}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
