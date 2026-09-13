@@ -90,37 +90,22 @@ export default function LandingPage() {
             </a>
           </motion.div>
 
-          {/* Quick Branch Selection & Date Picker */}
+          {/* Quick Branch Selection */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-col items-center justify-center gap-4 w-full"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
           >
-            <div className="bg-white/10 backdrop-blur-md p-2 rounded-2xl md:rounded-full border border-white/20 flex flex-col md:flex-row items-center w-full max-w-3xl gap-2 shadow-2xl">
-              <div className="flex-1 w-full flex bg-white rounded-xl md:rounded-full px-4 py-3 md:py-2 items-center">
-                <CalendarDays className="w-5 h-5 text-gray-400 mr-2 shrink-0" />
-                <input 
-                  type="date" 
-                  className="w-full bg-transparent outline-none text-sm text-gray-700 min-w-0" 
-                  min={new Date().toISOString().split('T')[0]}
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                />
-              </div>
-              
-              <div className="flex-1 w-full grid grid-cols-2 md:flex gap-2">
-                {branches.map((branch) => (
-                  <Link 
-                    key={branch.id}
-                    to={`/customer/booking?branch=${branch.id}${selectedDate ? `&date=${selectedDate}` : ''}`}
-                    className="flex-1 text-center flex items-center justify-center px-4 py-3 md:py-4 rounded-xl md:rounded-full bg-[#D4AF37] hover:bg-white hover:text-black text-white text-[10px] sm:text-xs uppercase tracking-wider font-bold transition-all duration-300 shadow-md"
-                  >
-                    {branch.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            {branches.map((branch) => (
+              <Link 
+                key={branch.id}
+                to={`/customer/booking?branch=${branch.id}`}
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/5 backdrop-blur-md border border-white/20 text-white text-[10px] uppercase tracking-[0.2em] font-medium hover:bg-white hover:text-black hover:scale-105 transition-all duration-300"
+              >
+                {branch.name}
+              </Link>
+            ))}
           </motion.div>
         </div>
       </section>

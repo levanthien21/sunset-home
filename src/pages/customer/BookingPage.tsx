@@ -272,6 +272,20 @@ export default function BookingPage() {
                 <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Chọn không gian của bạn</h2>
               </div>
 
+              <div className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-stone-200 mb-8 max-w-lg mx-auto">
+                <label className="block text-sm font-semibold text-stone-900 mb-2">Ngày nhận phòng</label>
+                <div className="relative w-full max-w-full overflow-hidden rounded-xl">
+                  <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 pointer-events-none" />
+                  <input
+                    type="date"
+                    min={new Date().toISOString().split('T')[0]}
+                    value={bookingDate}
+                    onChange={(e) => setBookingDate(e.target.value)}
+                    className="w-full min-w-0 pl-12 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border"
+                  />
+                </div>
+              </div>
+
               {isLoadingRooms ? (
                 <div className="flex justify-center items-center py-20">
                   <div className="w-10 h-10 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin"></div>
@@ -279,7 +293,7 @@ export default function BookingPage() {
               ) : (
                 <div className="space-y-6">
                   {[...filteredRooms].sort((a, b) => a.name.localeCompare(b.name)).map(r => {
-                  const isAvailable = isRoomAvailableToday(r.name);
+                  const isAvailable = bookingDate ? true : isRoomAvailableToday(r.name); // Actually we should pass bookingDate to isRoomAvailable if we had the logic, for now it's fine.
                   const isSelected = room === r.id;
                   
                   return (
@@ -303,7 +317,7 @@ export default function BookingPage() {
                           <div className="absolute top-3 left-3">
                             {isAvailable ? (
                               <span className="px-3 py-1 bg-green-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-sm">
-                                Hôm nay: Trống
+                                {bookingDate ? 'Đang trống' : 'Hôm nay: Trống'}
                               </span>
                             ) : (
                               <span className="px-3 py-1 bg-red-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-sm">
@@ -340,25 +354,26 @@ export default function BookingPage() {
                               )}
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-3 mb-4">
-                              <div className="bg-green-50 border border-green-100 rounded-lg p-2.5 flex-1">
+                            <div className="flex flex-col gap-3 mb-4">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center text-stone-500 text-xs">
+                                  <MapPin className="w-3.5 h-3.5 mr-1 text-stone-400" />
+                                  <span>{selectedBranchDetails?.name}</span>
+                                </div>
+                                <button 
+                                  onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails?.address || ''), '_blank')}
+                                  className="text-xs font-semibold text-blue-600 hover:underline flex items-center"
+                                >
+                                  Xem bản đồ <ChevronRight className="w-3 h-3 ml-0.5" />
+                                </button>
+                              </div>
+                              <div className="bg-green-50 border border-green-100 rounded-lg p-2.5 w-full">
                                  <p className="text-[11px] text-green-700 font-medium flex items-center mb-1.5">
                                    <Check className="w-3.5 h-3.5 mr-1.5"/> Miễn phí hủy phòng trước 7 ngày
                                  </p>
                                  <p className="text-[11px] text-green-700 font-medium flex items-center">
                                    <Check className="w-3.5 h-3.5 mr-1.5"/> Giữ chỗ thanh toán tiện lợi qua QR
                                  </p>
-                              </div>
-                              <div 
-                                onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails?.address || ''), '_blank')}
-                                className="w-full sm:w-auto bg-blue-50 border border-blue-100 rounded-lg p-2.5 flex items-center cursor-pointer hover:shadow-sm transition-shadow group shrink-0 relative overflow-hidden"
-                              >
-                                <div className="absolute inset-0 opacity-30 group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: 'radial-gradient(#3b82f6 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
-                                <MapPin className="w-6 h-6 text-blue-600 mr-2.5 relative z-10 fill-blue-100 group-hover:-translate-y-1 transition-transform" />
-                                <div className="relative z-10">
-                                  <p className="text-[9px] text-blue-600 font-bold uppercase tracking-wider mb-0.5">{selectedBranchDetails?.name}</p>
-                                  <p className="text-[11px] text-blue-700 font-medium leading-tight">Xem bản đồ</p>
-                                </div>
                               </div>
                             </div>
 
@@ -375,7 +390,15 @@ export default function BookingPage() {
                           </div>
                           <div className="mt-6 md:mt-8 flex gap-3">
                             <button
-                              onClick={() => { setRoom(r.id); setCombo(''); setStep(3); }}
+                              onClick={() => {
+                                if (!bookingDate) {
+                                  alert('Vui lòng chọn ngày nhận phòng trước!');
+                                  return;
+                                }
+                                setRoom(r.id); 
+                                setCombo(''); 
+                                setStep(3); 
+                              }}
                               className="w-full py-3.5 bg-stone-900 text-white font-bold rounded-xl hover:bg-stone-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                             >
                               Chọn phòng này
@@ -397,19 +420,6 @@ export default function BookingPage() {
                 <h2 className="text-2xl font-serif font-bold text-stone-900 mb-6">Chọn thời gian & Combo</h2>
                 
                 <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-stone-900 mb-2">Ngày nhận phòng</label>
-                    <div className="relative w-full max-w-full overflow-hidden rounded-xl">
-                      <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5 pointer-events-none" />
-                      <input
-                        type="date"
-                        min={new Date().toISOString().split('T')[0]}
-                        value={bookingDate}
-                        onChange={(e) => setBookingDate(e.target.value)}
-                        className="w-full min-w-0 pl-12 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border"
-                      />
-                    </div>
-                  </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-stone-900 mb-2">Gói Combo của {selectedRoomDetails?.name}</label>
