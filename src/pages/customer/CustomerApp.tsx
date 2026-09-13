@@ -39,9 +39,6 @@ function Navbar() {
 
         {/* Right - Action */}
         <div className="flex-1 flex justify-end items-center space-x-6">
-          <Link to="/customer/policies" className="hidden lg:block text-xs uppercase tracking-[0.2em] font-medium hover:opacity-70 transition-opacity">
-            Chính sách
-          </Link>
           <Link to="/customer/booking" className={`px-6 py-2.5 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold transition-all shadow-sm ${isSolid ? 'bg-yellow-600 text-white hover:bg-yellow-700' : 'bg-white text-[#1C1A17] hover:bg-white/90'}`}>
             Đặt Phòng
           </Link>

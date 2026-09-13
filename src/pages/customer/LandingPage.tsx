@@ -112,36 +112,6 @@ export default function LandingPage() {
       </section>
 
       {/* Intro Section */}
-      <section className="py-24 px-6 lg:px-12 max-w-7xl mx-auto" id="spaces">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">
-          <div className="lg:col-span-5 relative">
-            <div className="aspect-[3/4] overflow-hidden rounded-t-full border-4 border-white shadow-2xl">
-              <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" alt="Space" className="w-full h-full object-cover" />
-            </div>
-            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-yellow-600/10 rounded-full blur-3xl"></div>
-          </div>
-          <div className="lg:col-span-7 lg:pl-10">
-            <h3 className="text-xs font-bold tracking-[0.2em] text-yellow-600 uppercase mb-4">Triết lý thiết kế</h3>
-            <h2 className="text-4xl lg:text-5xl font-serif text-[#1C1A17] mb-8 leading-snug">Vẻ đẹp rực rỡ<br/>trong từng khoảnh khắc</h2>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              Mỗi căn hộ tại Sunset đều được chăm chút tỉ mỉ mang âm hưởng ấm áp. Không gian ngập tràn ánh sáng tự nhiên pha lẫn sắc vàng hoàng hôn sẽ làm nổi bật lên những cảm xúc chân thật nhất của bạn.
-            </p>
-            <div className="grid grid-cols-2 gap-8 mt-12 border-t border-gray-200 pt-12">
-              <div>
-                <Tv size={28} className="text-yellow-600 mb-4" />
-                <h4 className="font-bold text-[#1C1A17] mb-2">Tiện nghi hiện đại</h4>
-                <p className="text-sm text-gray-500">Màn hình rộng xịn sò, âm thanh chất lượng cao cho buổi tối lãng mạn.</p>
-              </div>
-              <div>
-                <Wine size={28} className="text-yellow-600 mb-4" />
-                <h4 className="font-bold text-[#1C1A17] mb-2">Trải nghiệm cá nhân</h4>
-                <p className="text-sm text-gray-500">Dịch vụ setup riêng tư, hoa hồng, rượu vang và không gian cực chill.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Branches Preview */}
       <section className="py-24 bg-[#1C1A17] text-white" id="experiences">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -151,85 +121,27 @@ export default function LandingPage() {
               <h2 className="text-4xl lg:text-5xl font-serif">Lựa chọn chốn về</h2>
             </div>
             <Link to="/customer/booking" className="hidden md:flex items-center text-xs uppercase tracking-[0.2em] font-medium text-yellow-500 hover:text-white transition-colors">
-              Xem tất cả phòng <ArrowRight size={14} className="ml-2" />
+              Xem tất cả <ArrowRight size={14} className="ml-2" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {branches.map((branch: any) => (
-              <Link to="/customer/booking" key={branch.id} className="group block">
+              <Link to={`/customer/booking?branch=${branch.id}`} key={branch.id} className="group block">
                 <div className="aspect-[4/3] overflow-hidden rounded-sm mb-6 relative">
                   <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-1000 ease-out" alt={branch.name} />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                  {!branch.has_rooms && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <span className="text-white font-semibold px-4 py-2 bg-stone-900/80 rounded-full">Sắp ra mắt</span>
+                    </div>
+                  )}
                 </div>
                 <h3 className="text-2xl font-serif text-white mb-2 group-hover:text-yellow-500 transition-colors">{branch.name}</h3>
                 <p className="text-white/60 text-sm">{branch.address}</p>
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Gallery Section */}
-      <section className="py-24 bg-white" id="gallery">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center mb-16">
-          <h3 className="text-xs font-bold tracking-[0.2em] text-yellow-600 uppercase mb-4">Thư viện ảnh</h3>
-          <h2 className="text-4xl lg:text-5xl font-serif text-[#1C1A17]">Góc Nhìn Khác Biệt</h2>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 px-2 md:px-6 max-w-7xl mx-auto">
-          <div className="col-span-2 row-span-2 overflow-hidden rounded-sm group">
-            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" alt="Villa Interior" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-          </div>
-          <div className="overflow-hidden rounded-sm group aspect-square">
-            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80" alt="Bedroom" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-          </div>
-          <div className="overflow-hidden rounded-sm group aspect-square">
-            <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="Bathroom" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-          </div>
-          <div className="overflow-hidden rounded-sm group aspect-[2/1] col-span-2">
-            <img src="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=1200&q=80" alt="Living Room" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-          </div>
-        </div>
-      </section>
-
-      {/* Reviews Section */}
-      <section className="py-24 bg-[#F9F8F6]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
-          <h3 className="text-xs font-bold tracking-[0.2em] text-yellow-600 uppercase mb-4">Cảm nhận</h3>
-          <h2 className="text-4xl lg:text-5xl font-serif text-[#1C1A17] mb-16">Khách Hàng Nói Gì?</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            {[
-              { name: "Minh Anh", review: "Phòng Cinebox ở Tân Bình cực kỳ đỉnh. Máy chiếu nét, không gian riêng tư. Tuyệt vời cho ngày kỷ niệm!" },
-              { name: "Hoàng Tôn", review: "Setup phòng lãng mạn đúng ý mình. Bạn gái mình rất thích bồn tắm và view ban công ở chi nhánh Bình Thạnh." },
-              { name: "Thu Thủy", review: "Thích nhất là sự sạch sẽ và mùi hương tinh dầu thoang thoảng khi vừa bước vào. Chắc chắn sẽ quay lại." }
-            ].map((r, i) => (
-              <div key={i} className="bg-white p-8 border border-gray-100 rounded-sm shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex text-yellow-500 mb-4">
-                  {'★★★★★'.split('').map((star, idx) => <span key={idx}>{star}</span>)}
-                </div>
-                <p className="text-gray-600 font-light italic mb-6">"{r.review}"</p>
-                <p className="font-bold text-sm tracking-widest uppercase text-gray-900">— {r.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Map Section */}
-      <section id="map" className="h-[60vh] relative border-t border-gray-200">
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1251390453535!2d106.65434191480112!3d10.793796592309873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752934142f1b4d%3A0x6d90d8a9e403d58!2sSunset%20Home%20-%20Boutique%20Homestay!5e0!3m2!1svi!2s!4v1680000000000!5m2!1svi!2s" 
-          className="w-full h-full border-0" 
-          allowFullScreen={false} 
-          loading="lazy" 
-          referrerPolicy="no-referrer-when-downgrade"
-          title="Sunset Home Location Map"
-        ></iframe>
-        <div className="absolute top-10 left-10 md:left-auto md:right-10 bg-white p-6 shadow-xl rounded-sm max-w-sm border-l-4 border-yellow-600">
-          <h3 className="font-serif text-2xl text-gray-900 mb-2">Sunset Vườn</h3>
-          <p className="text-sm text-gray-600 font-light mb-4">Đường Xuân Hồng, Phường 12, Quận Tân Bình, TP.HCM</p>
-          <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="text-xs uppercase tracking-[0.1em] font-bold text-yellow-600 hover:text-yellow-700">Chỉ đường qua Google Maps</a>
         </div>
       </section>
 
