@@ -498,13 +498,13 @@ export default function BookingPage() {
                       <div className="grid grid-cols-2 gap-3 md:gap-4">
                         <div>
                           <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2">Giờ đến</label>
-                          <div className="relative w-full">
-                            <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4 md:w-5 md:h-5 pointer-events-none z-10" />
+                          <div className={`relative w-full bg-stone-50 border ${expectedTime && !isTimeValid ? 'border-red-400 focus-within:ring-red-500' : 'border-stone-200 focus-within:ring-yellow-600'} rounded-xl focus-within:bg-white focus-within:ring-2 transition-all`}>
+                            <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 w-4 h-4 md:w-5 md:h-5 pointer-events-none z-10" />
                             <input
                               type="time"
                               value={expectedTime}
                               onChange={(e) => setExpectedTime(e.target.value)}
-                              className={`w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border ${expectedTime && !isTimeValid ? 'border-red-400 focus:ring-red-500' : 'border-stone-200 focus:ring-yellow-600'} rounded-xl focus:bg-white focus:ring-2 outline-none transition-all block box-border text-base cursor-pointer appearance-none relative z-20 ${!expectedTime ? 'text-transparent' : 'text-stone-900'}`}
+                              className={`w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-transparent outline-none border-none block box-border text-base cursor-pointer appearance-none relative z-20 ${!expectedTime ? 'text-transparent' : 'text-stone-900'}`}
                             />
                             {!expectedTime && (
                               <span className="absolute left-9 md:left-11 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none z-10 text-base">
@@ -520,15 +520,15 @@ export default function BookingPage() {
                           <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2 truncate" title={`Thêm giờ (+${(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ/h)`}>
                             Thêm giờ (+{(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ)
                           </label>
-                          <div className="relative w-full">
-                            <PlusCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4 md:w-5 md:h-5 pointer-events-none" />
+                          <div className="relative w-full bg-stone-50 border border-stone-200 rounded-xl focus-within:bg-white focus-within:ring-2 focus-within:ring-yellow-600/50 focus-within:border-yellow-600 transition-all">
+                            <PlusCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 w-4 h-4 md:w-5 md:h-5 pointer-events-none z-10" />
                             <input
                               type="number"
                               min="0"
                               max="10"
                               value={extraHours}
                               onChange={(e) => setExtraHours(parseInt(e.target.value) || 0)}
-                              className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border text-base appearance-none"
+                              className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-transparent outline-none border-none block box-border text-base appearance-none text-stone-900 relative z-20"
                             />
                           </div>
                         </div>
