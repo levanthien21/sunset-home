@@ -4,7 +4,7 @@ import StaffApp from './pages/staff/StaffApp';
 import AdminApp from './pages/admin/AdminApp';
 import RoleSelection from './pages/RoleSelection';
 
-import VNPayReturnPage from './pages/customer/VNPayReturnPage';
+import PayOSReturnPage from './pages/customer/PayOSReturnPage';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Route path="/customer/*" element={<CustomerApp />} />
         <Route path="/staff/*" element={<StaffApp />} />
         <Route path="/admin/*" element={<AdminApp />} />
-        <Route path="/vnpay-return" element={<VNPayReturnPage />} />
+        <Route path="/payos-return" element={<PayOSReturnPage />} />
       </Routes>
     </Router>
   );

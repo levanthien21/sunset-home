@@ -222,16 +222,21 @@ export default function BookingPage() {
         console.error("Lỗi khi gửi email:", error);
       }
 
-      // 4. Redirect to VNPay
+      // 4. Redirect to PayOS
       try {
-        const { generateVNPayUrl } = await import('../../utils/vnpay');
-        const orderInfo = `Sunset Homestay - Booking ${newBookingId}`;
-        const paymentUrl = await generateVNPayUrl(amountToPay, newBookingId, orderInfo);
+        const { createPayOSPaymentLink } = await import('../../utils/payos');
+        const orderInfo = `Homestay Booking ${newBookingId}`;
+        const payosOrderCode = parseInt(Date.now().toString().slice(-6) + Math.floor(Math.random() * 1000)); // Generate unique number < 2^53
         
-        // Chuyển hướng sang VNPay
+        // Cập nhật booking với mã order của PayOS để dễ tra cứu
+        await updateBookingStatus(newBookingId, 'pending_payment');
+        
+        const paymentUrl = await createPayOSPaymentLink(amountToPay, payosOrderCode, orderInfo);
+        
+        // Chuyển hướng sang PayOS
         window.location.href = paymentUrl;
       } catch (err) {
-        console.error("Lỗi tạo link VNPay:", err);
+        console.error("Lỗi tạo link PayOS:", err);
         setIsProcessing(false);
         setStep(4);
       }
@@ -676,13 +681,13 @@ export default function BookingPage() {
                       <div className="bg-stone-800/80 border border-stone-700 rounded-2xl p-4 md:p-5 mb-5 md:mb-6 flex flex-col items-center animate-in fade-in duration-500">
                         <p className="text-xs font-bold text-center mb-3 text-stone-400 uppercase tracking-wide">Phương thức thanh toán</p>
                         <div className="bg-white p-2 rounded-xl shadow-md border border-stone-100 mb-3 w-full flex justify-center items-center h-20">
-                          {/* VNPay Logo Mock */}
-                          <div className="text-2xl font-bold text-blue-700 flex items-center">
-                            <span className="text-red-600 mr-1">VNPAY</span>
-                            <span className="text-[10px] text-gray-500 font-normal">QR</span>
+                          {/* PayOS Logo Mock */}
+                          <div className="text-2xl font-bold flex items-center tracking-tight">
+                            <span className="text-[#132A3E]">Pay</span>
+                            <span className="text-[#00C292]">OS</span>
                           </div>
                         </div>
-                        <p className="text-xs text-stone-400 text-center px-2">Hệ thống sẽ chuyển hướng bạn sang cổng thanh toán an toàn của VNPay.</p>
+                        <p className="text-xs text-stone-400 text-center px-2">Hệ thống sẽ chuyển hướng bạn sang cổng thanh toán thông minh của PayOS.</p>
                       </div>
                     ) : (
                       <div className="bg-stone-800/50 rounded-2xl p-6 mb-5 md:mb-6 flex flex-col items-center text-center border border-dashed border-stone-700">
@@ -697,13 +702,13 @@ export default function BookingPage() {
                       onClick={handlePaymentSubmit}
                       disabled={!isStep2Valid || !isStep3Valid || isProcessing}
                       className={`w-full py-4 rounded-xl font-bold flex items-center justify-center transition-all ${
-                        isStep2Valid && isStep3Valid && !isProcessing ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30' : 'bg-stone-800 text-stone-600 cursor-not-allowed'
+                        isStep2Valid && isStep3Valid && !isProcessing ? 'bg-[#132A3E] text-white hover:bg-black shadow-lg shadow-[#132A3E]/30' : 'bg-stone-800 text-stone-600 cursor-not-allowed'
                       }`}
                     >
                       {isProcessing ? (
                         <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       ) : (
-                        "Thanh toán qua VNPay"
+                        "Thanh toán qua PayOS"
                       )}
                     </button>
                     {(!isStep2Valid || !isStep3Valid) && (

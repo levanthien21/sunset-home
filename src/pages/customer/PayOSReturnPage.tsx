@@ -1,46 +1,44 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { verifyVNPayReturn } from '../../utils/vnpay';
+import { verifyPayOSReturn } from '../../utils/payos';
 import { updateBookingStatus } from '../../utils/db';
 import { CheckCircle2, XCircle, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function VNPayReturnPage() {
+export default function PayOSReturnPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'invalid'>('loading');
-  const [orderId, setOrderId] = useState('');
-  const [amount, setAmount] = useState(0);
+  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'cancel'>('loading');
+  const [orderCode, setOrderCode] = useState('');
 
   useEffect(() => {
     const checkPayment = async () => {
       try {
-        const isValid = await verifyVNPayReturn(location.search);
+        const urlParams = new URLSearchParams(location.search);
+        const orderId = urlParams.get('orderCode') || '';
+        const cancel = urlParams.get('cancel') === 'true';
         
-        if (!isValid) {
-          setStatus('invalid');
+        setOrderCode(orderId);
+
+        if (cancel) {
+          await updateBookingStatus(orderId, 'cancelled');
+          setStatus('cancel');
           return;
         }
 
-        const urlParams = new URLSearchParams(location.search);
-        const vnp_ResponseCode = urlParams.get('vnp_ResponseCode');
-        const vnp_TxnRef = urlParams.get('vnp_TxnRef') || '';
-        const vnp_Amount = parseInt(urlParams.get('vnp_Amount') || '0') / 100;
+        const isValid = await verifyPayOSReturn(location.search);
         
-        setOrderId(vnp_TxnRef);
-        setAmount(vnp_Amount);
-
-        if (vnp_ResponseCode === '00') {
+        if (isValid) {
           // Giao dịch thành công
-          await updateBookingStatus(vnp_TxnRef, 'paid');
+          await updateBookingStatus(orderId, 'paid');
           setStatus('success');
         } else {
           // Giao dịch thất bại
-          await updateBookingStatus(vnp_TxnRef, 'cancelled');
+          await updateBookingStatus(orderId, 'cancelled');
           setStatus('error');
         }
       } catch (error) {
-        console.error("Lỗi xử lý kết quả VNPay:", error);
+        console.error("Lỗi xử lý kết quả PayOS:", error);
         setStatus('error');
       }
     };
@@ -58,8 +56,8 @@ export default function VNPayReturnPage() {
         {status === 'loading' && (
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin mb-6"></div>
-            <h2 className="text-xl font-bold text-stone-900">Đang xử lý thanh toán...</h2>
-            <p className="text-stone-500 mt-2">Vui lòng không đóng trình duyệt</p>
+            <h2 className="text-xl font-bold text-stone-900">Đang kiểm tra giao dịch...</h2>
+            <p className="text-stone-500 mt-2">Vui lòng đợi giây lát</p>
           </div>
         )}
 
@@ -70,7 +68,7 @@ export default function VNPayReturnPage() {
             </div>
             <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Thanh toán thành công!</h2>
             <p className="text-stone-600 mb-6">
-              Mã đơn <strong>{orderId}</strong> đã được thanh toán số tiền <strong>{amount.toLocaleString()}đ</strong>.
+              Mã đơn <strong>{orderCode}</strong> đã được thanh toán. Bạn sẽ sớm nhận được email xác nhận.
             </p>
             <button 
               onClick={() => navigate('/')}
@@ -86,9 +84,9 @@ export default function VNPayReturnPage() {
             <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6">
               <XCircle className="w-10 h-10 text-red-600" />
             </div>
-            <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Thanh toán thất bại</h2>
+            <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Giao dịch thất bại</h2>
             <p className="text-stone-600 mb-6">
-              Giao dịch của bạn đã bị hủy hoặc có lỗi xảy ra trong quá trình thanh toán.
+              Có lỗi xảy ra trong quá trình thanh toán hoặc giao dịch không hợp lệ.
             </p>
             <div className="flex gap-4">
               <button 
@@ -101,14 +99,14 @@ export default function VNPayReturnPage() {
           </div>
         )}
 
-        {status === 'invalid' && (
+        {status === 'cancel' && (
           <div className="flex flex-col items-center">
             <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mb-6">
               <XCircle className="w-10 h-10 text-orange-600" />
             </div>
-            <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Dữ liệu không hợp lệ</h2>
+            <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Đã hủy thanh toán</h2>
             <p className="text-stone-600 mb-6">
-              Chữ ký bảo mật không khớp hoặc dữ liệu đã bị can thiệp.
+              Bạn đã hủy giao dịch thanh toán.
             </p>
             <button 
               onClick={() => navigate('/')}
