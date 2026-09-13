@@ -5,11 +5,10 @@ import { useState, useEffect } from 'react';
 
 export default function LandingPage() {
   const [branches, setBranches] = useState<any[]>([]);
-  const [featuredRooms, setFeaturedRooms] = useState<any[]>([]);
 
   useEffect(() => {
     const load = async () => {
-      const { getBranches, getRooms } = await import('../../utils/db');
+      const { getBranches } = await import('../../utils/db');
       const data = await getBranches();
       if (data && data.length > 0) {
         setBranches(data);
@@ -18,11 +17,6 @@ export default function LandingPage() {
           { id: 1, name: 'Chi nhánh 1 (Bến Lức)', address: 'Số 06 Block A3 Ehome Waterpoint', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80' },
           { id: 2, name: 'Chi nhánh 2 (Hậu Nghĩa)', address: 'Số A3 Kdc young town Hậu Nghĩa', img: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80' }
         ]);
-      }
-      
-      const roomsData = await getRooms();
-      if (roomsData && roomsData.length > 0) {
-        setFeaturedRooms(roomsData.slice(0, 3));
       }
     };
     load();
@@ -110,78 +104,45 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Intro Section */}
-      {/* Branches Preview */}
-      <section className="py-24 bg-[#1C1A17] text-white" id="experiences">
+      {/* Branches Layout */}
+      <section className="py-32 bg-white" id="experiences">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-white/10 pb-8">
-            <div>
-              <h3 className="text-xs font-bold tracking-[0.2em] text-yellow-500 uppercase mb-4">Các chi nhánh</h3>
-              <h2 className="text-4xl lg:text-5xl font-serif">Lựa chọn chốn về</h2>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-20">
+            <div className="max-w-2xl">
+              <h3 className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-4">Các chi nhánh</h3>
+              <h2 className="text-4xl lg:text-6xl font-serif text-[#1C1A17] leading-tight">Lựa chọn<br/><span className="italic text-gray-400">chốn về</span></h2>
             </div>
-            <Link to="/customer/booking" className="hidden md:flex items-center text-xs uppercase tracking-[0.2em] font-medium text-yellow-500 hover:text-white transition-colors">
-              Xem tất cả <ArrowRight size={14} className="ml-2" />
+            <Link to="/customer/booking" className="hidden md:flex items-center text-xs uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:opacity-50 transition-opacity pb-4 border-b border-black/20 hover:border-black">
+              Xem tất cả <ArrowRight size={14} className="ml-3" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {branches.map((branch: any) => (
-              <Link to={`/customer/booking?branch=${branch.id}`} key={branch.id} className="group block">
-                <div className="aspect-[4/3] overflow-hidden rounded-sm mb-6 relative">
-                  <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-1000 ease-out" alt={branch.name} />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+            {branches.map((branch: any, index: number) => (
+              <Link to={`/customer/booking?branch=${branch.id}`} key={branch.id} className={`group block ${index % 2 !== 0 ? 'md:mt-24' : ''}`}>
+                <div className="aspect-[3/4] overflow-hidden mb-8 relative">
+                  <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-[1.5s] ease-out" alt={branch.name} />
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>
                   {!branch.has_rooms && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <span className="text-white font-semibold px-4 py-2 bg-stone-900/80 rounded-full">Sắp ra mắt</span>
+                    <div className="absolute top-6 left-6">
+                      <span className="text-white text-[9px] uppercase tracking-widest font-bold px-4 py-2 bg-black/60 backdrop-blur-md rounded-sm">Sắp ra mắt</span>
                     </div>
                   )}
                 </div>
-                <h3 className="text-2xl font-serif text-white mb-2 group-hover:text-yellow-500 transition-colors">{branch.name}</h3>
-                <p className="text-white/60 text-sm">{branch.address}</p>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-2xl font-serif text-[#1C1A17] mb-3 group-hover:text-gray-500 transition-colors duration-500">{branch.name}</h3>
+                    <p className="text-gray-500 text-sm font-light max-w-sm leading-relaxed">{branch.address}</p>
+                  </div>
+                  <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-[#1C1A17] group-hover:text-white group-hover:border-[#1C1A17] transition-all duration-500">
+                    <ArrowRight size={14} className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-500" />
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
         </div>
       </section>
-
-      {/* Featured Rooms */}
-      {featuredRooms.length > 0 && (
-        <section className="py-24 bg-white" id="rooms">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <div className="text-center mb-16">
-              <h3 className="text-xs font-bold tracking-[0.2em] text-yellow-600 uppercase mb-4">Không Gian Đặc Sắc</h3>
-              <h2 className="text-4xl lg:text-5xl font-serif text-[#1C1A17]">Các Hạng Phòng Nổi Bật</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {featuredRooms.map((room) => (
-                <div key={room.id} className="bg-white rounded-sm overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300 group">
-                  <div className="aspect-[4/3] overflow-hidden relative">
-                    <img 
-                      src={room.images?.[0] || "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"} 
-                      alt={room.name} 
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"
-                    />
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-sm shadow-sm">
-                      <span className="text-xs font-bold text-gray-900">{room.price_extra_hour ? room.price_extra_hour.toLocaleString() : '0'}đ / <span className="font-light">Thêm</span></span>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-serif text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors">{room.name}</h3>
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {room.features && room.features.slice(0, 3).map((f: string, i: number) => (
-                        <span key={i} className="text-[10px] uppercase tracking-wider bg-gray-50 text-gray-600 px-2 py-1 rounded-sm">{f}</span>
-                      ))}
-                    </div>
-                    <Link to={`/customer/booking?room=${room.id}`} className="block text-center w-full bg-[#1C1A17] text-white py-3 text-xs uppercase tracking-widest font-bold hover:bg-yellow-600 transition-colors">
-                      Đặt Phòng Ngay
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
     </motion.div>
   );
