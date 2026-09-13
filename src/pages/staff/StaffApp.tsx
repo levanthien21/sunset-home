@@ -72,7 +72,7 @@ function StaffDashboard() {
                   </td>
                   <td className="p-4">
                     <p className="text-sm font-medium">{b.roomName}</p>
-                    <p className="text-xs text-gray-500">{new Date(b.checkIn).toLocaleDateString()} - {new Date(b.checkOut).toLocaleDateString()}</p>
+                    <p className="text-xs text-gray-500">{b.checkIn} ➔ {b.checkOut}</p>
                   </td>
                   <td className="p-4">
                     <p className="text-sm font-medium text-gray-900">Tổng: {b.total.toLocaleString()}đ</p>

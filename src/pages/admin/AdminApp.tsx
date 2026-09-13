@@ -48,15 +48,15 @@ function AdminDashboard() {
           <ul className="space-y-4">
             <li className="flex justify-between items-center p-4 bg-gray-50 rounded-sm border border-gray-100">
               <div>
-                <p className="font-semibold text-gray-900">Cơ Sở 1 (Sunset Vườn)</p>
-                <p className="text-sm text-gray-500">Đường Xuân Hồng, Tân Bình • 2 Phòng</p>
+                <p className="font-semibold text-gray-900">Chi nhánh 1 (Bến Lức)</p>
+                <p className="text-sm text-gray-500">Số 06 Block A3 Ehome Waterpoint Bến Lức • 3 Phòng</p>
               </div>
               <button className="text-yellow-600 text-sm font-semibold uppercase tracking-wider hover:text-yellow-700">Sửa</button>
             </li>
             <li className="flex justify-between items-center p-4 bg-gray-50 rounded-sm border border-gray-100">
               <div>
-                <p className="font-semibold text-gray-900">Cơ Sở 2 (Sunset Biển)</p>
-                <p className="text-sm text-gray-500">Đường Bùi Đình Túy, Bình Thạnh • 3 Phòng</p>
+                <p className="font-semibold text-gray-900">Chi nhánh 2 (Hậu Nghĩa)</p>
+                <p className="text-sm text-gray-500">Số A3 Kdc Young Town Hậu Nghĩa • Đang cập nhật</p>
               </div>
               <button className="text-yellow-600 text-sm font-semibold uppercase tracking-wider hover:text-yellow-700">Sửa</button>
             </li>
