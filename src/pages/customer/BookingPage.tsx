@@ -583,85 +583,82 @@ export default function BookingPage() {
 
                 {/* Right Column: Order Summary & Checkout */}
                 <div className="lg:col-span-1">
-                  <div className="bg-white rounded-xl md:rounded-3xl p-5 md:p-6 sticky top-24 shadow-lg border border-stone-200">
-                    <h3 className="font-serif font-bold text-lg md:text-xl text-stone-900 mb-5 md:mb-6 flex items-center">
-                      <span className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center mr-2 md:mr-3 text-xs md:text-sm">3</span> 
+                  <div className="bg-stone-900 rounded-xl md:rounded-3xl p-5 md:p-6 sticky top-24 shadow-2xl border border-stone-800 text-stone-100">
+                    <h3 className="font-serif font-bold text-lg md:text-xl text-white mb-5 md:mb-6 flex items-center">
+                      <span className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-yellow-600/20 text-yellow-500 flex items-center justify-center mr-2 md:mr-3 text-xs md:text-sm">3</span> 
                       Chi tiết thanh toán
                     </h3>
                     
-                    <div className="mb-5 md:mb-6">
-                      <div className="w-full h-32 md:h-40 overflow-hidden rounded-xl mb-4 shadow-sm">
-                        <img src={selectedRoomDetails?.images[0]} alt="Room" className="w-full h-full object-cover" />
-                      </div>
-                      <h4 className="font-bold text-base md:text-lg text-stone-900 leading-tight">{selectedRoomDetails?.name}</h4>
-                      <p className="text-xs md:text-sm text-stone-500 mt-1.5 flex items-start">
-                         <MapPin className="w-3.5 h-3.5 mr-1.5 mt-0.5 shrink-0 text-stone-400" /> {selectedBranchDetails?.name}
+                    <div className="mb-5 md:mb-6 border-b border-stone-700/50 pb-5">
+                      <h4 className="font-bold text-lg md:text-xl text-white leading-tight">{selectedRoomDetails?.name}</h4>
+                      <p className="text-xs md:text-sm text-stone-400 mt-1.5 flex items-start">
+                         <MapPin className="w-3.5 h-3.5 mr-1.5 mt-0.5 shrink-0 text-yellow-600" /> {selectedBranchDetails?.name}
                       </p>
                     </div>
 
-                    <div className="space-y-3 text-sm text-stone-600 mb-5 md:mb-6 bg-stone-50 p-4 rounded-xl border border-stone-100">
+                    <div className="space-y-3 text-sm text-stone-300 mb-5 md:mb-6 bg-stone-800/40 p-4 rounded-xl border border-stone-700/50">
                       <div className="flex justify-between items-center">
-                        <span className="flex items-center"><CalendarDays className="w-4 h-4 mr-2 text-stone-400" /> Ngày nhận</span>
-                        <span className="font-bold text-stone-900">{new Date(bookingDate).toLocaleDateString('vi-VN')}</span>
+                        <span className="flex items-center"><CalendarDays className="w-4 h-4 mr-2 text-stone-500" /> Ngày nhận</span>
+                        <span className="font-bold text-white">{new Date(bookingDate).toLocaleDateString('vi-VN')}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="flex items-center"><Clock className="w-4 h-4 mr-2 text-stone-400" /> Giờ đến</span>
-                        <span className="font-bold text-stone-900">{expectedTime || '--:--'}</span>
+                        <span className="flex items-center"><Clock className="w-4 h-4 mr-2 text-stone-500" /> Giờ đến</span>
+                        <span className="font-bold text-white">{expectedTime || '--:--'}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="flex items-center"><Users className="w-4 h-4 mr-2 text-stone-400" /> Số khách</span>
-                        <span className="font-bold text-stone-900">{guests}</span>
+                        <span className="flex items-center"><Users className="w-4 h-4 mr-2 text-stone-500" /> Số khách</span>
+                        <span className="font-bold text-white">{guests}</span>
                       </div>
                     </div>
                     
-                    <div className="border-t border-dashed border-stone-300 pt-5 md:pt-6 mb-5 md:mb-6 space-y-3 text-sm text-stone-600">
+                    <div className="border-t border-dashed border-stone-700 pt-5 md:pt-6 mb-5 md:mb-6 space-y-3 text-sm text-stone-400">
                       <div className="flex justify-between items-center">
                         <span>Gói: {selectedComboDetails?.name || 'Chưa chọn'}</span>
-                        <span className="font-medium text-stone-900">{comboPrice.toLocaleString()}đ</span>
+                        <span className="font-medium text-white">{comboPrice.toLocaleString()}đ</span>
                       </div>
                       {extraHourTotal > 0 && (
                         <div className="flex justify-between items-center">
                           <span>Phụ thu thêm giờ ({extraHours}h)</span>
-                          <span className="font-medium text-stone-900">{extraHourTotal.toLocaleString()}đ</span>
+                          <span className="font-medium text-white">{extraHourTotal.toLocaleString()}đ</span>
                         </div>
                       )}
                       {weekendSurcharge > 0 && (
                         <div className="flex justify-between items-center">
                           <span>Phụ thu cuối tuần</span>
-                          <span className="font-medium text-stone-900">{weekendSurcharge.toLocaleString()}đ</span>
+                          <span className="font-medium text-white">{weekendSurcharge.toLocaleString()}đ</span>
                         </div>
                       )}
                       {guestSurcharge > 0 && (
                         <div className="flex justify-between items-center">
                           <span>Phụ thu khách</span>
-                          <span className="font-medium text-stone-900">{guestSurcharge.toLocaleString()}đ</span>
+                          <span className="font-medium text-white">{guestSurcharge.toLocaleString()}đ</span>
                         </div>
                       )}
                       
                       <div className="flex justify-between items-end pt-3">
-                        <span className="text-stone-900 font-bold text-base">Tổng cộng:</span>
-                        <span className="text-yellow-600 font-bold text-2xl md:text-3xl leading-none">{amountToPay.toLocaleString()}đ</span>
+                        <span className="text-white font-bold text-base">Tổng cộng:</span>
+                        <span className="text-yellow-500 font-bold text-2xl md:text-3xl leading-none">{amountToPay.toLocaleString()}đ</span>
                       </div>
                     </div>
 
                     {isStep2Valid && isStep3Valid ? (
-                      <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 md:p-5 mb-5 md:mb-6 flex flex-col items-center animate-in fade-in duration-500">
-                        <p className="text-xs font-bold text-center mb-3 text-stone-500 uppercase tracking-wide">Quét mã QR để thanh toán</p>
-                        <div className="bg-white p-2 rounded-xl shadow-sm border border-stone-100 mb-3">
+                      <div className="bg-stone-800/80 border border-stone-700 rounded-2xl p-4 md:p-5 mb-5 md:mb-6 flex flex-col items-center animate-in fade-in duration-500">
+                        <p className="text-xs font-bold text-center mb-3 text-stone-400 uppercase tracking-wide">Quét mã QR để thanh toán</p>
+                        <div className="bg-white p-2 rounded-xl shadow-md border border-stone-100 mb-3">
                           <img 
                             src={`https://img.vietqr.io/image/970415-0123456789-compact.png?amount=${amountToPay}&addInfo=THANHTOANSUNSET%20${phone}&accountName=SUNSET%20HOMESTAY`}
                             alt="VietQR" 
-                            className="w-full max-w-[160px] md:max-w-[180px] aspect-square rounded-lg object-contain"
+                            className="w-full max-w-[150px] md:max-w-[170px] aspect-square rounded-lg object-contain"
                           />
                         </div>
-                        <p className="text-xs text-stone-500 text-center px-4">Hệ thống sẽ tự động xác nhận đơn ngay khi nhận được thanh toán.</p>
+                        <p className="text-xs text-stone-400 text-center px-2">Hệ thống sẽ tự động xác nhận đơn ngay khi nhận được thanh toán.</p>
                       </div>
                     ) : (
-                      <div className="bg-stone-50 rounded-2xl p-6 mb-5 md:mb-6 flex flex-col items-center text-center border border-dashed border-stone-300">
-                        <div className="w-12 h-12 rounded-full bg-stone-200 flex items-center justify-center mb-3">
-                          <CheckCircle2 className="w-6 h-6 text-stone-400" />
+                      <div className="bg-stone-800/50 rounded-2xl p-6 mb-5 md:mb-6 flex flex-col items-center text-center border border-dashed border-stone-700">
+                        <div className="w-12 h-12 rounded-full bg-stone-700 flex items-center justify-center mb-3">
+                          <CheckCircle2 className="w-6 h-6 text-stone-500" />
                         </div>
-                        <p className="text-sm text-stone-500">Vui lòng điền đầy đủ thông tin bên trái để tạo mã QR thanh toán.</p>
+                        <p className="text-sm text-stone-400">Vui lòng điền đầy đủ thông tin bên trái để tạo mã QR thanh toán.</p>
                       </div>
                     )}
 
@@ -669,7 +666,7 @@ export default function BookingPage() {
                       onClick={handlePaymentSubmit}
                       disabled={!isStep2Valid || !isStep3Valid || isProcessing}
                       className={`w-full py-4 rounded-xl font-bold flex items-center justify-center transition-all ${
-                        isStep2Valid && isStep3Valid && !isProcessing ? 'bg-yellow-600 text-white hover:bg-yellow-500 shadow-lg shadow-yellow-600/30' : 'bg-stone-200 text-stone-400 cursor-not-allowed'
+                        isStep2Valid && isStep3Valid && !isProcessing ? 'bg-yellow-600 text-white hover:bg-yellow-500 shadow-lg shadow-yellow-600/30' : 'bg-stone-800 text-stone-600 cursor-not-allowed'
                       }`}
                     >
                       {isProcessing ? (
@@ -679,7 +676,7 @@ export default function BookingPage() {
                       )}
                     </button>
                     {(!isStep2Valid || !isStep3Valid) && (
-                      <p className="text-xs text-center text-stone-400 mt-3">* Vui lòng hoàn thiện các thông tin bên trái</p>
+                      <p className="text-xs text-center text-stone-500 mt-3">* Vui lòng hoàn thiện các thông tin bên trái</p>
                     )}
                   </div>
                 </div>
