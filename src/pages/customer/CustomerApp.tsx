@@ -74,7 +74,7 @@ export default function CustomerApp() {
       
       {/* Footer */}
       {/* Minimalist Luxury Footer */}
-      <footer className="bg-[#050814] text-white pt-24 pb-12 border-t border-[#050814]">
+      <footer className="bg-[#1C1A17] text-white pt-24 pb-12 border-t border-[#1C1A17]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-xl font-serif mb-2 tracking-[0.2em] uppercase text-white">Sunset</h3>
@@ -86,17 +86,17 @@ export default function CustomerApp() {
           <div>
             <h4 className="font-bold mb-6 text-xs tracking-widest uppercase text-white/40">Liên Hệ</h4>
             <ul className="space-y-4 text-white/70 text-sm font-medium">
-              <li><a href="tel:1900xxxx" className="hover:text-[#D4AF37] transition-colors">1900 xxxx</a></li>
-              <li><a href="mailto:hello@sunsethome.vn" className="hover:text-[#D4AF37] transition-colors">hello@sunsethome.vn</a></li>
-              <li><a href="#" className="hover:text-[#D4AF37] transition-colors">Zalo Official</a></li>
+              <li><a href="tel:1900xxxx" className="hover:text-[#B8860B] transition-colors">1900 xxxx</a></li>
+              <li><a href="mailto:hello@sunsethome.vn" className="hover:text-[#B8860B] transition-colors">hello@sunsethome.vn</a></li>
+              <li><a href="#" className="hover:text-[#B8860B] transition-colors">Zalo Official</a></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold mb-6 text-xs tracking-widest uppercase text-white/40">Khám Phá</h4>
             <ul className="space-y-4 text-white/70 text-sm font-medium">
-              <li><Link to="/customer" className="hover:text-[#D4AF37] transition-colors">Trang chủ</Link></li>
-              <li><Link to="/customer/booking" className="hover:text-[#D4AF37] transition-colors">Đặt phòng</Link></li>
-              <li><Link to="/customer/policies" className="hover:text-[#D4AF37] transition-colors">Chính sách</Link></li>
+              <li><Link to="/customer" className="hover:text-[#B8860B] transition-colors">Trang chủ</Link></li>
+              <li><Link to="/customer/booking" className="hover:text-[#B8860B] transition-colors">Đặt phòng</Link></li>
+              <li><Link to="/customer/policies" className="hover:text-[#B8860B] transition-colors">Chính sách</Link></li>
             </ul>
           </div>
         </div>
