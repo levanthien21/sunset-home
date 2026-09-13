@@ -56,11 +56,22 @@ function Navbar() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 export default function CustomerApp() {
   const location = useLocation();
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-[#F9F8F6] text-[#1C1A17] selection:bg-yellow-200">
+      <ScrollToTop />
       <Navbar />
       <div className="flex-1">
         <AnimatePresence mode="wait">
