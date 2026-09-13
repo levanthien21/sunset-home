@@ -85,7 +85,11 @@ export default function BookingPage() {
           const formattedRooms = dbRooms.map((r: any) => ({
             ...r,
             branchId: r.branch_id,
-            extraHourPrice: Number(r.extra_hour_price)
+            extraHourPrice: Number(r.extra_hour_price),
+            combos: [
+              ...(r.combos || []),
+              { id: 'test-5k', name: 'Gói Test Thanh Toán 5k', price: 5000 }
+            ]
           }));
           setRooms(formattedRooms);
         }
