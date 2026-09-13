@@ -104,7 +104,55 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Branches Layout */}
+      {/* 1. Intro Section: The Bridge */}
+      <section className="py-24 bg-[#F9F8F6] text-[#1C1A17]">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h3 className="text-[10px] font-bold tracking-[0.3em] text-yellow-600 uppercase mb-6">Câu chuyện của chúng tôi</h3>
+          <h2 className="text-3xl md:text-5xl font-serif leading-tight mb-8">Nơi những <span className="italic font-light">cảm xúc</span> được trân trọng</h2>
+          <p className="text-sm md:text-base text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
+            Không chỉ là một nơi lưu trú, Sunset Home là sự kết tinh của nghệ thuật thiết kế và lòng hiếu khách. 
+            Mỗi chi nhánh được chúng tôi chăm chút tỉ mỉ từng ánh đèn, từng góc nhỏ để mang lại cho bạn những phút giây thư giãn tuyệt đối giữa lòng phố thị.
+          </p>
+        </div>
+      </section>
+
+      {/* 2. Amenities Section: The Utility */}
+      <section className="py-24 bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 text-center">
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17]">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+              </div>
+              <h4 className="text-xs font-bold uppercase tracking-widest mb-2">Smart TV</h4>
+              <p className="text-[11px] text-gray-500 font-light">Tích hợp Netflix 4K</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17]">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+              </div>
+              <h4 className="text-xs font-bold uppercase tracking-widest mb-2">Bồn Tắm</h4>
+              <p className="text-[11px] text-gray-500 font-light">Thư giãn tối đa</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17]">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
+              <h4 className="text-xs font-bold uppercase tracking-widest mb-2">Riêng Tư</h4>
+              <p className="text-[11px] text-gray-500 font-light">An ninh 24/7</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17]">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+              <h4 className="text-xs font-bold uppercase tracking-widest mb-2">Linh Hoạt</h4>
+              <p className="text-[11px] text-gray-500 font-light">Check-in mọi lúc</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Branches Layout: The Destination */}
       <section className="py-32 bg-white" id="experiences">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-20">
@@ -117,9 +165,9 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 md:gap-y-24">
             {branches.map((branch: any, index: number) => (
-              <Link to={`/customer/booking?branch=${branch.id}`} key={branch.id} className={`group block ${index % 2 !== 0 ? 'md:mt-24' : ''}`}>
+              <Link to={`/customer/booking?branch=${branch.id}`} key={branch.id} className={`group block ${index % 2 !== 0 ? 'md:mt-16 lg:mt-32' : ''}`}>
                 <div className="aspect-[3/4] overflow-hidden mb-8 relative">
                   <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-[1.5s] ease-out" alt={branch.name} />
                   <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>
@@ -131,7 +179,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-2xl font-serif text-[#1C1A17] mb-3 group-hover:text-gray-500 transition-colors duration-500">{branch.name}</h3>
+                    <h3 className="text-2xl font-serif text-[#1C1A17] mb-3 group-hover:text-yellow-600 transition-colors duration-500">{branch.name}</h3>
                     <p className="text-gray-500 text-sm font-light max-w-sm leading-relaxed">{branch.address}</p>
                   </div>
                   <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-[#1C1A17] group-hover:text-white group-hover:border-[#1C1A17] transition-all duration-500">
