@@ -268,28 +268,33 @@ export default function BookingPage() {
 
               {/* Branch Info & Mini Map */}
               {selectedBranchDetails && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-stone-200 mb-8 flex flex-col md:flex-row gap-6">
-                  <div className="md:w-1/2 flex flex-col justify-center">
-                    <h3 className="text-xl font-bold text-stone-900 mb-2">{selectedBranchDetails.name}</h3>
-                    <p className="text-stone-500 text-sm flex items-start mb-5">
-                      <MapPin className="w-4 h-4 mr-1.5 shrink-0 mt-0.5 text-stone-400" />
-                      {selectedBranchDetails.address}
-                    </p>
-                    <div className="bg-stone-50 p-4 rounded-xl text-sm text-stone-600 space-y-3">
-                       <p className="flex items-center"><Clock className="w-4 h-4 mr-3 text-stone-400"/> Mở cửa 24/7</p>
-                       <p className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-3 text-green-500"/> Hỗ trợ lễ tân trực tuyến</p>
-                       <p className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-3 text-green-500"/> Dọn phòng hằng ngày</p>
-                    </div>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-stone-200 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-start gap-4 w-full sm:w-auto">
+                     <div 
+                        onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails.address), '_blank')}
+                        className="w-16 h-16 rounded-xl bg-blue-50 border border-blue-100 shrink-0 relative overflow-hidden flex items-center justify-center cursor-pointer hover:shadow-md transition-shadow group"
+                     >
+                        <div className="absolute inset-0 opacity-30 group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: 'radial-gradient(#3b82f6 1.5px, transparent 1.5px)', backgroundSize: '6px 6px' }}></div>
+                        <MapPin className="w-7 h-7 text-blue-600 relative z-10 fill-blue-100 group-hover:-translate-y-1 transition-transform duration-300" />
+                     </div>
+                     <div className="flex-1">
+                        <h3 className="text-lg font-bold text-stone-900 leading-tight">{selectedBranchDetails.name}</h3>
+                        <p className="text-stone-500 text-sm mt-1 line-clamp-2">{selectedBranchDetails.address}</p>
+                        <button 
+                          onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails.address), '_blank')}
+                          className="text-blue-600 text-sm font-semibold mt-1 hover:underline flex items-center"
+                        >
+                          Xem vị trí trên bản đồ
+                        </button>
+                     </div>
                   </div>
-                  <div className="md:w-1/2 h-48 md:h-auto min-h-[200px] rounded-xl overflow-hidden relative bg-stone-100 border border-stone-200">
-                    <iframe 
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.038487399478!2d106.47167667480436!3d10.654572289487532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310aed004e76a6e7%3A0x8995a97dd50020d2!2sEHome%20Southgate!5e0!3m2!1svi!2s!4v1714457718011!5m2!1svi!2s" 
-                      className="absolute inset-0 w-full h-full"
-                      style={{ border: 0 }} 
-                      allowFullScreen={false} 
-                      loading="lazy" 
-                      referrerPolicy="no-referrer-when-downgrade"
-                    ></iframe>
+                  <div className="flex flex-wrap gap-2 sm:justify-end shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
+                     <span className="px-3 py-1.5 bg-stone-50 border border-stone-200 text-stone-600 text-xs font-semibold rounded-lg flex items-center">
+                       <Clock className="w-3.5 h-3.5 mr-1.5"/> 24/7
+                     </span>
+                     <span className="px-3 py-1.5 bg-stone-50 border border-stone-200 text-stone-600 text-xs font-semibold rounded-lg flex items-center">
+                       <CheckCircle2 className="w-3.5 h-3.5 mr-1.5 text-green-500"/> Có Lễ tân
+                     </span>
                   </div>
                 </motion.div>
               )}
