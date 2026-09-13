@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, X, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, X, ChevronRight, BedDouble, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function BookingPage() {
@@ -339,28 +339,55 @@ export default function BookingPage() {
                             )}
                           </div>
                         </div>
-                        <div className="p-6 md:w-3/5 flex flex-col justify-between">
+                        <div className="p-5 md:p-6 md:w-3/5 flex flex-col justify-between">
                           <div>
-                            <div className="mb-2">
-                              <h3 className="text-2xl font-serif font-bold text-stone-900">{r.name}</h3>
+                            <div className="flex justify-between items-start mb-4">
+                              <div className="flex-1 pr-3">
+                                <h3 className="text-xl md:text-2xl font-serif font-bold text-stone-900 leading-tight">{r.name}</h3>
+                                <div className="flex flex-wrap gap-2 mt-2.5">
+                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1 rounded flex items-center">
+                                    <Users className="w-3 h-3 mr-1" /> Tối đa 4 Khách
+                                  </span>
+                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1 rounded flex items-center">
+                                    <BedDouble className="w-3 h-3 mr-1" /> 1 Giường lớn
+                                  </span>
+                                </div>
+                              </div>
                               {r.combos && r.combos.length > 0 && (
-                                <p className="text-yellow-600 font-semibold mt-1">
-                                  Giá từ {Math.min(...r.combos.map((c: any) => c.price)).toLocaleString()}đ
-                                </p>
+                                <div className="text-right shrink-0">
+                                  <div className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded mb-1 inline-block shadow-sm">Ưu đãi 25%</div>
+                                  <p className="text-xs text-stone-400 line-through">
+                                    {(Math.min(...r.combos.map((c: any) => c.price)) * 1.33).toLocaleString()}đ
+                                  </p>
+                                  <p className="text-yellow-600 font-bold text-lg md:text-xl leading-none mt-0.5">
+                                    {Math.min(...r.combos.map((c: any) => c.price)).toLocaleString()}đ
+                                  </p>
+                                  <p className="text-[9px] text-stone-400 mt-1">Chưa bao gồm thuế & phí</p>
+                                </div>
                               )}
                             </div>
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+
+                            <div className="bg-green-50 border border-green-100 rounded-lg p-2.5 mb-4 inline-block w-full">
+                               <p className="text-xs text-green-700 font-medium flex items-center mb-1.5">
+                                 <Check className="w-3.5 h-3.5 mr-1.5"/> Miễn phí hủy phòng trước 7 ngày
+                               </p>
+                               <p className="text-xs text-green-700 font-medium flex items-center">
+                                 <Check className="w-3.5 h-3.5 mr-1.5"/> Giữ chỗ thanh toán tiện lợi qua mã QR
+                               </p>
+                            </div>
+
+                            <ul className="grid grid-cols-2 gap-x-2 gap-y-2.5 mt-2">
                               {r.features.map((f: any, i: any) => (
-                                <li key={i} className="flex items-center text-sm text-stone-600">
-                                  <div className="w-5 h-5 rounded-full bg-yellow-50 flex items-center justify-center mr-2.5 shrink-0">
-                                    <CheckCircle2 className="w-3.5 h-3.5 text-yellow-600" />
+                                <li key={i} className="flex items-center text-[13px] text-stone-600">
+                                  <div className="w-4 h-4 rounded-full bg-yellow-50 flex items-center justify-center mr-2 shrink-0">
+                                    <CheckCircle2 className="w-3 h-3 text-yellow-600" />
                                   </div>
-                                  {f}
+                                  <span className="truncate" title={f}>{f}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div className="mt-8 flex gap-3">
+                          <div className="mt-6 md:mt-8 flex gap-3">
                             <button
                               onClick={() => { setRoom(r.id); setCombo(''); setStep(3); }}
                               className="w-full py-3.5 bg-stone-900 text-white font-bold rounded-xl hover:bg-stone-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
