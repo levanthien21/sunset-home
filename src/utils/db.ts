@@ -158,5 +158,50 @@ export const addBranch = async (branchData: any) => {
     if (error) throw error;
   } catch (e) {
     console.error("Lỗi thêm chi nhánh mới:", e);
+    throw e;
+  }
+};
+
+export const deleteBranch = async (branchId: number) => {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase.from('branches').delete().match({ id: branchId });
+    if (error) throw error;
+  } catch (e) {
+    console.error("Lỗi xóa chi nhánh:", e);
+    throw e;
+  }
+};
+
+export const addRoom = async (roomData: any) => {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase.from('rooms').insert([roomData]);
+    if (error) throw error;
+  } catch (e) {
+    console.error("Lỗi thêm phòng mới:", e);
+    throw e;
+  }
+};
+
+export const updateRoom = async (roomId: string, updateData: any) => {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase.from('rooms').update(updateData).match({ id: roomId });
+    if (error) throw error;
+  } catch (e) {
+    console.error("Lỗi cập nhật phòng:", e);
+    throw e;
+  }
+};
+
+export const deleteRoom = async (roomId: string) => {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase.from('rooms').delete().match({ id: roomId });
+    if (error) throw error;
+  } catch (e) {
+    console.error("Lỗi xóa phòng:", e);
+    throw e;
   }
 };

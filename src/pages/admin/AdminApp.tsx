@@ -1,5 +1,5 @@
 import { Routes, Route, Link } from 'react-router-dom';
-import { Home, MapPin, Settings, LogOut, BarChart3, TrendingUp } from 'lucide-react';
+import { Home, MapPin, Settings, LogOut, BarChart3, TrendingUp, Plus, Trash2, Edit2, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 function AdminDashboard() {
@@ -9,15 +9,94 @@ function AdminDashboard() {
   const [uploadingRoomId, setUploadingRoomId] = useState<string | null>(null);
   const [uploadingBranchId, setUploadingBranchId] = useState<number | null>(null);
 
+  // Modals
+  const [isBranchModalOpen, setIsBranchModalOpen] = useState(false);
+  const [editingBranch, setEditingBranch] = useState<any>(null);
+  const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
+  const [editingRoom, setEditingRoom] = useState<any>(null);
+
+  const refreshData = async () => {
+    const { getRooms, getBranches } = await import('../../utils/db');
+    setRooms(await getRooms());
+    setBranches(await getBranches());
+  };
+
   useEffect(() => {
     const load = async () => {
-      const { getBookings, getRooms, getBranches } = await import('../../utils/db');
+      const { getBookings } = await import('../../utils/db');
       setBookings(await getBookings());
-      setRooms(await getRooms());
-      setBranches(await getBranches());
+      await refreshData();
     };
     load();
   }, []);
+
+  const handleSaveBranch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { addBranch, updateBranch } = await import('../../utils/db');
+    if (editingBranch.id) {
+      await updateBranch(editingBranch.id, {
+        name: editingBranch.name,
+        address: editingBranch.address,
+        has_rooms: editingBranch.has_rooms
+      });
+    } else {
+      await addBranch({
+        name: editingBranch.name,
+        address: editingBranch.address,
+        has_rooms: editingBranch.has_rooms,
+        img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80'
+      });
+    }
+    await refreshData();
+    setIsBranchModalOpen(false);
+  };
+
+  const handleDeleteBranch = async (branchId: number) => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa cơ sở này?')) return;
+    try {
+      const { deleteBranch } = await import('../../utils/db');
+      await deleteBranch(branchId);
+      await refreshData();
+    } catch (e) {
+      alert("Không thể xóa cơ sở. Vui lòng xóa hết các phòng thuộc cơ sở này trước.");
+    }
+  };
+
+  const handleSaveRoom = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { addRoom, updateRoom } = await import('../../utils/db');
+    if (editingRoom.id) {
+      await updateRoom(editingRoom.id, {
+        branch_id: editingRoom.branch_id,
+        name: editingRoom.name,
+        extra_hour_price: editingRoom.extra_hour_price,
+        features: editingRoom.features,
+        combos: editingRoom.combos
+      });
+    } else {
+      await addRoom({
+        branch_id: editingRoom.branch_id,
+        name: editingRoom.name,
+        extra_hour_price: editingRoom.extra_hour_price,
+        features: editingRoom.features || [],
+        combos: editingRoom.combos || [],
+        images: []
+      });
+    }
+    await refreshData();
+    setIsRoomModalOpen(false);
+  };
+
+  const handleDeleteRoom = async (roomId: string) => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa phòng này?')) return;
+    try {
+      const { deleteRoom } = await import('../../utils/db');
+      await deleteRoom(roomId);
+      await refreshData();
+    } catch (e) {
+      alert("Lỗi khi xóa phòng.");
+    }
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, roomId: string, existingImages: string[]) => {
     const files = e.target.files;
@@ -127,8 +206,10 @@ function AdminDashboard() {
       <div className="mt-10 grid grid-cols-1 gap-8">
         <div className="bg-white p-8 rounded-sm shadow-sm border border-gray-100">
           <h2 className="text-xl font-serif text-gray-900 mb-6 flex justify-between items-center">
-            Quản lý Cơ sở (Chi nhánh)
-            {branches.length === 0 && <span className="text-xs text-red-500">Chưa có dữ liệu cơ sở. Hãy chạy SQL!</span>}
+            <span>Quản lý Cơ sở (Chi nhánh) {branches.length === 0 && <span className="text-xs text-red-500 ml-2">Chưa có dữ liệu cơ sở. Hãy chạy SQL!</span>}</span>
+            <button onClick={() => { setEditingBranch({ name: '', address: '', has_rooms: true }); setIsBranchModalOpen(true); }} className="bg-yellow-600 text-white px-4 py-2 rounded-sm text-sm font-bold flex items-center hover:bg-yellow-700">
+              <Plus size={16} className="mr-2" /> Thêm Cơ sở
+            </button>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {branches.map(branch => (
@@ -149,7 +230,13 @@ function AdminDashboard() {
                   </label>
                 </div>
                 <div className="w-2/3 flex flex-col justify-center">
-                  <h3 className="font-bold text-lg text-gray-900">{branch.name}</h3>
+                  <div className="flex justify-between items-start">
+                    <h3 className="font-bold text-lg text-gray-900 pr-2">{branch.name}</h3>
+                    <div className="flex space-x-2 shrink-0">
+                      <button onClick={() => { setEditingBranch(branch); setIsBranchModalOpen(true); }} className="text-yellow-600 hover:text-yellow-700"><Edit2 size={16} /></button>
+                      <button onClick={() => handleDeleteBranch(branch.id)} className="text-red-500 hover:text-red-600"><Trash2 size={16} /></button>
+                    </div>
+                  </div>
                   <p className="text-sm text-gray-500 mt-1">{branch.address}</p>
                   <p className="text-xs font-semibold mt-2 text-yellow-600 uppercase tracking-wider">
                     Trạng thái: {branch.has_rooms ? 'Đang hoạt động' : 'Sắp ra mắt'}
@@ -162,19 +249,23 @@ function AdminDashboard() {
 
         <div className="bg-white p-8 rounded-sm shadow-sm border border-gray-100">
           <h2 className="text-xl font-serif text-gray-900 mb-6 flex justify-between items-center">
-            Quản lý Ảnh Phòng
-            {rooms.length === 0 && <span className="text-xs text-red-500">Chưa có dữ liệu phòng. Hãy chạy SQL!</span>}
+            <span>Quản lý Phòng {rooms.length === 0 && <span className="text-xs text-red-500 ml-2">Chưa có dữ liệu phòng. Hãy chạy SQL!</span>}</span>
+            <button onClick={() => { setEditingRoom({ branch_id: branches[0]?.id || 1, name: '', extra_hour_price: 50000, features: [], combos: [] }); setIsRoomModalOpen(true); }} className="bg-yellow-600 text-white px-4 py-2 rounded-sm text-sm font-bold flex items-center hover:bg-yellow-700">
+              <Plus size={16} className="mr-2" /> Thêm Phòng
+            </button>
           </h2>
           <div className="space-y-8">
             {rooms.map(room => (
               <div key={room.id} className="p-5 bg-gray-50 rounded-sm border border-gray-100">
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="font-bold text-lg text-gray-900">{room.name}</h3>
-                    <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Cơ sở {room.branch_id}</p>
+                    <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">{branches.find(b => b.id === room.branch_id)?.name || `Cơ sở ${room.branch_id}`}</p>
                   </div>
-                  <div>
-                    <label className={`cursor-pointer px-4 py-2 text-xs font-bold tracking-wider uppercase rounded-sm transition-colors ${uploadingRoomId === room.id ? 'bg-gray-300 text-gray-600' : 'bg-yellow-600 text-white hover:bg-yellow-700'}`}>
+                  <div className="flex items-center space-x-3">
+                    <button onClick={() => { setEditingRoom(room); setIsRoomModalOpen(true); }} className="text-gray-500 hover:text-yellow-600" title="Sửa thông tin phòng"><Edit2 size={18} /></button>
+                    <button onClick={() => handleDeleteRoom(room.id)} className="text-gray-500 hover:text-red-600" title="Xóa phòng"><Trash2 size={18} /></button>
+                    <label className={`cursor-pointer ml-4 px-4 py-2 text-xs font-bold tracking-wider uppercase rounded-sm transition-colors ${uploadingRoomId === room.id ? 'bg-gray-300 text-gray-600' : 'bg-yellow-600 text-white hover:bg-yellow-700'}`}>
                       {uploadingRoomId === room.id ? 'Đang Upload...' : 'Thêm Ảnh'}
                       <input 
                         type="file" 
@@ -230,6 +321,119 @@ function AdminDashboard() {
           </div>
         </div>
       </div>
+      
+      {/* Branch Modal */}
+      {isBranchModalOpen && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-sm w-full max-w-md p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold">{editingBranch?.id ? 'Chỉnh sửa Cơ sở' : 'Thêm Cơ sở mới'}</h3>
+              <button onClick={() => setIsBranchModalOpen(false)}><X size={20} /></button>
+            </div>
+            <form onSubmit={handleSaveBranch} className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold mb-1">Tên cơ sở</label>
+                <input required type="text" value={editingBranch?.name || ''} onChange={e => setEditingBranch({...editingBranch, name: e.target.value})} className="w-full border border-gray-300 p-2 rounded-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-1">Địa chỉ</label>
+                <input required type="text" value={editingBranch?.address || ''} onChange={e => setEditingBranch({...editingBranch, address: e.target.value})} className="w-full border border-gray-300 p-2 rounded-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-1">Trạng thái</label>
+                <select value={editingBranch?.has_rooms ? 'true' : 'false'} onChange={e => setEditingBranch({...editingBranch, has_rooms: e.target.value === 'true'})} className="w-full border border-gray-300 p-2 rounded-sm">
+                  <option value="true">Đang hoạt động</option>
+                  <option value="false">Sắp ra mắt</option>
+                </select>
+              </div>
+              <div className="flex justify-end pt-4">
+                <button type="submit" className="bg-yellow-600 text-white px-6 py-2 font-bold rounded-sm hover:bg-yellow-700">Lưu thông tin</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Room Modal */}
+      {isRoomModalOpen && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-sm w-full max-w-3xl p-6 my-8">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold">{editingRoom?.id ? 'Chỉnh sửa Phòng' : 'Thêm Phòng mới'}</h3>
+              <button onClick={() => setIsRoomModalOpen(false)}><X size={20} /></button>
+            </div>
+            <form onSubmit={handleSaveRoom} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold mb-1">Tên phòng</label>
+                  <input required type="text" value={editingRoom?.name || ''} onChange={e => setEditingRoom({...editingRoom, name: e.target.value})} className="w-full border border-gray-300 p-2 rounded-sm" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-1">Thuộc Cơ sở</label>
+                  <select required value={editingRoom?.branch_id || ''} onChange={e => setEditingRoom({...editingRoom, branch_id: Number(e.target.value)})} className="w-full border border-gray-300 p-2 rounded-sm">
+                    {branches.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+                  </select>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-bold mb-1">Giá phụ thu thêm giờ (VNĐ/1h)</label>
+                  <input required type="number" value={editingRoom?.extra_hour_price || 0} onChange={e => setEditingRoom({...editingRoom, extra_hour_price: Number(e.target.value)})} className="w-full md:w-1/2 border border-gray-300 p-2 rounded-sm" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2 flex justify-between items-center">
+                  <span>Tiện ích phòng</span>
+                  <button type="button" onClick={() => setEditingRoom({...editingRoom, features: [...(editingRoom?.features||[]), '']})} className="text-yellow-600 text-sm flex items-center font-bold hover:text-yellow-700 bg-yellow-50 px-3 py-1 rounded-sm"><Plus size={16} className="mr-1"/> Thêm tiện ích</button>
+                </label>
+                {editingRoom?.features?.map((f: string, idx: number) => (
+                  <div key={idx} className="flex mb-2 space-x-2">
+                    <input type="text" value={f} onChange={e => {
+                      const newF = [...editingRoom.features];
+                      newF[idx] = e.target.value;
+                      setEditingRoom({...editingRoom, features: newF});
+                    }} className="flex-1 border border-gray-300 p-2 rounded-sm text-sm" placeholder="VD: Bồn tắm, Tivi lớn..." required />
+                    <button type="button" onClick={() => {
+                      const newF = editingRoom.features.filter((_:any, i:number) => i !== idx);
+                      setEditingRoom({...editingRoom, features: newF});
+                    }} className="bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 px-3 border border-red-200 rounded-sm"><Trash2 size={16}/></button>
+                  </div>
+                ))}
+                {(!editingRoom?.features || editingRoom.features.length === 0) && <p className="text-xs text-gray-500 italic">Chưa có tiện ích nào.</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2 flex justify-between items-center">
+                  <span>Các gói Combo Giá</span>
+                  <button type="button" onClick={() => setEditingRoom({...editingRoom, combos: [...(editingRoom?.combos||[]), { id: Date.now().toString(), name: '', price: 0 }]})} className="text-yellow-600 text-sm flex items-center font-bold hover:text-yellow-700 bg-yellow-50 px-3 py-1 rounded-sm"><Plus size={16} className="mr-1"/> Thêm gói giá</button>
+                </label>
+                {editingRoom?.combos?.map((c: any, idx: number) => (
+                  <div key={idx} className="flex flex-col md:flex-row mb-2 gap-2 bg-gray-50 p-3 rounded-sm border border-gray-200">
+                    <input type="text" value={c.name} onChange={e => {
+                      const newC = [...editingRoom.combos];
+                      newC[idx].name = e.target.value;
+                      setEditingRoom({...editingRoom, combos: newC});
+                    }} className="flex-1 border border-gray-300 p-2 rounded-sm text-sm" placeholder="Tên gói (VD: Combo 3h)" required />
+                    <input type="number" value={c.price} onChange={e => {
+                      const newC = [...editingRoom.combos];
+                      newC[idx].price = Number(e.target.value);
+                      setEditingRoom({...editingRoom, combos: newC});
+                    }} className="w-full md:w-1/3 border border-gray-300 p-2 rounded-sm text-sm" placeholder="Giá (VD: 249000)" required />
+                    <button type="button" onClick={() => {
+                      const newC = editingRoom.combos.filter((_:any, i:number) => i !== idx);
+                      setEditingRoom({...editingRoom, combos: newC});
+                    }} className="bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 px-3 py-2 md:py-0 border border-red-200 rounded-sm flex items-center justify-center"><Trash2 size={16}/></button>
+                  </div>
+                ))}
+                {(!editingRoom?.combos || editingRoom.combos.length === 0) && <p className="text-xs text-gray-500 italic">Chưa có combo giá nào.</p>}
+              </div>
+
+              <div className="flex justify-end pt-6 border-t border-gray-200 mt-6">
+                <button type="submit" className="bg-yellow-600 text-white px-8 py-3 font-bold rounded-sm hover:bg-yellow-700 shadow-md">Lưu Phòng</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
