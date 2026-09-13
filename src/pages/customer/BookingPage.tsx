@@ -295,15 +295,15 @@ export default function BookingPage() {
                   <div className="w-10 h-10 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin"></div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="space-y-6">
                   {[...filteredRooms].sort((a, b) => a.name.localeCompare(b.name)).map(r => {
                   const isAvailable = bookingDate ? true : isRoomAvailableToday(r.name);
                   const isSelected = room === r.id;
                   
                   return (
                     <div key={r.id} className={`bg-white rounded-3xl transition-all overflow-hidden shadow-sm hover:shadow-xl border flex flex-col ${isSelected ? 'border-yellow-600 ring-1 ring-yellow-600' : 'border-stone-200'}`}>
-                      <div className="flex flex-col h-full">
-                        <div className="h-64 relative group shrink-0 w-full overflow-hidden">
+                      <div className="flex flex-col md:flex-row h-full">
+                        <div className="md:w-5/12 lg:w-2/5 h-64 md:h-auto min-h-[280px] relative group shrink-0 w-full overflow-hidden">
                           <img 
                             src={r.images[0]} 
                             onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
@@ -330,7 +330,7 @@ export default function BookingPage() {
                             )}
                           </div>
                         </div>
-                        <div className="p-6 flex flex-col justify-between flex-1">
+                        <div className="p-5 md:p-6 flex flex-col justify-between flex-1 md:w-7/12 lg:w-3/5">
                           <div>
                             <div className="flex justify-between items-start mb-4">
                               <div className="flex-1 pr-2">
@@ -391,7 +391,7 @@ export default function BookingPage() {
                               ))}
                             </ul>
                           </div>
-                          <div className="mt-8 flex gap-3">
+                          <div className="mt-8 flex justify-end">
                             <button
                               onClick={() => {
                                 if (!bookingDate) {
@@ -402,7 +402,7 @@ export default function BookingPage() {
                                 setCombo(''); 
                                 setStep(3); 
                               }}
-                              className="w-full py-3.5 bg-stone-900 text-white font-bold rounded-xl hover:bg-stone-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                              className="w-full sm:w-auto px-8 py-3.5 bg-stone-900 text-white font-bold rounded-xl hover:bg-stone-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                             >
                               Chọn phòng này
                             </button>

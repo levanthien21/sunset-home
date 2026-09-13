@@ -42,13 +42,13 @@ function Navbar() {
         <div className="flex-shrink-0 flex justify-end items-center">
           <Link 
             to="/customer/booking" 
-            className={`relative px-6 py-3 md:px-8 md:py-3.5 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold rounded-full transition-all duration-300 overflow-hidden group animate-[pulse_2.5s_infinite] hover:animate-none ${
+            className={`px-5 py-2.5 md:px-8 md:py-3 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold rounded-full transition-all duration-300 border animate-[pulse_3s_infinite] hover:animate-none ${
               isSolid 
-                ? 'bg-gradient-to-r from-yellow-600 to-yellow-500 text-white shadow-[0_0_15px_rgba(202,138,4,0.4)] hover:shadow-[0_0_25px_rgba(202,138,4,0.6)] hover:-translate-y-0.5 border border-yellow-500/50' 
-                : 'bg-[#D4AF37] text-white shadow-[0_0_20px_rgba(212,175,55,0.5)] hover:shadow-[0_0_30px_rgba(212,175,55,0.8)] hover:bg-white hover:text-[#1C1A17] hover:-translate-y-0.5 border border-white/20'
+                ? 'bg-[#1C1A17] text-white border-[#1C1A17] hover:bg-yellow-600 hover:border-yellow-600 shadow-md hover:shadow-[0_0_20px_rgba(202,138,4,0.4)] hover:-translate-y-0.5' 
+                : 'bg-white/10 backdrop-blur-md text-white border-white/50 hover:bg-white hover:text-[#1C1A17] shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:-translate-y-0.5'
             }`}
           >
-            <span className="relative z-10">Đặt Phòng Ngay</span>
+            Đặt Phòng
           </Link>
         </div>
       </div>

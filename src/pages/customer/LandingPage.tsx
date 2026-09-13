@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { PhoneCall, MessageCircle } from 'lucide-react';
+import { PhoneCall, MessageCircle, ChevronUp } from 'lucide-react';
 
 export default function LandingPage() {
   const [branches, setBranches] = useState<any[]>([]);
@@ -31,13 +31,21 @@ export default function LandingPage() {
     >
       {/* Floating Hotline Icons */}
       <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-4">
-        <a href="tel:0987654321" className="w-12 h-12 bg-[#B8860B] rounded-full flex items-center justify-center text-white shadow-lg shadow-black/20 hover:scale-110 hover:bg-[#a07409] transition-transform flex-shrink-0 animate-bounce">
+        <a href="tel:0987654321" className="w-12 h-12 bg-[#B8860B] rounded-full flex items-center justify-center text-white shadow-[0_0_15px_rgba(184,134,11,0.5)] hover:scale-110 hover:bg-[#a07409] transition-transform flex-shrink-0 animate-bounce">
           <PhoneCall className="w-5 h-5" />
         </a>
-        <a href="https://zalo.me/0987654321" target="_blank" rel="noreferrer" className="w-12 h-12 bg-[#0068FF] rounded-full flex items-center justify-center text-white shadow-lg shadow-black/20 hover:scale-110 hover:bg-[#0055d4] transition-transform flex-shrink-0">
-          <MessageCircle className="w-5 h-5" />
+        <a href="https://zalo.me/0987654321" target="_blank" rel="noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#0068FF] shadow-[0_0_15px_rgba(0,104,255,0.4)] hover:scale-110 transition-transform flex-shrink-0 font-bold text-[13px]">
+          Zalo
         </a>
       </div>
+
+      {/* Scroll to Top */}
+      <button 
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-stone-900/80 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 hover:bg-stone-900 transition-all flex-shrink-0"
+      >
+        <ChevronUp className="w-6 h-6" />
+      </button>
 
       {/* Hero Section */}
       <section className="relative h-[90vh] md:h-screen flex flex-col justify-center items-center overflow-hidden">
@@ -100,7 +108,7 @@ export default function LandingPage() {
               <Link 
                 key={branch.id}
                 to={`/customer/booking?branch=${branch.id}`}
-                className="w-full sm:w-auto px-10 py-4 rounded-full bg-[#D4AF37] text-white text-[11px] uppercase tracking-[0.25em] font-bold hover:bg-white hover:text-[#1C1A17] transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] hover:-translate-y-1 hover:scale-105 animate-[pulse_3s_infinite] hover:animate-none flex justify-center items-center"
+                className="w-full sm:w-auto px-10 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white text-[11px] uppercase tracking-[0.25em] font-bold hover:bg-white hover:text-[#1C1A17] transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] hover:-translate-y-1 hover:scale-105 animate-[pulse_3s_infinite] hover:animate-none flex justify-center items-center"
               >
                 {branch.name}
               </Link>
