@@ -527,12 +527,15 @@ export default function BookingPage() {
                         </div>
                       </div>
 
-                      <div>
-                        <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2">Số khách (Phụ thu 100k từ người thứ 3)</label>
-                        <div className="flex items-center bg-stone-50 p-1 rounded-xl border border-stone-200 w-fit shadow-sm">
-                          <button onClick={() => guests > 1 && setGuests(guests - 1)} className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-white shadow-sm border border-stone-100 flex items-center justify-center font-bold text-stone-600 hover:text-stone-900 transition-colors">-</button>
-                          <span className="w-12 md:w-14 text-center font-bold text-stone-900 text-sm md:text-base">{guests}</span>
-                          <button onClick={() => setGuests(guests + 1)} className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-white shadow-sm border border-stone-100 flex items-center justify-center font-bold text-stone-600 hover:text-stone-900 transition-colors">+</button>
+                      <div className="flex items-center justify-between p-3 md:p-4 border border-stone-200 rounded-xl bg-stone-50">
+                        <div>
+                          <p className="font-semibold text-stone-900 text-xs md:text-sm">Số khách</p>
+                          <p className="text-[10px] md:text-xs text-stone-500 mt-0.5">Phụ thu 100k từ người thứ 3</p>
+                        </div>
+                        <div className="flex items-center bg-white p-1 rounded-lg border border-stone-200 shadow-sm">
+                          <button onClick={() => guests > 1 && setGuests(guests - 1)} className="w-7 h-7 md:w-9 md:h-9 rounded-md flex items-center justify-center font-bold text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors">-</button>
+                          <span className="w-8 md:w-10 text-center font-bold text-stone-900 text-sm md:text-base">{guests}</span>
+                          <button onClick={() => setGuests(guests + 1)} className="w-7 h-7 md:w-9 md:h-9 rounded-md flex items-center justify-center font-bold text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors">+</button>
                         </div>
                       </div>
                     </div>
