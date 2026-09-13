@@ -583,91 +583,85 @@ export default function BookingPage() {
 
                 {/* Right Column: Order Summary & Checkout */}
                 <div className="lg:col-span-1">
-                  <div className="bg-stone-900 text-white rounded-xl md:rounded-3xl p-4 md:p-6 sticky top-24 shadow-xl">
-                    <h3 className="font-serif font-bold text-lg md:text-xl mb-4 md:mb-5 flex items-center">
-                      <span className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-yellow-600/20 text-yellow-500 flex items-center justify-center mr-2 md:mr-3 text-xs md:text-sm">3</span> 
-                      Thanh toán
+                  <div className="bg-white rounded-xl md:rounded-3xl p-5 md:p-6 sticky top-24 shadow-lg border border-stone-200">
+                    <h3 className="font-serif font-bold text-lg md:text-xl text-stone-900 mb-5 md:mb-6 flex items-center">
+                      <span className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center mr-2 md:mr-3 text-xs md:text-sm">3</span> 
+                      Chi tiết thanh toán
                     </h3>
                     
-                    <div className="space-y-2.5 md:space-y-3 text-[11px] md:text-sm text-stone-300 mb-5 md:mb-6 bg-stone-800/50 p-3 md:p-4 rounded-xl border border-stone-700">
-                      <div className="flex items-start">
-                        <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 md:mr-3 mt-0.5 text-yellow-500 shrink-0" />
-                        <div>
-                          <p className="font-bold text-white text-sm md:text-base">{selectedRoomDetails?.name}</p>
-                          <p className="text-[10px] md:text-xs mt-0.5">{selectedBranchDetails?.name}</p>
-                        </div>
+                    <div className="mb-5 md:mb-6">
+                      <div className="w-full h-32 md:h-40 overflow-hidden rounded-xl mb-4 shadow-sm">
+                        <img src={selectedRoomDetails?.images[0]} alt="Room" className="w-full h-full object-cover" />
                       </div>
-                      <div className="h-px bg-stone-700 my-1.5 md:my-2"></div>
-                      <div className="flex items-start">
-                        <CalendarDays className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 md:mr-3 mt-0.5 text-yellow-500 shrink-0" />
-                        <div>
-                          <p className="font-semibold text-white">{new Date(bookingDate).toLocaleDateString('vi-VN')}</p>
-                          <p className="text-[10px] md:text-xs mt-0.5">Giờ đến: {expectedTime}</p>
-                        </div>
+                      <h4 className="font-bold text-base md:text-lg text-stone-900 leading-tight">{selectedRoomDetails?.name}</h4>
+                      <p className="text-xs md:text-sm text-stone-500 mt-1.5 flex items-start">
+                         <MapPin className="w-3.5 h-3.5 mr-1.5 mt-0.5 shrink-0 text-stone-400" /> {selectedBranchDetails?.name}
+                      </p>
+                    </div>
+
+                    <div className="space-y-3 text-sm text-stone-600 mb-5 md:mb-6 bg-stone-50 p-4 rounded-xl border border-stone-100">
+                      <div className="flex justify-between items-center">
+                        <span className="flex items-center"><CalendarDays className="w-4 h-4 mr-2 text-stone-400" /> Ngày nhận</span>
+                        <span className="font-bold text-stone-900">{new Date(bookingDate).toLocaleDateString('vi-VN')}</span>
                       </div>
-                      <div className="flex items-start">
-                        <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 md:mr-3 mt-0.5 text-yellow-500 shrink-0" />
-                        <div>
-                          <p className="font-semibold text-white">Gói: {selectedComboDetails?.name || 'Chưa chọn'}</p>
-                          {extraHours > 0 && <p className="text-[10px] md:text-xs mt-0.5">Thêm giờ: {extraHours}h</p>}
-                        </div>
+                      <div className="flex justify-between items-center">
+                        <span className="flex items-center"><Clock className="w-4 h-4 mr-2 text-stone-400" /> Giờ đến</span>
+                        <span className="font-bold text-stone-900">{expectedTime || '--:--'}</span>
                       </div>
-                      <div className="flex items-center">
-                        <Users className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 md:mr-3 text-yellow-500 shrink-0" />
-                        <span className="font-semibold text-white">{guests} khách</span>
+                      <div className="flex justify-between items-center">
+                        <span className="flex items-center"><Users className="w-4 h-4 mr-2 text-stone-400" /> Số khách</span>
+                        <span className="font-bold text-stone-900">{guests}</span>
                       </div>
                     </div>
                     
-                    <div className="border-t border-stone-700 pt-3 md:pt-4 mb-4 md:mb-5 space-y-1.5 md:space-y-2 text-[11px] md:text-sm">
-                      <div className="flex justify-between text-stone-400">
-                        <span>Giá gói:</span>
-                        <span className="text-white">{comboPrice.toLocaleString()}đ</span>
+                    <div className="border-t border-dashed border-stone-300 pt-5 md:pt-6 mb-5 md:mb-6 space-y-3 text-sm text-stone-600">
+                      <div className="flex justify-between items-center">
+                        <span>Gói: {selectedComboDetails?.name || 'Chưa chọn'}</span>
+                        <span className="font-medium text-stone-900">{comboPrice.toLocaleString()}đ</span>
                       </div>
                       {extraHourTotal > 0 && (
-                        <div className="flex justify-between text-stone-400">
-                          <span>Phụ thu thêm giờ:</span>
-                          <span className="text-white">{extraHourTotal.toLocaleString()}đ</span>
+                        <div className="flex justify-between items-center">
+                          <span>Phụ thu thêm giờ ({extraHours}h)</span>
+                          <span className="font-medium text-stone-900">{extraHourTotal.toLocaleString()}đ</span>
                         </div>
                       )}
                       {weekendSurcharge > 0 && (
-                        <div className="flex justify-between text-stone-400">
-                          <span>Phụ thu cuối tuần:</span>
-                          <span className="text-white">{weekendSurcharge.toLocaleString()}đ</span>
+                        <div className="flex justify-between items-center">
+                          <span>Phụ thu cuối tuần</span>
+                          <span className="font-medium text-stone-900">{weekendSurcharge.toLocaleString()}đ</span>
                         </div>
                       )}
                       {guestSurcharge > 0 && (
-                        <div className="flex justify-between text-stone-400">
-                          <span>Phụ thu khách:</span>
-                          <span className="text-white">{guestSurcharge.toLocaleString()}đ</span>
+                        <div className="flex justify-between items-center">
+                          <span>Phụ thu khách</span>
+                          <span className="font-medium text-stone-900">{guestSurcharge.toLocaleString()}đ</span>
                         </div>
                       )}
                       
-                      <div className="flex justify-between items-end pt-1.5 md:pt-2">
-                        <span className="text-white font-bold">Tổng thanh toán:</span>
-                        <span className="text-yellow-500 font-bold text-xl md:text-2xl leading-none">{amountToPay.toLocaleString()}đ</span>
+                      <div className="flex justify-between items-end pt-3">
+                        <span className="text-stone-900 font-bold text-base">Tổng cộng:</span>
+                        <span className="text-yellow-600 font-bold text-2xl md:text-3xl leading-none">{amountToPay.toLocaleString()}đ</span>
                       </div>
                     </div>
 
                     {isStep2Valid && isStep3Valid ? (
-                      <div className="bg-white rounded-xl p-3 md:p-4 mb-5 md:mb-6 flex flex-col items-center text-stone-900 animate-in fade-in duration-500 relative">
-                        <p className="text-[10px] md:text-[11px] font-bold text-center mb-1.5 md:mb-2 text-stone-500">Quét mã QR để tự động thanh toán</p>
-                        {/* Using standard vietqr URL format with a placeholder bank bin and account */}
-                        <img 
-                          src={`https://img.vietqr.io/image/970415-0123456789-compact.png?amount=${amountToPay}&addInfo=THANHTOANSUNSET%20${phone}&accountName=SUNSET%20HOMESTAY`}
-                          alt="VietQR" 
-                          className="w-full max-w-[140px] md:max-w-[200px] aspect-square rounded-lg mb-2 md:mb-3 shadow-sm border border-stone-100"
-                        />
-                        <div className="w-full bg-stone-50 rounded-lg p-2 md:p-2.5 text-center">
-                          <p className="text-[9px] md:text-[10px] text-stone-500 uppercase tracking-wider mb-0.5 md:mb-1">Số tiền thanh toán</p>
-                          <p className="font-bold text-base md:text-lg text-yellow-600">{amountToPay.toLocaleString()}đ</p>
+                      <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 md:p-5 mb-5 md:mb-6 flex flex-col items-center animate-in fade-in duration-500">
+                        <p className="text-xs font-bold text-center mb-3 text-stone-500 uppercase tracking-wide">Quét mã QR để thanh toán</p>
+                        <div className="bg-white p-2 rounded-xl shadow-sm border border-stone-100 mb-3">
+                          <img 
+                            src={`https://img.vietqr.io/image/970415-0123456789-compact.png?amount=${amountToPay}&addInfo=THANHTOANSUNSET%20${phone}&accountName=SUNSET%20HOMESTAY`}
+                            alt="VietQR" 
+                            className="w-full max-w-[160px] md:max-w-[180px] aspect-square rounded-lg object-contain"
+                          />
                         </div>
+                        <p className="text-xs text-stone-500 text-center px-4">Hệ thống sẽ tự động xác nhận đơn ngay khi nhận được thanh toán.</p>
                       </div>
                     ) : (
-                      <div className="bg-stone-800 rounded-xl p-4 md:p-6 mb-5 md:mb-6 flex flex-col items-center text-center border border-stone-700">
-                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-stone-700 flex items-center justify-center mb-2 md:mb-3">
-                          <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-stone-500" />
+                      <div className="bg-stone-50 rounded-2xl p-6 mb-5 md:mb-6 flex flex-col items-center text-center border border-dashed border-stone-300">
+                        <div className="w-12 h-12 rounded-full bg-stone-200 flex items-center justify-center mb-3">
+                          <CheckCircle2 className="w-6 h-6 text-stone-400" />
                         </div>
-                        <p className="text-xs md:text-sm text-stone-400">Vui lòng điền đầy đủ thông tin bên trái để tự động tạo mã QR thanh toán.</p>
+                        <p className="text-sm text-stone-500">Vui lòng điền đầy đủ thông tin bên trái để tạo mã QR thanh toán.</p>
                       </div>
                     )}
 
@@ -675,19 +669,13 @@ export default function BookingPage() {
                       onClick={handlePaymentSubmit}
                       disabled={!isStep2Valid || !isStep3Valid || isProcessing}
                       className={`w-full py-4 rounded-xl font-bold flex items-center justify-center transition-all ${
-                        isStep2Valid && isStep3Valid && !isProcessing ? 'bg-yellow-600 text-white hover:bg-yellow-500 shadow-lg shadow-yellow-600/30' : 'bg-stone-800 text-stone-500 cursor-not-allowed'
+                        isStep2Valid && isStep3Valid && !isProcessing ? 'bg-yellow-600 text-white hover:bg-yellow-500 shadow-lg shadow-yellow-600/30' : 'bg-stone-200 text-stone-400 cursor-not-allowed'
                       }`}
                     >
                       {isProcessing ? (
-                        <>
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-                          Đang xử lý...
-                        </>
+                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       ) : (
-                        <>
-                          Xác nhận & Đặt phòng
-                          <ArrowRight className="w-5 h-5 ml-2" />
-                        </>
+                        "Tôi đã chuyển khoản / Đặt phòng"
                       )}
                     </button>
                     {(!isStep2Valid || !isStep3Valid) && (
