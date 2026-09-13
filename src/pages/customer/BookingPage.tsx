@@ -366,67 +366,79 @@ export default function BookingPage() {
                           </div>
                         </div>
                         <div className="p-4 md:p-5 lg:p-6 flex flex-col justify-between flex-1 w-[58%] md:w-7/12 lg:w-3/5">
-                          <div>
-                            <div className="flex justify-between items-start mb-3 md:mb-4 gap-2">
-                              <div className="flex-1">
-                                <h3 className="text-xl md:text-2xl font-serif font-bold text-stone-900 leading-tight">{r.name}</h3>
-                                <div className="flex flex-wrap gap-2 mt-2">
-                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1.5 rounded-lg flex items-center">
-                                    <Users className="w-3 h-3 mr-1" /> Tối đa 4 Khách
-                                  </span>
-                                  <span className="text-[10px] font-medium bg-stone-100 text-stone-600 px-2 py-1.5 rounded-lg flex items-center">
-                                    <BedDouble className="w-3 h-3 mr-1" /> 1 Giường lớn
-                                  </span>
-                                </div>
-                              </div>
-                              {r.combos && r.combos.length > 0 && (
-                                <div className="text-right shrink-0 bg-stone-50 p-2 rounded-xl border border-stone-100">
-                                  <div className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded mb-1 inline-block shadow-sm">Ưu đãi 25%</div>
-                                  <p className="text-[10px] md:text-xs text-stone-400 line-through">
-                                    {(Math.min(...r.combos.map((c: any) => c.price)) * 1.33).toLocaleString()}đ
-                                  </p>
-                                  <p className="text-yellow-600 font-bold text-base md:text-lg leading-none mt-0.5">
-                                    {Math.min(...r.combos.map((c: any) => c.price)).toLocaleString()}đ
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="flex flex-col gap-2.5 md:gap-3 mb-4 md:mb-5">
-                              <div className="flex flex-wrap items-center justify-between gap-1">
-                                <div className="flex items-center text-stone-500 text-[11px]">
+                          <div className="flex flex-col gap-3 md:gap-4">
+                            {/* Tiêu đề & Địa điểm */}
+                            <div>
+                              <h3 className="text-lg md:text-2xl font-serif font-bold text-stone-900 leading-tight mb-1.5">{r.name}</h3>
+                              <div className="flex items-center flex-wrap text-stone-500 text-[11px] md:text-xs gap-x-2 gap-y-1">
+                                <span className="flex items-center">
                                   <MapPin className="w-3 h-3 mr-1 text-stone-400" />
-                                  <span className="line-clamp-1">{selectedBranchDetails?.name}</span>
-                                </div>
+                                  {selectedBranchDetails?.name}
+                                </span>
+                                <span className="text-stone-300">•</span>
                                 <button 
                                   onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails?.address || ''), '_blank')}
-                                  className="text-[11px] font-bold text-blue-600 hover:underline flex items-center bg-blue-50 px-2 py-1 rounded-md shrink-0"
+                                  className="text-blue-600 font-medium hover:underline flex items-center"
                                 >
-                                  Xem bản đồ <ChevronRight className="w-2.5 h-2.5 ml-0.5" />
+                                  Xem bản đồ <ChevronRight className="w-3 h-3 ml-0.5" />
                                 </button>
-                              </div>
-                              <div className="bg-green-50 border border-green-100 rounded-lg md:rounded-xl p-2.5 md:p-3 w-full shadow-sm">
-                                 <p className="text-[11px] text-green-700 font-bold flex items-start mb-1">
-                                   <Check className="w-3.5 h-3.5 mr-1.5 mt-0.5 shrink-0"/> Miễn phí hủy trước 7 ngày
-                                 </p>
-                                 <p className="text-[11px] text-green-700 font-bold flex items-start">
-                                   <Check className="w-3.5 h-3.5 mr-1.5 mt-0.5 shrink-0"/> Giữ chỗ thanh toán qua QR
-                                 </p>
                               </div>
                             </div>
 
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-2 md:gap-y-3 mt-2">
-                              {r.features.map((f: any, i: any) => (
-                                <li key={i} className="flex items-center text-[11px] md:text-[12px] text-stone-600">
-                                  <div className="w-4 h-4 rounded-full bg-yellow-50 flex items-center justify-center mr-1.5 md:mr-2 shrink-0">
-                                    <CheckCircle2 className="w-3 h-3 text-yellow-600" />
+                            {/* Sức chứa & Giường */}
+                            <div className="flex flex-wrap gap-2">
+                              <span className="text-[10px] md:text-[11px] font-medium bg-stone-100 text-stone-700 px-2 py-1 md:px-2.5 md:py-1.5 rounded-md flex items-center border border-stone-200/60">
+                                <Users className="w-3 h-3 mr-1 text-stone-500" /> Tối đa 4 Khách
+                              </span>
+                              <span className="text-[10px] md:text-[11px] font-medium bg-stone-100 text-stone-700 px-2 py-1 md:px-2.5 md:py-1.5 rounded-md flex items-center border border-stone-200/60">
+                                <BedDouble className="w-3 h-3 mr-1 text-stone-500" /> 1 Giường lớn
+                              </span>
+                            </div>
+
+                            {/* Tiện ích phòng (chỉ hiện 4 cái đầu cho gọn) */}
+                            {r.features && r.features.length > 0 && (
+                              <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                                {r.features.slice(0, 4).map((f: any, i: any) => (
+                                  <div key={i} className="flex items-center text-[10px] md:text-[11px] text-stone-600">
+                                    <CheckCircle2 className="w-3 h-3 text-stone-400 mr-1" />
+                                    <span className="truncate max-w-[120px]">{f}</span>
                                   </div>
-                                  <span className="truncate" title={f}>{f}</span>
-                                </li>
-                              ))}
-                            </ul>
+                                ))}
+                                {r.features.length > 4 && (
+                                  <span className="text-[10px] md:text-[11px] text-stone-400">+{r.features.length - 4} tiện ích</span>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Lợi ích */}
+                            <div className="flex flex-col gap-1 mt-1">
+                               <p className="text-[11px] text-green-600 font-medium flex items-center">
+                                 <Check className="w-3 h-3 mr-1.5"/> Miễn phí hủy trước 7 ngày
+                               </p>
+                               <p className="text-[11px] text-green-600 font-medium flex items-center">
+                                 <Check className="w-3 h-3 mr-1.5"/> Giữ chỗ thanh toán qua mã QR
+                               </p>
+                            </div>
                           </div>
-                          <div className="mt-4 md:mt-8 flex justify-end">
+
+                          {/* Khu vực Giá & Nút chọn (Gắn chặt dưới đáy) */}
+                          <div className="mt-4 pt-4 border-t border-stone-100 flex flex-row items-end justify-between gap-3">
+                            {r.combos && r.combos.length > 0 ? (
+                              <div className="flex flex-col">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                  <span className="bg-red-500 text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded">Ưu đãi 25%</span>
+                                  <span className="text-[10px] md:text-xs text-stone-400 line-through">
+                                    {(Math.min(...r.combos.map((c: any) => c.price)) * 1.33).toLocaleString()}đ
+                                  </span>
+                                </div>
+                                <div className="text-yellow-600 font-bold text-lg md:text-xl leading-none">
+                                  {Math.min(...r.combos.map((c: any) => c.price)).toLocaleString()}đ
+                                </div>
+                              </div>
+                            ) : (
+                              <div></div>
+                            )}
+
                             <button
                               onClick={() => {
                                 if (!bookingDate) {
@@ -437,9 +449,9 @@ export default function BookingPage() {
                                 setCombo(''); 
                                 setStep(3); 
                               }}
-                              className="w-full sm:w-auto px-5 py-3 md:px-8 md:py-3.5 bg-stone-900 text-white text-sm font-bold rounded-xl hover:bg-stone-800 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                              className="px-4 py-2.5 md:px-6 md:py-3 bg-stone-900 text-white text-xs md:text-sm font-bold rounded-xl hover:bg-stone-800 transition-all shadow-md shrink-0"
                             >
-                              Chọn phòng này
+                              Chọn phòng
                             </button>
                           </div>
                         </div>
