@@ -147,79 +147,62 @@ export default function LandingPage() {
 
       {/* 3. Policies Section */}
       <section className="py-20 md:py-24 bg-gray-50 border-t border-gray-100">
-        <div className="max-w-5xl mx-auto px-6 lg:px-12">
+        <div className="max-w-5xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row gap-12 md:gap-20">
+          
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="text-center mb-12 md:mb-16"
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="md:w-1/3 flex flex-col items-start text-left"
           >
             <h3 className="text-[9px] md:text-[10px] font-bold tracking-[0.3em] text-[#B8860B] uppercase mb-3 md:mb-4">Lưu ý quan trọng</h3>
-            <h2 className="text-2xl md:text-4xl font-serif text-[#1C1A17]">Chính sách lưu trú</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-              className="bg-white p-6 md:p-8 rounded-sm shadow-sm border border-gray-50"
-            >
-              <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-3 md:mb-4 border-b border-gray-100 pb-3">Thời gian</h4>
-              <p className="text-xs md:text-sm text-gray-600 font-light leading-relaxed">
-                Check-in: Từ 14:00<br/>
-                Check-out: Trước 12:00
-                <span className="block mt-2 text-[10px] text-gray-400 italic">(Hỗ trợ nhận phòng sớm nếu có trống)</span>
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="bg-white p-6 md:p-8 rounded-sm shadow-sm border border-gray-50"
-            >
-              <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-3 md:mb-4 border-b border-gray-100 pb-3">Không gian</h4>
-              <p className="text-xs md:text-sm text-gray-600 font-light leading-relaxed">
-                Không hút thuốc trong phòng.<br/>
-                Không mang theo thú cưng.
-                <span className="block mt-2 text-[10px] text-gray-400 italic">(Cùng giữ gìn không gian chung)</span>
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-              className="bg-white p-6 md:p-8 rounded-sm shadow-sm border border-gray-50"
-            >
-              <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#1C1A17] mb-3 md:mb-4 border-b border-gray-100 pb-3">Hoàn hủy</h4>
-              <p className="text-xs md:text-sm text-gray-600 font-light leading-relaxed">
-                Miễn phí hủy trước 48h.<br/>
-                Hỗ trợ dời lịch linh hoạt.
-                <span className="block mt-2 text-[10px] text-gray-400 italic">(Bảo lưu giá trị cọc an toàn)</span>
-              </p>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            className="mt-12 md:mt-16 text-center"
-          >
+            <h2 className="text-2xl md:text-4xl font-serif text-[#1C1A17] mb-4">Quy định<br/>lưu trú</h2>
+            <p className="text-xs md:text-sm text-gray-500 font-light leading-relaxed mb-8">
+              Nhằm đảm bảo trải nghiệm nghỉ dưỡng hoàn hảo nhất, quý khách vui lòng lưu ý các quy định chung của Sunset Home.
+            </p>
             <Link 
               to="/customer/policies" 
               className="inline-flex items-center text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:text-[#B8860B] transition-colors pb-1 border-b border-[#1C1A17]/20 hover:border-[#B8860B]"
             >
-              Xem chi tiết chính sách
+              Xem chi tiết toàn bộ
             </Link>
           </motion.div>
+
+          <div className="md:w-2/3 flex flex-col justify-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+              className="py-6 border-t border-[#1C1A17]/10 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6"
+            >
+              <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#1C1A17] sm:w-1/3">Thời gian</h4>
+              <p className="text-xs md:text-sm text-gray-600 font-light sm:w-2/3">Nhận phòng từ 14:00 — Trả phòng trước 12:00.</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="py-6 border-t border-[#1C1A17]/10 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6"
+            >
+              <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#1C1A17] sm:w-1/3">Không gian</h4>
+              <p className="text-xs md:text-sm text-gray-600 font-light sm:w-2/3">Không khói thuốc, không thú cưng và tiệc tùng ồn ào.</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+              className="py-6 border-y border-[#1C1A17]/10 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6"
+            >
+              <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#1C1A17] sm:w-1/3">Hoàn hủy</h4>
+              <p className="text-xs md:text-sm text-gray-600 font-light sm:w-2/3">Miễn phí hủy trước 48h. Hỗ trợ dời lịch linh hoạt.</p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
