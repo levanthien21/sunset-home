@@ -188,22 +188,22 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 pt-20 pb-12">
+    <div className="min-h-screen bg-[#F9F8F6] pt-16 md:pt-20 pb-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Steps */}
-        <div className="mb-8">
-          <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="flex items-center text-stone-500 hover:text-stone-900 mb-6">
-            <ArrowLeft className="w-5 h-5 mr-2" />
+        <div className="mb-6 md:mb-8">
+          <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="flex items-center text-gray-500 hover:text-[#1C1A17] mb-6 text-sm font-medium transition-colors w-fit">
+            <ArrowLeft className="w-4 h-4 mr-2" />
             Quay lại
           </button>
           
-          <div className="flex items-center justify-between mb-8 relative">
-            <div className="absolute left-0 top-1/2 w-full h-0.5 bg-stone-200 -z-10" />
+          <div className="flex items-center justify-between relative px-2">
+            <div className="absolute left-0 top-1/2 w-full h-[1px] bg-gray-200 -z-10" />
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className={`flex flex-col items-center bg-stone-50 px-2 ${step >= i ? 'text-yellow-600' : 'text-stone-400'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold mb-2 ${step >= i ? 'bg-yellow-600 text-white' : 'bg-stone-200 text-stone-500'}`}>
-                  {step > i ? <CheckCircle2 className="w-5 h-5" /> : i}
+              <div key={i} className={`flex flex-col items-center bg-[#F9F8F6] px-1 md:px-2 ${step >= i ? 'text-[#B8860B]' : 'text-gray-300'}`}>
+                <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-[10px] md:text-xs font-bold transition-colors ${step >= i ? 'bg-[#1C1A17] text-white ring-4 ring-[#F9F8F6]' : 'bg-gray-200 text-gray-500 ring-4 ring-[#F9F8F6]'}`}>
+                  {step > i ? <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4" /> : i}
                 </div>
               </div>
             ))}
@@ -295,26 +295,28 @@ export default function BookingPage() {
                         </div>
                         <div className="p-6 md:w-3/5 flex flex-col justify-between">
                           <div>
-                            <div className="flex justify-between items-start mb-4">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
                               <div>
-                                <h3 className="text-2xl font-serif font-bold text-[#1C1A17]">{r.name}</h3>
+                                <h3 className="text-xl md:text-2xl font-serif font-bold text-[#1C1A17]">{r.name}</h3>
                                 {r.combos && r.combos.length > 0 && (
                                   <p className="text-[#B8860B] font-medium text-sm mt-1">
                                     Giá từ: {Math.min(...r.combos.map((c: any) => c.price)).toLocaleString()}đ
                                   </p>
                                 )}
                               </div>
-                              {isAvailable ? (
-                                <span className="px-3 py-1 bg-green-50 text-green-700 border border-green-200 text-[10px] uppercase tracking-wider font-bold rounded-sm flex items-center">
-                                  Hôm nay: Trống
-                                </span>
-                              ) : (
-                                <span className="px-3 py-1 bg-red-50 text-red-700 border border-red-200 text-[10px] uppercase tracking-wider font-bold rounded-sm">
-                                  Kín lịch
-                                </span>
-                              )}
+                              <div className="w-fit">
+                                {isAvailable ? (
+                                  <span className="px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 text-[9px] md:text-[10px] uppercase tracking-wider font-bold rounded-sm inline-flex items-center">
+                                    Hôm nay: Trống
+                                  </span>
+                                ) : (
+                                  <span className="px-2.5 py-1 bg-red-50 text-red-700 border border-red-200 text-[9px] md:text-[10px] uppercase tracking-wider font-bold rounded-sm inline-flex items-center">
+                                    Kín lịch
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                            <ul className="space-y-2.5 mt-6">
+                            <ul className="space-y-2.5 mt-4 md:mt-6">
                               {r.features.map((f: any, i: any) => (
                                 <li key={i} className="flex items-center text-sm text-gray-600 font-light">
                                   <CheckCircle2 className="w-4 h-4 text-[#B8860B] mr-2.5 shrink-0" />
