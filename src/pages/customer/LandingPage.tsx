@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { CalendarDays, PhoneCall, MessageCircle } from 'lucide-react';
+import { PhoneCall, MessageCircle } from 'lucide-react';
 
 export default function LandingPage() {
   const [branches, setBranches] = useState<any[]>([]);
-  const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
     const load = async () => {
