@@ -29,16 +29,16 @@ export default function LandingPage() {
       className="bg-[#F9F8F6]"
     >
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden">
+      <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden border-b-4 border-[#D4AF37]">
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&w=2000&q=80" 
             alt="Hero" 
             className="w-full h-full object-cover scale-105"
           />
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-[#0A1128]/40"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1128] via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         </div>
         
         <div className="relative z-10 text-center px-6 w-full max-w-4xl mx-auto mt-10">
@@ -104,7 +104,7 @@ export default function LandingPage() {
       </section>
 
       {/* 1. Intro Section: The Bridge */}
-      <section className="py-24 md:py-32 bg-[#0A1128] text-white overflow-hidden">
+      <section className="py-24 md:py-32 bg-white text-[#0A1128] overflow-hidden">
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -113,8 +113,8 @@ export default function LandingPage() {
           className="max-w-4xl mx-auto px-6 text-center"
         >
           <h3 className="text-[10px] font-bold tracking-[0.3em] text-[#D4AF37] uppercase mb-6">Câu chuyện của chúng tôi</h3>
-          <h2 className="text-3xl md:text-5xl font-serif leading-tight mb-8">Nơi những <span className="italic font-light text-white/50">cảm xúc</span> được trân trọng</h2>
-          <p className="text-sm md:text-base text-white/70 font-light leading-relaxed max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-5xl font-serif leading-tight mb-8">Nơi những <span className="italic font-light text-gray-400">cảm xúc</span> được trân trọng</h2>
+          <p className="text-sm md:text-base text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
             Không chỉ là một nơi lưu trú, Sunset Home là sự kết tinh của nghệ thuật thiết kế và lòng hiếu khách. 
             Mỗi chi nhánh được chúng tôi chăm chút tỉ mỉ từng ánh đèn, từng góc nhỏ để mang lại cho bạn những phút giây thư giãn tuyệt đối giữa lòng phố thị.
           </p>
@@ -122,7 +122,7 @@ export default function LandingPage() {
       </section>
 
       {/* 2. Amenities Section: The Utility */}
-      <section className="py-20 bg-[#F4F6F9]">
+      <section className="py-24 bg-[#0A1128] text-white">
         <div className="max-w-5xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
             {[
@@ -139,11 +139,11 @@ export default function LandingPage() {
                 transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
                 className="flex flex-col items-center"
               >
-                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center mb-4 text-[#0A1128] hover:bg-[#0A1128] hover:text-white transition-colors duration-500 shadow-sm border border-[#0A1128]/5">
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/5 flex items-center justify-center mb-5 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A1128] transition-colors duration-500 border border-white/10">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">{item.icon}</svg>
                 </div>
-                <h4 className="text-[11px] font-bold uppercase tracking-[0.15em] mb-1 text-[#0A1128]">{item.title}</h4>
-                <p className="text-xs text-[#0A1128]/60 font-light">{item.desc}</p>
+                <h4 className="text-[11px] font-bold uppercase tracking-[0.15em] mb-2 text-white">{item.title}</h4>
+                <p className="text-xs text-white/50 font-light">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -151,7 +151,7 @@ export default function LandingPage() {
       </section>
 
       {/* 3. Policies Section */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#F4F6F9]">
         <div className="max-w-5xl mx-auto px-6 lg:px-12">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
