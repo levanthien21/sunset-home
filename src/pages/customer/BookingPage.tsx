@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, X, ChevronRight, BedDouble, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { updateBookingStatus } from '../../utils/db';
 
 export default function BookingPage() {
   const navigate = useNavigate();
