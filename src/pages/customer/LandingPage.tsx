@@ -105,57 +105,62 @@ export default function LandingPage() {
       </section>
 
       {/* 1. Intro Section: The Bridge */}
-      <section className="py-24 bg-[#F9F8F6] text-[#1C1A17]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="py-24 md:py-32 bg-[#F9F8F6] text-[#1C1A17] overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="max-w-4xl mx-auto px-6 text-center"
+        >
           <h3 className="text-[10px] font-bold tracking-[0.3em] text-yellow-600 uppercase mb-6">Câu chuyện của chúng tôi</h3>
-          <h2 className="text-3xl md:text-5xl font-serif leading-tight mb-8">Nơi những <span className="italic font-light">cảm xúc</span> được trân trọng</h2>
+          <h2 className="text-3xl md:text-5xl font-serif leading-tight mb-8">Nơi những <span className="italic font-light text-gray-500">cảm xúc</span> được trân trọng</h2>
           <p className="text-sm md:text-base text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
             Không chỉ là một nơi lưu trú, Sunset Home là sự kết tinh của nghệ thuật thiết kế và lòng hiếu khách. 
             Mỗi chi nhánh được chúng tôi chăm chút tỉ mỉ từng ánh đèn, từng góc nhỏ để mang lại cho bạn những phút giây thư giãn tuyệt đối giữa lòng phố thị.
           </p>
-        </div>
+        </motion.div>
       </section>
 
       {/* 2. Amenities Section: The Utility */}
-      <section className="py-24 bg-white border-b border-gray-100">
+      <section className="py-24 bg-white border-b border-gray-100 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 text-center">
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-              </div>
-              <h4 className="text-xs font-bold uppercase tracking-widest mb-2">Smart TV</h4>
-              <p className="text-[11px] text-gray-500 font-light">Tích hợp Netflix 4K</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-              </div>
-              <h4 className="text-xs font-bold uppercase tracking-widest mb-2">Bồn Tắm</h4>
-              <p className="text-[11px] text-gray-500 font-light">Thư giãn tối đa</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              </div>
-              <h4 className="text-xs font-bold uppercase tracking-widest mb-2">Riêng Tư</h4>
-              <p className="text-[11px] text-gray-500 font-light">An ninh 24/7</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              </div>
-              <h4 className="text-xs font-bold uppercase tracking-widest mb-2">Linh Hoạt</h4>
-              <p className="text-[11px] text-gray-500 font-light">Check-in mọi lúc</p>
-            </div>
+            {[
+              { icon: <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline>, title: "Smart TV", desc: "Tích hợp Netflix 4K" },
+              { icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>, title: "Bồn Tắm", desc: "Thư giãn tối đa" },
+              { icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>, title: "Riêng Tư", desc: "An ninh 24/7" },
+              { icon: <><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></>, title: "Linh Hoạt", desc: "Check-in mọi lúc" }
+            ].map((item, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.8, delay: i * 0.15, ease: "easeOut" }}
+                className="flex flex-col items-center"
+              >
+                <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17] hover:bg-[#1C1A17] hover:text-white transition-colors duration-500">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">{item.icon}</svg>
+                </div>
+                <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] mb-2">{item.title}</h4>
+                <p className="text-[11px] text-gray-500 font-light">{item.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* 3. Branches Layout: The Destination */}
-      <section className="py-32 bg-white" id="experiences">
+      <section className="py-32 bg-white overflow-hidden" id="experiences">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-20">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="flex flex-col md:flex-row md:items-end justify-between mb-20"
+          >
             <div className="max-w-2xl">
               <h3 className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-4">Các chi nhánh</h3>
               <h2 className="text-4xl lg:text-6xl font-serif text-[#1C1A17] leading-tight">Lựa chọn<br/><span className="italic text-gray-400">chốn về</span></h2>
@@ -163,30 +168,39 @@ export default function LandingPage() {
             <Link to="/customer/booking" className="hidden md:flex items-center text-xs uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:opacity-50 transition-opacity pb-4 border-b border-black/20 hover:border-black">
               Xem tất cả <ArrowRight size={14} className="ml-3" />
             </Link>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 md:gap-y-24">
             {branches.map((branch: any, index: number) => (
-              <Link to={`/customer/booking?branch=${branch.id}`} key={branch.id} className={`group block ${index % 2 !== 0 ? 'md:mt-16 lg:mt-32' : ''}`}>
-                <div className="aspect-[3/4] overflow-hidden mb-8 relative">
-                  <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-[1.5s] ease-out" alt={branch.name} />
-                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>
-                  {!branch.has_rooms && (
-                    <div className="absolute top-6 left-6">
-                      <span className="text-white text-[9px] uppercase tracking-widest font-bold px-4 py-2 bg-black/60 backdrop-blur-md rounded-sm">Sắp ra mắt</span>
+              <motion.div
+                key={branch.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 1, delay: index * 0.2, ease: "easeOut" }}
+                className={`group block ${index % 2 !== 0 ? 'md:mt-16 lg:mt-32' : ''}`}
+              >
+                <Link to={`/customer/booking?branch=${branch.id}`} className="block">
+                  <div className="aspect-[3/4] overflow-hidden mb-8 relative">
+                    <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-110 transition duration-[2s] ease-out" alt={branch.name} />
+                    <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>
+                    {!branch.has_rooms && (
+                      <div className="absolute top-6 left-6">
+                        <span className="text-white text-[9px] uppercase tracking-widest font-bold px-4 py-2 bg-black/60 backdrop-blur-md rounded-sm">Sắp ra mắt</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-2xl font-serif text-[#1C1A17] mb-3 group-hover:text-yellow-600 transition-colors duration-500">{branch.name}</h3>
+                      <p className="text-gray-500 text-sm font-light max-w-sm leading-relaxed">{branch.address}</p>
                     </div>
-                  )}
-                </div>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-2xl font-serif text-[#1C1A17] mb-3 group-hover:text-yellow-600 transition-colors duration-500">{branch.name}</h3>
-                    <p className="text-gray-500 text-sm font-light max-w-sm leading-relaxed">{branch.address}</p>
+                    <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-[#1C1A17] group-hover:text-white group-hover:border-[#1C1A17] transition-all duration-500">
+                      <ArrowRight size={14} className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-500" />
+                    </div>
                   </div>
-                  <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-[#1C1A17] group-hover:text-white group-hover:border-[#1C1A17] transition-all duration-500">
-                    <ArrowRight size={14} className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-500" />
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
