@@ -8,7 +8,7 @@ import PoliciesPage from './PoliciesPage';
 
 function Navbar() {
   const location = useLocation();
-  const isHome = location.pathname === '/customer' || location.pathname === '/customer/';
+  const isHome = location.pathname === '/' || location.pathname === '';
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -23,17 +23,17 @@ function Navbar() {
     <nav className={`fixed w-full z-50 transition-all duration-700 ${isSolid ? 'bg-white shadow-sm border-b border-gray-100 py-4 text-gray-900' : 'bg-transparent py-6 text-white'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
         {/* Left - Logo */}
-        <Link to="/customer" className="flex-shrink-0 flex flex-col">
+        <Link to="/" className="flex-shrink-0 flex flex-col">
           <h1 className="text-xl md:text-2xl font-serif tracking-[0.25em] uppercase font-light">Sunset</h1>
           <span className="text-[9px] uppercase tracking-[0.3em] opacity-70 mt-1">Boutique Homestay</span>
         </Link>
 
         {/* Center - Navigation */}
         <div className="hidden md:flex flex-1 justify-center items-center space-x-12">
-          <Link to="/customer" className="text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
+          <Link to="/" className="text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
             Trang chủ
           </Link>
-          <Link to="/customer/policies" className="text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
+          <Link to="/policies" className="text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
             Chính sách
           </Link>
         </div>
@@ -41,7 +41,7 @@ function Navbar() {
         {/* Right - Action */}
         <div className="flex-shrink-0 flex justify-end items-center">
           <Link 
-            to="/customer/booking" 
+            to="/booking" 
             className={`px-5 py-2.5 md:px-8 md:py-3 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold rounded-full transition-all duration-300 border animate-[pulse_3s_infinite] hover:animate-none ${
               isSolid 
                 ? 'bg-[#1C1A17] text-white border-[#1C1A17] hover:bg-yellow-600 hover:border-yellow-600 shadow-md hover:shadow-[0_0_20px_rgba(202,138,4,0.4)] hover:-translate-y-0.5' 
@@ -101,9 +101,9 @@ export default function CustomerApp() {
           <div className="md:col-span-3">
             <h4 className="font-bold mb-5 text-[10px] md:text-xs tracking-widest uppercase text-white/40">Khám Phá</h4>
             <ul className="space-y-3 text-white/70 text-xs md:text-sm font-medium">
-              <li><Link to="/customer" className="hover:text-[#B8860B] transition-colors">Trang chủ</Link></li>
-              <li><Link to="/customer/booking" className="hover:text-[#B8860B] transition-colors">Hệ thống phòng</Link></li>
-              <li><Link to="/customer/policies" className="hover:text-[#B8860B] transition-colors">Quy định chung</Link></li>
+              <li><Link to="/" className="hover:text-[#B8860B] transition-colors">Trang chủ</Link></li>
+              <li><Link to="/booking" className="hover:text-[#B8860B] transition-colors">Hệ thống phòng</Link></li>
+              <li><Link to="/policies" className="hover:text-[#B8860B] transition-colors">Quy định chung</Link></li>
             </ul>
           </div>
 

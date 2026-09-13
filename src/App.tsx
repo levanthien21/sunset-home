@@ -10,8 +10,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<RoleSelection />} />
-        <Route path="/customer/*" element={<CustomerApp />} />
+        <Route path="/portal" element={<RoleSelection />} />
+        <Route path="/*" element={<CustomerApp />} />
         <Route path="/staff/*" element={<StaffApp />} />
         <Route path="/admin/*" element={<AdminApp />} />
         <Route path="/payos-return" element={<PayOSReturnPage />} />

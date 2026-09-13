@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Home, MapPin, Settings, LogOut, BarChart3, TrendingUp, Plus, Trash2, Edit2, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -439,6 +439,15 @@ function AdminDashboard() {
 }
 
 export default function AdminApp() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const role = localStorage.getItem('auth_role');
+    if (role !== 'admin') {
+      navigate('/portal');
+    }
+  }, [navigate]);
+
   return (
     <div className="flex h-screen bg-[#F9F8F6] font-sans">
       {/* Sidebar */}
@@ -462,10 +471,16 @@ export default function AdminApp() {
           </a>
         </nav>
         <div className="p-6 border-t border-gray-800">
-          <Link to="/" className="flex items-center space-x-3 text-red-400 p-2 hover:bg-white/5 rounded-sm transition-colors">
+          <button 
+            onClick={() => {
+              localStorage.removeItem('auth_role');
+              navigate('/portal');
+            }}
+            className="flex items-center space-x-3 text-red-400 p-2 hover:bg-white/5 rounded-sm transition-colors w-full"
+          >
             <LogOut size={18} />
             <span className="text-sm font-medium tracking-wide">Đăng xuất</span>
-          </Link>
+          </button>
         </div>
       </div>
 

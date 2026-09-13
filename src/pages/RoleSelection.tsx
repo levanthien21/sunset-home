@@ -1,42 +1,98 @@
-import { Link } from 'react-router-dom';
-import { User, Briefcase, ShieldAlert } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Lock, User, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function RoleSelection() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === 'admin' && password === 'admin123') {
+      localStorage.setItem('auth_role', 'admin');
+      navigate('/admin');
+    } else if (username === 'staff' && password === 'staff123') {
+      localStorage.setItem('auth_role', 'staff');
+      navigate('/staff');
+    } else {
+      setError('Tài khoản hoặc mật khẩu không chính xác!');
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-yellow-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#F9F8F6] p-4 font-sans relative">
+      <Link to="/" className="absolute top-6 left-6 flex items-center text-stone-500 hover:text-stone-900 transition-colors font-medium">
+        <ArrowLeft className="w-5 h-5 mr-2" /> Về trang Khách hàng
+      </Link>
+      
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-2xl w-full bg-white rounded-3xl shadow-xl overflow-hidden p-8 text-center"
+        className="max-w-md w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-stone-100 overflow-hidden p-8 md:p-10"
       >
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Sunset Homestay</h1>
-        <p className="text-gray-500 mb-8">Vui lòng chọn luồng người dùng để tiếp tục (Demo)</p>
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-serif text-stone-900 tracking-widest uppercase mb-2">Sunset</h1>
+          <p className="text-xs text-yellow-600 tracking-widest uppercase font-bold">Hệ thống quản lý</p>
+        </div>
         
-        <div className="grid md:grid-cols-3 gap-6">
-          <Link to="/customer" className="flex flex-col items-center justify-center p-6 border-2 border-transparent hover:border-yellow-400 bg-gray-50 rounded-2xl transition-all hover:shadow-md cursor-pointer group">
-            <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <User size={32} />
+        <form onSubmit={handleLogin} className="space-y-5">
+          {error && (
+            <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-medium text-center border border-red-100">
+              {error}
             </div>
-            <h2 className="text-xl font-semibold text-gray-800">Khách Hàng</h2>
-            <p className="text-sm text-gray-500 mt-2 text-center">Xem cơ sở, đặt phòng, xem review</p>
-          </Link>
-
-          <Link to="/staff" className="flex flex-col items-center justify-center p-6 border-2 border-transparent hover:border-blue-400 bg-gray-50 rounded-2xl transition-all hover:shadow-md cursor-pointer group">
-            <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Briefcase size={32} />
+          )}
+          
+          <div>
+            <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Tên đăng nhập</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-stone-400" />
+              </div>
+              <input 
+                type="text" 
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                className="w-full pl-11 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all"
+                placeholder="Nhập admin hoặc staff..."
+                required
+              />
             </div>
-            <h2 className="text-xl font-semibold text-gray-800">Nhân Viên</h2>
-            <p className="text-sm text-gray-500 mt-2 text-center">Quản lý đặt phòng, check-in, check-out</p>
-          </Link>
-
-          <Link to="/admin" className="flex flex-col items-center justify-center p-6 border-2 border-transparent hover:border-red-400 bg-gray-50 rounded-2xl transition-all hover:shadow-md cursor-pointer group">
-            <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <ShieldAlert size={32} />
+          </div>
+          
+          <div>
+            <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Mật khẩu</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Lock className="h-5 w-5 text-stone-400" />
+              </div>
+              <input 
+                type="password" 
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="w-full pl-11 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all"
+                placeholder="Nhập mật khẩu..."
+                required
+              />
             </div>
-            <h2 className="text-xl font-semibold text-gray-800">Admin</h2>
-            <p className="text-sm text-gray-500 mt-2 text-center">Quản lý tổng quan, cơ sở, thống kê</p>
-          </Link>
+          </div>
+          
+          <button 
+            type="submit"
+            className="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-4 rounded-xl transition-all shadow-md mt-2 uppercase tracking-wider text-sm"
+          >
+            Đăng nhập
+          </button>
+        </form>
+        
+        <div className="mt-8 pt-6 border-t border-stone-100 text-center">
+          <p className="text-xs text-stone-400 font-medium">
+            Demo Accounts:<br/>
+            Admin: admin / admin123<br/>
+            Staff: staff / staff123
+          </p>
         </div>
       </motion.div>
     </div>

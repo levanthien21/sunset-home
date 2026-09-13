@@ -107,7 +107,7 @@ export default function LandingPage() {
             {branches.map((branch) => (
               <Link 
                 key={branch.id}
-                to={`/customer/booking?branch=${branch.id}`}
+                to={`/booking?branch=${branch.id}`}
                 className="w-full sm:w-auto px-10 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white text-[11px] uppercase tracking-[0.25em] font-bold hover:bg-white hover:text-[#1C1A17] transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] hover:-translate-y-1 hover:scale-105 animate-[pulse_3s_infinite] hover:animate-none flex justify-center items-center"
               >
                 {branch.name}
