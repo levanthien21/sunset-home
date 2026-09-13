@@ -499,18 +499,18 @@ export default function BookingPage() {
                         <div>
                           <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2">Giờ đến</label>
                           <div className="relative w-full">
-                            <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4 md:w-5 md:h-5 pointer-events-none" />
+                            <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 w-4 h-4 md:w-5 md:h-5 pointer-events-none z-10" />
                             <input
-                              type={expectedTime ? "time" : "text"}
-                              onFocus={(e) => (e.target.type = "time")}
-                              onBlur={(e) => {
-                                if (!e.target.value) e.target.type = "text";
-                              }}
-                              placeholder="Chọn giờ..."
+                              type="time"
                               value={expectedTime}
                               onChange={(e) => setExpectedTime(e.target.value)}
-                              className={`w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border ${expectedTime && !isTimeValid ? 'border-red-400 focus:ring-red-500' : 'border-stone-200 focus:ring-yellow-600'} rounded-xl focus:bg-white focus:ring-2 outline-none transition-all block box-border text-xs md:text-base cursor-pointer appearance-none`}
+                              className={`w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border ${expectedTime && !isTimeValid ? 'border-red-400 focus:ring-red-500' : 'border-stone-200 focus:ring-yellow-600'} rounded-xl focus:bg-white focus:ring-2 outline-none transition-all block box-border text-base cursor-pointer appearance-none relative z-20 ${!expectedTime ? 'text-transparent' : 'text-stone-900'}`}
                             />
+                            {!expectedTime && (
+                              <span className="absolute left-9 md:left-11 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none z-10 text-base">
+                                Chọn giờ...
+                              </span>
+                            )}
                           </div>
                           {expectedTime && !isTimeValid && (
                             <p className="text-[10px] md:text-xs text-red-500 mt-1 font-medium">* Giờ đã qua</p>
@@ -528,7 +528,7 @@ export default function BookingPage() {
                               max="10"
                               value={extraHours}
                               onChange={(e) => setExtraHours(parseInt(e.target.value) || 0)}
-                              className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border text-xs md:text-base appearance-none"
+                              className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all block box-border text-base appearance-none"
                             />
                           </div>
                         </div>
@@ -562,7 +562,7 @@ export default function BookingPage() {
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           placeholder="Nguyễn Văn A"
-                          className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-sm md:text-base"
+                          className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
                         />
                       </div>
                       <div className="grid md:grid-cols-2 gap-3 md:gap-4">
@@ -573,7 +573,7 @@ export default function BookingPage() {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="0901234567"
-                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-sm md:text-base"
+                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
                           />
                         </div>
                         <div>
@@ -583,7 +583,7 @@ export default function BookingPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="nguyenvana@gmail.com"
-                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-sm md:text-base"
+                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
                           />
                         </div>
                       </div>
@@ -594,7 +594,7 @@ export default function BookingPage() {
                           onChange={(e) => setNote(e.target.value)}
                           placeholder="Yêu cầu đặc biệt, lưu ý thêm cho homestay..."
                           rows={2}
-                          className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-sm md:text-base resize-none"
+                          className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base resize-none"
                         ></textarea>
                       </div>
                     </div>
