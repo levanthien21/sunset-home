@@ -123,9 +123,9 @@ export default function LandingPage() {
       </section>
 
       {/* 2. Amenities Section: The Utility */}
-      <section className="py-24 bg-white border-b border-gray-100 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 text-center">
+      <section className="py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
             {[
               { icon: <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline>, title: "Smart TV", desc: "Tích hợp Netflix 4K" },
               { icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>, title: "Bồn Tắm", desc: "Thư giãn tối đa" },
@@ -137,14 +137,14 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.8, delay: i * 0.15, ease: "easeOut" }}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
                 className="flex flex-col items-center"
               >
-                <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17] hover:bg-[#1C1A17] hover:text-white transition-colors duration-500">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">{item.icon}</svg>
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4 text-[#1C1A17] hover:bg-[#1C1A17] hover:text-white transition-colors duration-500">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">{item.icon}</svg>
                 </div>
-                <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] mb-2">{item.title}</h4>
-                <p className="text-[11px] text-gray-500 font-light">{item.desc}</p>
+                <h4 className="text-[11px] font-bold uppercase tracking-[0.15em] mb-1">{item.title}</h4>
+                <p className="text-xs text-gray-500 font-light">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -152,51 +152,51 @@ export default function LandingPage() {
       </section>
 
       {/* 3. Branches Layout: The Destination */}
-      <section className="py-32 bg-white overflow-hidden" id="experiences">
+      <section className="py-24 bg-gray-50 overflow-hidden" id="experiences">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="flex flex-col md:flex-row md:items-end justify-between mb-20"
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col md:flex-row md:items-end justify-between mb-16"
           >
             <div className="max-w-2xl">
-              <h3 className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-4">Các chi nhánh</h3>
-              <h2 className="text-4xl lg:text-6xl font-serif text-[#1C1A17] leading-tight">Lựa chọn<br/><span className="italic text-gray-400">chốn về</span></h2>
+              <h3 className="text-xs font-bold tracking-[0.2em] text-yellow-600 uppercase mb-4">Các chi nhánh</h3>
+              <h2 className="text-4xl md:text-5xl font-serif text-[#1C1A17] leading-tight">Lựa chọn<br/><span className="italic text-gray-400">chốn về</span></h2>
             </div>
-            <Link to="/customer/booking" className="hidden md:flex items-center text-xs uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:opacity-50 transition-opacity pb-4 border-b border-black/20 hover:border-black">
-              Xem tất cả <ArrowRight size={14} className="ml-3" />
+            <Link to="/customer/booking" className="hidden md:flex items-center text-xs uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:text-yellow-600 transition-colors pb-2 border-b border-black/20 hover:border-yellow-600 mt-8 md:mt-0">
+              Xem tất cả <ArrowRight size={14} className="ml-2" />
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 md:gap-y-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             {branches.map((branch: any, index: number) => (
               <motion.div
                 key={branch.id}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 1, delay: index * 0.2, ease: "easeOut" }}
-                className={`group block ${index % 2 !== 0 ? 'md:mt-16 lg:mt-32' : ''}`}
+                transition={{ duration: 0.8, delay: index * 0.15, ease: "easeOut" }}
+                className="group block bg-white p-4 md:p-6 rounded-sm shadow-sm hover:shadow-xl transition-all duration-500"
               >
                 <Link to={`/customer/booking?branch=${branch.id}`} className="block">
-                  <div className="aspect-[3/4] overflow-hidden mb-8 relative">
-                    <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-110 transition duration-[2s] ease-out" alt={branch.name} />
-                    <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>
+                  <div className="aspect-[16/10] overflow-hidden mb-6 relative rounded-sm">
+                    <img src={branch.img} className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700 ease-out" alt={branch.name} />
+                    <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500"></div>
                     {!branch.has_rooms && (
-                      <div className="absolute top-6 left-6">
-                        <span className="text-white text-[9px] uppercase tracking-widest font-bold px-4 py-2 bg-black/60 backdrop-blur-md rounded-sm">Sắp ra mắt</span>
+                      <div className="absolute top-4 left-4">
+                        <span className="text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-sm">Sắp ra mắt</span>
                       </div>
                     )}
                   </div>
-                  <div className="flex justify-between items-start">
+                  <div className="flex justify-between items-center">
                     <div>
-                      <h3 className="text-2xl font-serif text-[#1C1A17] mb-3 group-hover:text-yellow-600 transition-colors duration-500">{branch.name}</h3>
-                      <p className="text-gray-500 text-sm font-light max-w-sm leading-relaxed">{branch.address}</p>
+                      <h3 className="text-xl md:text-2xl font-serif text-[#1C1A17] mb-2 group-hover:text-yellow-600 transition-colors duration-300">{branch.name}</h3>
+                      <p className="text-gray-500 text-xs md:text-sm font-light max-w-[250px] md:max-w-sm truncate">{branch.address}</p>
                     </div>
-                    <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-[#1C1A17] group-hover:text-white group-hover:border-[#1C1A17] transition-all duration-500">
-                      <ArrowRight size={14} className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-500" />
+                    <div className="w-10 h-10 flex-shrink-0 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-[#1C1A17] group-hover:text-white transition-all duration-300">
+                      <ArrowRight size={16} className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                     </div>
                   </div>
                 </Link>

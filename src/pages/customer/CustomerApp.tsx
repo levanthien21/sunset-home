@@ -74,38 +74,38 @@ export default function CustomerApp() {
       
       {/* Footer */}
       {/* Minimalist Luxury Footer */}
-      <footer className="bg-white text-[#1C1A17] pt-24 pb-12 border-t border-gray-100">
+      <footer className="bg-[#1C1A17] text-white pt-24 pb-12 border-t border-[#1C1A17]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-xl font-serif mb-2 tracking-[0.2em] uppercase">Sunset</h3>
-            <p className="text-[9px] uppercase tracking-[0.3em] text-gray-400 mb-8">Boutique Homestay</p>
-            <p className="text-gray-500 font-light max-w-sm leading-relaxed text-xs">
+            <h3 className="text-xl font-serif mb-2 tracking-[0.2em] uppercase text-white">Sunset</h3>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 mb-8">Boutique Homestay</p>
+            <p className="text-white/60 font-light max-w-sm leading-relaxed text-sm">
               Đánh thức mọi giác quan trong không gian lãng mạn, nơi mỗi góc nhỏ đều được chăm chút tỉ mỉ để tạo nên những kỷ niệm khó quên tại trung tâm thành phố.
             </p>
           </div>
           <div>
-            <h4 className="font-bold mb-6 text-[10px] tracking-widest uppercase text-gray-400">Liên Hệ</h4>
-            <ul className="space-y-4 text-gray-600 text-xs font-medium">
-              <li><a href="tel:1900xxxx" className="hover:text-black transition-colors">1900 xxxx</a></li>
-              <li><a href="mailto:hello@sunsethome.vn" className="hover:text-black transition-colors">hello@sunsethome.vn</a></li>
-              <li><a href="#" className="hover:text-black transition-colors">Zalo Official</a></li>
+            <h4 className="font-bold mb-6 text-xs tracking-widest uppercase text-white/40">Liên Hệ</h4>
+            <ul className="space-y-4 text-white/70 text-sm font-medium">
+              <li><a href="tel:1900xxxx" className="hover:text-yellow-500 transition-colors">1900 xxxx</a></li>
+              <li><a href="mailto:hello@sunsethome.vn" className="hover:text-yellow-500 transition-colors">hello@sunsethome.vn</a></li>
+              <li><a href="#" className="hover:text-yellow-500 transition-colors">Zalo Official</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-6 text-[10px] tracking-widest uppercase text-gray-400">Khám Phá</h4>
-            <ul className="space-y-4 text-gray-600 text-xs font-medium">
-              <li><Link to="/customer" className="hover:text-black transition-colors">Trang chủ</Link></li>
-              <li><Link to="/customer/booking" className="hover:text-black transition-colors">Đặt phòng</Link></li>
-              <li><Link to="/customer/policies" className="hover:text-black transition-colors">Chính sách</Link></li>
+            <h4 className="font-bold mb-6 text-xs tracking-widest uppercase text-white/40">Khám Phá</h4>
+            <ul className="space-y-4 text-white/70 text-sm font-medium">
+              <li><Link to="/customer" className="hover:text-yellow-500 transition-colors">Trang chủ</Link></li>
+              <li><Link to="/customer/booking" className="hover:text-yellow-500 transition-colors">Đặt phòng</Link></li>
+              <li><Link to="/customer/policies" className="hover:text-yellow-500 transition-colors">Chính sách</Link></li>
             </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-20 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-gray-400 text-[10px] tracking-widest uppercase">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/40 text-[10px] tracking-widest uppercase">
           <p>© 2024 Sunset. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-black transition-colors">Instagram</a>
-            <a href="#" className="hover:text-black transition-colors">Facebook</a>
-            <a href="#" className="hover:text-black transition-colors">TikTok</a>
+            <a href="#" className="hover:text-white transition-colors">Instagram</a>
+            <a href="#" className="hover:text-white transition-colors">Facebook</a>
+            <a href="#" className="hover:text-white transition-colors">TikTok</a>
           </div>
         </div>
       </footer>
