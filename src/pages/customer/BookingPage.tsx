@@ -222,8 +222,19 @@ export default function BookingPage() {
         console.error("Lỗi khi gửi email:", error);
       }
 
-      setIsProcessing(false);
-      setStep(4); // Success step
+      // 4. Redirect to VNPay
+      try {
+        const { generateVNPayUrl } = await import('../../utils/vnpay');
+        const orderInfo = `Sunset Homestay - Booking ${newBookingId}`;
+        const paymentUrl = await generateVNPayUrl(amountToPay, newBookingId, orderInfo);
+        
+        // Chuyển hướng sang VNPay
+        window.location.href = paymentUrl;
+      } catch (err) {
+        console.error("Lỗi tạo link VNPay:", err);
+        setIsProcessing(false);
+        setStep(4);
+      }
     } catch (e) {
       console.error(e);
       alert('Có lỗi xảy ra trong quá trình đặt phòng. Vui lòng thử lại!');
@@ -663,22 +674,22 @@ export default function BookingPage() {
 
                     {isStep2Valid && isStep3Valid ? (
                       <div className="bg-stone-800/80 border border-stone-700 rounded-2xl p-4 md:p-5 mb-5 md:mb-6 flex flex-col items-center animate-in fade-in duration-500">
-                        <p className="text-xs font-bold text-center mb-3 text-stone-400 uppercase tracking-wide">Quét mã QR để thanh toán</p>
-                        <div className="bg-white p-2 rounded-xl shadow-md border border-stone-100 mb-3">
-                          <img 
-                            src={`https://img.vietqr.io/image/970415-0123456789-compact.png?amount=${amountToPay}&addInfo=THANHTOANSUNSET%20${phone}&accountName=SUNSET%20HOMESTAY`}
-                            alt="VietQR" 
-                            className="w-full max-w-[150px] md:max-w-[170px] aspect-square rounded-lg object-contain"
-                          />
+                        <p className="text-xs font-bold text-center mb-3 text-stone-400 uppercase tracking-wide">Phương thức thanh toán</p>
+                        <div className="bg-white p-2 rounded-xl shadow-md border border-stone-100 mb-3 w-full flex justify-center items-center h-20">
+                          {/* VNPay Logo Mock */}
+                          <div className="text-2xl font-bold text-blue-700 flex items-center">
+                            <span className="text-red-600 mr-1">VNPAY</span>
+                            <span className="text-[10px] text-gray-500 font-normal">QR</span>
+                          </div>
                         </div>
-                        <p className="text-xs text-stone-400 text-center px-2">Hệ thống sẽ tự động xác nhận đơn ngay khi nhận được thanh toán.</p>
+                        <p className="text-xs text-stone-400 text-center px-2">Hệ thống sẽ chuyển hướng bạn sang cổng thanh toán an toàn của VNPay.</p>
                       </div>
                     ) : (
                       <div className="bg-stone-800/50 rounded-2xl p-6 mb-5 md:mb-6 flex flex-col items-center text-center border border-dashed border-stone-700">
                         <div className="w-12 h-12 rounded-full bg-stone-700 flex items-center justify-center mb-3">
                           <CheckCircle2 className="w-6 h-6 text-stone-500" />
                         </div>
-                        <p className="text-sm text-stone-400">Vui lòng điền đầy đủ thông tin bên trái để tạo mã QR thanh toán.</p>
+                        <p className="text-sm text-stone-400">Vui lòng điền đầy đủ thông tin bên trái để tiếp tục thanh toán.</p>
                       </div>
                     )}
 
@@ -686,13 +697,13 @@ export default function BookingPage() {
                       onClick={handlePaymentSubmit}
                       disabled={!isStep2Valid || !isStep3Valid || isProcessing}
                       className={`w-full py-4 rounded-xl font-bold flex items-center justify-center transition-all ${
-                        isStep2Valid && isStep3Valid && !isProcessing ? 'bg-yellow-600 text-white hover:bg-yellow-500 shadow-lg shadow-yellow-600/30' : 'bg-stone-800 text-stone-600 cursor-not-allowed'
+                        isStep2Valid && isStep3Valid && !isProcessing ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30' : 'bg-stone-800 text-stone-600 cursor-not-allowed'
                       }`}
                     >
                       {isProcessing ? (
                         <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       ) : (
-                        "Tôi đã chuyển khoản / Đặt phòng"
+                        "Thanh toán qua VNPay"
                       )}
                     </button>
                     {(!isStep2Valid || !isStep3Valid) && (
