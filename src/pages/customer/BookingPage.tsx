@@ -45,6 +45,12 @@ export default function BookingPage() {
     // Read branch from URL if present
     const params = new URLSearchParams(window.location.search);
     const branchParam = params.get('branch');
+    const dateParam = params.get('date');
+    
+    if (dateParam) {
+      setBookingDate(dateParam);
+    }
+    
     if (branchParam) {
       setBranch(parseInt(branchParam));
       setStep(2); // Skip directly to room selection
@@ -266,53 +272,20 @@ export default function BookingPage() {
                 <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Chọn không gian của bạn</h2>
               </div>
 
-              {/* Branch Info & Mini Map */}
-              {selectedBranchDetails && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-stone-200 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="flex items-start gap-4 w-full sm:w-auto">
-                     <div 
-                        onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails.address), '_blank')}
-                        className="w-16 h-16 rounded-xl bg-blue-50 border border-blue-100 shrink-0 relative overflow-hidden flex items-center justify-center cursor-pointer hover:shadow-md transition-shadow group"
-                     >
-                        <div className="absolute inset-0 opacity-30 group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: 'radial-gradient(#3b82f6 1.5px, transparent 1.5px)', backgroundSize: '6px 6px' }}></div>
-                        <MapPin className="w-7 h-7 text-blue-600 relative z-10 fill-blue-100 group-hover:-translate-y-1 transition-transform duration-300" />
-                     </div>
-                     <div className="flex-1">
-                        <h3 className="text-lg font-bold text-stone-900 leading-tight">{selectedBranchDetails.name}</h3>
-                        <p className="text-stone-500 text-sm mt-1 line-clamp-2">{selectedBranchDetails.address}</p>
-                        <button 
-                          onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails.address), '_blank')}
-                          className="text-blue-600 text-sm font-semibold mt-1 hover:underline flex items-center"
-                        >
-                          Xem vị trí trên bản đồ
-                        </button>
-                     </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 sm:justify-end shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
-                     <span className="px-3 py-1.5 bg-stone-50 border border-stone-200 text-stone-600 text-xs font-semibold rounded-lg flex items-center">
-                       <Clock className="w-3.5 h-3.5 mr-1.5"/> 24/7
-                     </span>
-                     <span className="px-3 py-1.5 bg-stone-50 border border-stone-200 text-stone-600 text-xs font-semibold rounded-lg flex items-center">
-                       <CheckCircle2 className="w-3.5 h-3.5 mr-1.5 text-green-500"/> Có Lễ tân
-                     </span>
-                  </div>
-                </motion.div>
-              )}
-
               {isLoadingRooms ? (
                 <div className="flex justify-center items-center py-20">
                   <div className="w-10 h-10 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin"></div>
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {filteredRooms.map(r => {
+                  {[...filteredRooms].sort((a, b) => a.name.localeCompare(b.name)).map(r => {
                   const isAvailable = isRoomAvailableToday(r.name);
                   const isSelected = room === r.id;
                   
                   return (
-                    <div key={r.id} className={`bg-white rounded-2xl transition-all overflow-hidden shadow-sm hover:shadow-md border ${isSelected ? 'border-yellow-600 ring-1 ring-yellow-600' : 'border-stone-200'}`}>
-                      <div className="flex flex-col md:flex-row">
-                        <div className="md:w-2/5 h-56 md:h-auto relative group">
+                    <div key={r.id} className={`bg-white rounded-2xl transition-all overflow-hidden shadow-sm hover:shadow-md border flex flex-col ${isSelected ? 'border-yellow-600 ring-1 ring-yellow-600' : 'border-stone-200'}`}>
+                      <div className="flex flex-col md:flex-row h-full">
+                        <div className="md:w-1/2 h-56 md:h-auto min-h-[240px] relative group shrink-0">
                           <img 
                             src={r.images[0]} 
                             onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
@@ -339,7 +312,7 @@ export default function BookingPage() {
                             )}
                           </div>
                         </div>
-                        <div className="p-5 md:p-6 md:w-3/5 flex flex-col justify-between">
+                        <div className="p-5 md:p-6 md:w-1/2 flex flex-col justify-between">
                           <div>
                             <div className="flex justify-between items-start mb-4">
                               <div className="flex-1 pr-3">
@@ -367,18 +340,31 @@ export default function BookingPage() {
                               )}
                             </div>
 
-                            <div className="bg-green-50 border border-green-100 rounded-lg p-2.5 mb-4 inline-block w-full">
-                               <p className="text-xs text-green-700 font-medium flex items-center mb-1.5">
-                                 <Check className="w-3.5 h-3.5 mr-1.5"/> Miễn phí hủy phòng trước 7 ngày
-                               </p>
-                               <p className="text-xs text-green-700 font-medium flex items-center">
-                                 <Check className="w-3.5 h-3.5 mr-1.5"/> Giữ chỗ thanh toán tiện lợi qua mã QR
-                               </p>
+                            <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                              <div className="bg-green-50 border border-green-100 rounded-lg p-2.5 flex-1">
+                                 <p className="text-[11px] text-green-700 font-medium flex items-center mb-1.5">
+                                   <Check className="w-3.5 h-3.5 mr-1.5"/> Miễn phí hủy phòng trước 7 ngày
+                                 </p>
+                                 <p className="text-[11px] text-green-700 font-medium flex items-center">
+                                   <Check className="w-3.5 h-3.5 mr-1.5"/> Giữ chỗ thanh toán tiện lợi qua QR
+                                 </p>
+                              </div>
+                              <div 
+                                onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails?.address || ''), '_blank')}
+                                className="w-full sm:w-auto bg-blue-50 border border-blue-100 rounded-lg p-2.5 flex items-center cursor-pointer hover:shadow-sm transition-shadow group shrink-0 relative overflow-hidden"
+                              >
+                                <div className="absolute inset-0 opacity-30 group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: 'radial-gradient(#3b82f6 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
+                                <MapPin className="w-6 h-6 text-blue-600 mr-2.5 relative z-10 fill-blue-100 group-hover:-translate-y-1 transition-transform" />
+                                <div className="relative z-10">
+                                  <p className="text-[9px] text-blue-600 font-bold uppercase tracking-wider mb-0.5">{selectedBranchDetails?.name}</p>
+                                  <p className="text-[11px] text-blue-700 font-medium leading-tight">Xem bản đồ</p>
+                                </div>
+                              </div>
                             </div>
 
                             <ul className="grid grid-cols-2 gap-x-2 gap-y-2.5 mt-2">
                               {r.features.map((f: any, i: any) => (
-                                <li key={i} className="flex items-center text-[13px] text-stone-600">
+                                <li key={i} className="flex items-center text-[12px] md:text-[13px] text-stone-600">
                                   <div className="w-4 h-4 rounded-full bg-yellow-50 flex items-center justify-center mr-2 shrink-0">
                                     <CheckCircle2 className="w-3 h-3 text-yellow-600" />
                                   </div>

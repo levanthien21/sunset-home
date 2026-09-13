@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { CalendarDays, PhoneCall, MessageCircle } from 'lucide-react';
 
 export default function LandingPage() {
   const [branches, setBranches] = useState<any[]>([]);
+  const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -26,8 +28,18 @@ export default function LandingPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="bg-[#F9F8F6]"
+      className="bg-[#F9F8F6] relative"
     >
+      {/* Floating Hotline Icons */}
+      <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-4">
+        <a href="tel:0987654321" className="w-12 h-12 bg-[#B8860B] rounded-full flex items-center justify-center text-white shadow-lg shadow-black/20 hover:scale-110 hover:bg-[#a07409] transition-transform flex-shrink-0 animate-bounce">
+          <PhoneCall className="w-5 h-5" />
+        </a>
+        <a href="https://zalo.me/0987654321" target="_blank" rel="noreferrer" className="w-12 h-12 bg-[#0068FF] rounded-full flex items-center justify-center text-white shadow-lg shadow-black/20 hover:scale-110 hover:bg-[#0055d4] transition-transform flex-shrink-0">
+          <MessageCircle className="w-5 h-5" />
+        </a>
+      </div>
+
       {/* Hero Section */}
       <section className="relative h-[90vh] md:h-screen flex flex-col justify-center items-center overflow-hidden">
         <div className="absolute inset-0">
@@ -65,7 +77,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex items-center justify-center space-x-4 mb-8 md:mb-12"
+            className="flex items-center justify-center space-x-4 mb-8 md:mb-12 hidden"
           >
             <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#1877F2] hover:border-[#1877F2] transition-all duration-300 shadow-lg">
               <svg fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
@@ -78,22 +90,37 @@ export default function LandingPage() {
             </a>
           </motion.div>
 
-          {/* Quick Branch Selection */}
+          {/* Quick Branch Selection & Date Picker */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
+            className="flex flex-col items-center justify-center gap-4 w-full"
           >
-            {branches.map((branch) => (
-              <Link 
-                key={branch.id}
-                to={`/customer/booking?branch=${branch.id}`}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/5 backdrop-blur-md border border-white/20 text-white text-[10px] uppercase tracking-[0.2em] font-medium hover:bg-white hover:text-black hover:scale-105 transition-all duration-300"
-              >
-                {branch.name}
-              </Link>
-            ))}
+            <div className="bg-white/10 backdrop-blur-md p-2 rounded-2xl md:rounded-full border border-white/20 flex flex-col md:flex-row items-center w-full max-w-3xl gap-2 shadow-2xl">
+              <div className="flex-1 w-full flex bg-white rounded-xl md:rounded-full px-4 py-3 md:py-2 items-center">
+                <CalendarDays className="w-5 h-5 text-gray-400 mr-2 shrink-0" />
+                <input 
+                  type="date" 
+                  className="w-full bg-transparent outline-none text-sm text-gray-700 min-w-0" 
+                  min={new Date().toISOString().split('T')[0]}
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                />
+              </div>
+              
+              <div className="flex-1 w-full grid grid-cols-2 md:flex gap-2">
+                {branches.map((branch) => (
+                  <Link 
+                    key={branch.id}
+                    to={`/customer/booking?branch=${branch.id}${selectedDate ? `&date=${selectedDate}` : ''}`}
+                    className="flex-1 text-center flex items-center justify-center px-4 py-3 md:py-4 rounded-xl md:rounded-full bg-[#D4AF37] hover:bg-white hover:text-black text-white text-[10px] sm:text-xs uppercase tracking-wider font-bold transition-all duration-300 shadow-md"
+                  >
+                    {branch.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
