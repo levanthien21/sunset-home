@@ -57,6 +57,20 @@ function AdminDashboard() {
     }
   };
 
+  const handleSetCoverImage = async (roomId: string, imgIndex: number, existingImages: string[]) => {
+    if (imgIndex === 0) return;
+    try {
+      const { updateRoomImages } = await import('../../utils/db');
+      const updatedImages = [...existingImages];
+      const [movedImg] = updatedImages.splice(imgIndex, 1);
+      updatedImages.unshift(movedImg);
+      await updateRoomImages(roomId, updatedImages);
+      setRooms(rooms.map(r => r.id === roomId ? { ...r, images: updatedImages } : r));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const approvedBookings = bookings.filter(b => b.status === 'approved');
   const expectedRevenue = approvedBookings.reduce((sum, b) => sum + b.total, 0);
   const collectedRevenue = approvedBookings.reduce((sum, b) => sum + (b.amountPaid || 0), 0);
@@ -118,12 +132,27 @@ function AdminDashboard() {
                   {room.images && room.images.map((img: string, idx: number) => (
                     <div key={idx} className="relative group aspect-square rounded-sm overflow-hidden border border-gray-200">
                       <img src={img} alt={`Room ${idx}`} className="w-full h-full object-cover" />
-                      <button 
-                        onClick={() => handleRemoveImage(room.id, idx, room.images)}
-                        className="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs transition-opacity"
-                      >
-                        X
-                      </button>
+                      {idx === 0 && (
+                        <div className="absolute top-1 left-1 bg-yellow-600 text-white px-2 py-0.5 text-[10px] font-bold uppercase rounded-sm shadow-sm">
+                          Ảnh Bìa
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center space-y-2">
+                        {idx !== 0 && (
+                          <button 
+                            onClick={() => handleSetCoverImage(room.id, idx, room.images)}
+                            className="bg-yellow-600 text-white px-3 py-1.5 rounded-sm text-xs font-semibold hover:bg-yellow-700"
+                          >
+                            Làm Ảnh Bìa
+                          </button>
+                        )}
+                        <button 
+                          onClick={() => handleRemoveImage(room.id, idx, room.images)}
+                          className="bg-red-500 text-white px-3 py-1.5 rounded-sm text-xs font-bold hover:bg-red-600"
+                        >
+                          Xóa
+                        </button>
+                      </div>
                     </div>
                   ))}
                   {(!room.images || room.images.length === 0) && (
