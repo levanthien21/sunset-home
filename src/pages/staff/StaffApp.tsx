@@ -397,141 +397,111 @@ function StaffDashboard() {
         </div>
       )}
 
-      {/* Add Modal */}
+            {/* Add Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-              <h3 className="text-xl font-serif font-bold text-gray-900">Tạo Đơn Thủ Công</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X className="w-6 h-6" />
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden flex flex-col">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-white">
+              <h3 className="text-lg font-bold text-gray-900">T?o �on: <span className="text-yellow-600">{manualForm.roomName || "Chua ch?n ph�ng"}</span></h3>
+              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600 bg-gray-100 p-2 rounded-full">
+                <X className="w-5 h-5" />
               </button>
             </div>
             
-            <div className="p-6 overflow-y-auto flex-1">
-              <form id="manual-booking-form" onSubmit={handleAddBooking} className="space-y-5">
-                <div className="grid grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Tên khách hàng</label>
-                    <input 
-                      type="text" 
-                      placeholder="Tùy chọn"
-                      value={manualForm.customerName} 
-                      onChange={e => setManualForm({...manualForm, customerName: e.target.value})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Số điện thoại</label>
-                    <input 
-                      type="text" 
-                      placeholder="Tùy chọn"
-                      value={manualForm.phone} 
-                      onChange={e => setManualForm({...manualForm, phone: e.target.value})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-5">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Phòng</label>
-                    <select 
-                      required
-                      value={manualForm.roomName} 
-                      onChange={e => setManualForm({...manualForm, roomName: e.target.value, selectedComboIndex: -1})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none"
-                    >
-                      <option value="">-- Chọn --</option>
-                      {roomsList.map(r => (
-                        <option key={r.id} value={r.name}>{r.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Ngày nhận</label>
-                    <input 
-                      required 
-                      type="date" 
-                      value={manualForm.bookingDate} 
-                      onChange={e => setManualForm({...manualForm, bookingDate: e.target.value})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Giờ nhận</label>
-                    <input 
-                      required 
-                      type="time" 
-                      value={manualForm.expectedTime} 
-                      onChange={e => setManualForm({...manualForm, expectedTime: e.target.value})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Gói giờ (Combo)</label>
-                    <select 
-                      required
-                      value={manualForm.selectedComboIndex} 
-                      onChange={e => setManualForm({...manualForm, selectedComboIndex: Number(e.target.value)})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none bg-yellow-50"
-                    >
-                      <option value={-1}>-- Chọn Gói --</option>
-                      {manualForm.roomName && roomsList.find(r => r.name === manualForm.roomName)?.combos?.map((c: any, idx: number) => (
-                        <option key={idx} value={idx}>{c.name} - {c.price.toLocaleString("vi-VN")}đ</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Gia hạn thêm (Giờ)</label>
-                    <input 
-                      type="number" 
-                      min="0"
-                      value={manualForm.extraHours} 
-                      onChange={e => setManualForm({...manualForm, extraHours: Number(e.target.value)})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Thanh toán</label>
-                  <select 
-                    value={manualForm.paymentMethod} 
-                    onChange={e => setManualForm({...manualForm, paymentMethod: e.target.value})} 
-                    className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none"
-                  >
-                    <option value="transfer">Khách Chuyển khoản Trực tiếp / Tiền mặt</option>
-                    <option value="qr">Chuyển khoản qua quét mã PayOS (Không khuyến nghị cho Lễ tân)</option>
-                  </select>
-                </div>
+            <div className="p-5 overflow-y-auto flex-1 bg-gray-50/50">
+              <form id="manual-booking-form" onSubmit={handleAddBooking} className="space-y-6">
                 
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Trạng thái đơn</label>
-                  <select 
-                    value={manualForm.status} 
-                    onChange={e => setManualForm({...manualForm, status: e.target.value})} 
-                    className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none"
-                  >
-                    <option value="approved">Đã Xác Nhận (Chưa Check-in)</option>
-                    <option value="checked_in">Check-in Ngay (Khách đang ở)</option>
-                  </select>
+                {/* LO?I KH�CH & TH?I GIAN */}
+                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+                  <div className="flex p-1 bg-gray-100 rounded-xl">
+                    <button 
+                      type="button"
+                      onClick={() => setManualForm({...manualForm, status: "checked_in", bookingDate: new Date().toLocaleDateString("en-CA"), expectedTime: new Date().toTimeString().slice(0,5)})}
+                      className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${manualForm.status === "checked_in" ? "bg-white shadow text-yellow-600" : "text-gray-500"}`}
+                    >V�o ? Ngay</button>
+                    <button 
+                      type="button"
+                      onClick={() => setManualForm({...manualForm, status: "approved"})}
+                      className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${manualForm.status === "approved" ? "bg-white shadow text-blue-600" : "text-gray-500"}`}
+                    >�?t L?ch Tru?c</button>
+                  </div>
+
+                  {manualForm.status === "approved" && (
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 mb-1 uppercase">Ng�y nh?n</label>
+                        <input required type="date" value={manualForm.bookingDate} onChange={e => setManualForm({...manualForm, bookingDate: e.target.value})} className="w-full border border-gray-200 p-2.5 rounded-xl text-sm font-bold outline-none focus:border-blue-500" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 mb-1 uppercase">Gi? nh?n</label>
+                        <input required type="time" value={manualForm.expectedTime} onChange={e => setManualForm({...manualForm, expectedTime: e.target.value})} className="w-full border border-gray-200 p-2.5 rounded-xl text-sm font-bold outline-none focus:border-blue-500" />
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {/* G�I GI? */}
+                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                  <label className="block text-[10px] font-bold text-gray-400 mb-3 uppercase">Ch?n G�i Th?i Gian</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {roomsList.find(r => r.name === manualForm.roomName)?.combos?.map((c: any, idx: number) => (
+                      <button 
+                        key={idx}
+                        type="button"
+                        onClick={() => setManualForm({...manualForm, selectedComboIndex: idx})}
+                        className={`p-3 rounded-xl border text-left transition-all ${manualForm.selectedComboIndex === idx ? "border-yellow-500 bg-yellow-50 ring-2 ring-yellow-500/20" : "border-gray-200 hover:border-gray-300"}`}
+                      >
+                        <div className={`font-bold text-sm ${manualForm.selectedComboIndex === idx ? "text-yellow-700" : "text-gray-700"}`}>{c.name}</div>
+                        <div className={`text-xs font-bold mt-1 ${manualForm.selectedComboIndex === idx ? "text-yellow-600" : "text-gray-400"}`}>{c.price.toLocaleString("vi-VN")}d</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* TH�NG TIN T�Y CH?N */}
+                <details className="bg-white rounded-2xl border border-gray-100 shadow-sm group">
+                  <summary className="p-4 text-sm font-bold text-gray-600 cursor-pointer list-none flex justify-between items-center">
+                    Th�ng tin th�m (Kh�ng b?t bu?c)
+                    <span className="text-gray-400 group-open:rotate-180 transition-transform">?</span>
+                  </summary>
+                  <div className="p-4 pt-0 border-t border-gray-100 space-y-4 mt-2">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 mb-1 uppercase">T�n kh�ch</label>
+                        <input type="text" placeholder="Kh�ch l?" value={manualForm.customerName} onChange={e => setManualForm({...manualForm, customerName: e.target.value})} className="w-full border border-gray-200 p-2.5 rounded-xl text-sm outline-none focus:border-gray-400" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 mb-1 uppercase">�i?n tho?i</label>
+                        <input type="text" placeholder="Tr?ng" value={manualForm.phone} onChange={e => setManualForm({...manualForm, phone: e.target.value})} className="w-full border border-gray-200 p-2.5 rounded-xl text-sm outline-none focus:border-gray-400" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 mb-1 uppercase">Gia h?n th�m (Gi?)</label>
+                        <input type="number" min="0" value={manualForm.extraHours} onChange={e => setManualForm({...manualForm, extraHours: Number(e.target.value)})} className="w-full border border-gray-200 p-2.5 rounded-xl text-sm outline-none focus:border-gray-400" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-gray-400 mb-1 uppercase">Thanh to�n</label>
+                        <select value={manualForm.paymentMethod} onChange={e => setManualForm({...manualForm, paymentMethod: e.target.value})} className="w-full border border-gray-200 p-2.5 rounded-xl text-sm outline-none focus:border-gray-400">
+                          <option value="transfer">Chuy?n kho?n / Ti?n m?t</option>
+                          <option value="qr">PayOS (QR code)</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </details>
 
               </form>
             </div>
 
-            <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
-              <div className="text-2xl font-black text-red-600">
-                {manualForm.total.toLocaleString("vi-VN")} đ
+            <div className="p-5 border-t border-gray-100 bg-white">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-sm font-bold text-gray-500">T?ng ti?n:</span>
+                <span className="text-2xl font-black text-red-600">{manualForm.total.toLocaleString("vi-VN")} d</span>
               </div>
-              <div className="flex gap-4">
-                <button onClick={() => setShowAddModal(false)} className="px-6 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300">Hủy</button>
-                <button form="manual-booking-form" type="submit" className="px-6 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800">Tạo Đơn</button>
-              </div>
+              <button form="manual-booking-form" type="submit" className={`w-full py-3.5 rounded-xl font-black text-white text-lg shadow-lg transition-all ${manualForm.status === "checked_in" ? "bg-yellow-500 hover:bg-yellow-600 shadow-yellow-500/30" : "bg-blue-600 hover:bg-blue-700 shadow-blue-500/30"}`}>
+                {manualForm.status === "checked_in" ? "?? B?T �?U T�NH GI?" : "?? LUU L?CH �?T"}
+              </button>
             </div>
           </div>
         </div>
