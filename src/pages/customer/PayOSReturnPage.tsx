@@ -68,9 +68,9 @@ export default function PayOSReturnPage() {
               console.error("Không tìm thấy thông tin đơn phòng để gửi email:", orderId);
               alert("Lỗi: Đã thanh toán thành công nhưng không tìm thấy đơn hàng trong hệ thống! Vui lòng liên hệ Admin.");
             }
-          } catch (emailError) {
+          } catch (emailError: any) {
             console.error("Lỗi khi gửi email sau khi thanh toán thành công:", emailError);
-            alert("Lỗi khi gửi email. Chi tiết: " + emailError.message);
+            alert("Lỗi khi gửi email. Chi tiết: " + (emailError?.message || emailError));
           }
         } else {
           // Giao dịch thất bại
