@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchAndSetRole = async (currentUser: User | null) => {
     if (currentUser) {
       try {
-        const { data } = await supabase.from('profiles').select('role').eq('id', currentUser.id).single();
+        const { data } = await supabase!.from('profiles').select('role').eq('id', currentUser.id).single();
         if (data?.role) {
           localStorage.setItem('auth_role', data.role);
         }
