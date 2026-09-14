@@ -270,3 +270,19 @@ export const checkAvailabilityWithRPC = async (roomName: string, startTime: stri
     return true;
   }
 };
+export const getBookingHolds = async () => {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("booking_holds")
+        .select("*")
+        .gt("expires_at", new Date().toISOString());
+      if (error) throw error;
+      return data || [];
+    } catch (e) {
+      console.error("Error holds:", e);
+      return [];
+    }
+  }
+  return [];
+};

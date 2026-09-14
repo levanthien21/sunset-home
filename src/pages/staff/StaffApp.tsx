@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 
 function StaffDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
+  const [holds, setHolds] = useState<any[]>([]);
   const [roomsList, setRoomsList] = useState<any[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toLocaleDateString("en-CA"));
@@ -28,8 +29,9 @@ function StaffDashboard() {
   const [addonForm, setAddonForm] = useState({ name: "", price: 0 });
 
   const loadData = async () => {
-    const { getBookings, getRooms } = await import("../../utils/db");
+    const { getBookings, getRooms, getBookingHolds } = await import("../../utils/db");
     setBookings(await getBookings());
+    setHolds(await getBookingHolds());
     const rawRooms = await getRooms();
     const formattedRooms = rawRooms.map((r: any) => ({
       ...r,
@@ -43,6 +45,14 @@ function StaffDashboard() {
 
   useEffect(() => {
     loadData();
+    const pollHolds = setInterval(async () => {
+      try {
+        const { getBookingHolds } = await import("../../utils/db");
+        const holdsData = await getBookingHolds();
+        setHolds(holdsData);
+      } catch (e) {}
+    }, 10000);
+    return () => clearInterval(pollHolds);
   }, []);
 
   useEffect(() => {
@@ -134,6 +144,8 @@ function StaffDashboard() {
     if (active) return { status: "occupied", booking: active };
     const dirty = roomBookings.find(b => b.status === "checked_out_dirty");
     if (dirty) return { status: "dirty", booking: dirty };
+    const isHold = holds.find((h: any) => h.room_name === roomName);
+    if (isHold) return { status: "holding", booking: null };
     return { status: "available", booking: null };
   };
 
@@ -315,7 +327,8 @@ function StaffDashboard() {
           const styles = {
             available: { wrapper: "bg-white border-green-200 hover:border-green-500", header: "text-green-700", badge: "bg-green-100 text-green-700", inner: "bg-gray-50/50" },
             occupied: { wrapper: "bg-red-50 border-red-200 hover:border-red-300", header: "text-red-700", badge: "bg-red-100 text-red-700", inner: "bg-white/60" },
-            dirty: { wrapper: "bg-yellow-50 border-yellow-300 hover:border-yellow-400", header: "text-yellow-700", badge: "bg-yellow-100 text-yellow-700", inner: "bg-white/60" }
+            dirty: { wrapper: "bg-yellow-50 border-yellow-300 hover:border-yellow-400", header: "text-yellow-700", badge: "bg-yellow-100 text-yellow-700", inner: "bg-white/60" },
+            holding: { wrapper: "bg-purple-50 border-purple-300 hover:border-purple-400 opacity-90", header: "text-purple-700", badge: "bg-purple-100 text-purple-700 animate-pulse", inner: "bg-white/60" }
           };
           const currentStyle = styles[status as keyof typeof styles];
 
@@ -323,6 +336,10 @@ function StaffDashboard() {
             <div 
               key={room.id}
               onClick={() => {
+                if (status === "holding") {
+                  alert("Phòng đang có khách chọn trực tuyến và chờ thanh toán. Vui lòng đợi trong vài phút để tránh trùng đơn!");
+                  return;
+                }
                 if (status === "available") {
                   setManualForm(prev => ({ ...prev, roomName: room.name, bookingDate: selectedDate }));
                   setShowAddModal(true);
@@ -339,7 +356,7 @@ function StaffDashboard() {
               <div className="flex justify-between items-start mb-4">
                 <h3 className={`text-2xl font-black font-serif ${currentStyle.header}`}>{room.name}</h3>
                 <div className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${currentStyle.badge}`}>
-                  {status === "available" ? "🟢 TRỐNG" : status === "occupied" ? "🔴 ĐANG Ở" : "🟡 CHỜ DỌN"}
+                  {status === "available" ? "🟢 TRỐNG" : status === "occupied" ? "🔴 ĐANG Ở" : status === "dirty" ? "🟡 CHỜ DỌN" : "🟣 KHÁCH ĐANG CHỌN"}
                 </div>
               </div>
               
