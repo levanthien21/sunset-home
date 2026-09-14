@@ -8,14 +8,48 @@ function StaffDashboard() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
+  
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [roomsList, setRoomsList] = useState<any[]>([]);
+  const [newBooking, setNewBooking] = useState({
+    customerName: '',
+    phone: '',
+    roomName: '',
+    checkIn: '',
+    checkOut: '',
+    total: 0,
+    paymentMethod: 'cash',
+    status: 'approved',
+    guests: 2
+  });
 
   useEffect(() => {
     const load = async () => {
-      const { getBookings } = await import('../../utils/db');
+      const { getBookings, getRooms } = await import('../../utils/db');
       setBookings(await getBookings());
+      setRoomsList(await getRooms());
     };
     load();
   }, []);
+
+  const handleAddBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { addBooking } = await import('../../utils/db');
+    try {
+      await addBooking({
+        ...newBooking,
+        id: Date.now().toString(),
+        created_at: new Date().toISOString()
+      });
+      alert('Tạo đơn thủ công thành công!');
+      setShowAddModal(false);
+      const { getBookings } = await import('../../utils/db');
+      setBookings(await getBookings());
+    } catch (err) {
+      console.error(err);
+      alert('Lỗi tạo đơn!');
+    }
+  };
 
   const handleUpdateStatus = async (id: string, newStatus: string) => {
     const { updateBookingStatus } = await import('../../utils/db');
@@ -54,7 +88,15 @@ function StaffDashboard() {
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-        <h2 className="text-xl font-serif text-gray-900">Quản lý Đơn hàng (Lễ tân)</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-serif text-gray-900">Quản lý Đơn hàng (Lễ tân)</h2>
+          <button 
+            onClick={() => setShowAddModal(true)}
+            className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-colors"
+          >
+            + Tạo đơn thủ công
+          </button>
+        </div>
         <div className="flex gap-4 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
             <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
@@ -254,6 +296,91 @@ function StaffDashboard() {
                 className="px-6 py-2 bg-gray-900 text-white font-bold rounded-lg hover:bg-gray-800"
               >
                 Đóng
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Add Manual Booking Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]"
+          >
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 shrink-0">
+              <h3 className="text-xl font-serif font-bold text-gray-900">Tạo Đơn Đặt Phòng Thủ Công</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-1">
+              <form id="manual-booking-form" onSubmit={handleAddBooking} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Tên khách hàng *</label>
+                    <input required type="text" value={newBooking.customerName} onChange={e => setNewBooking({...newBooking, customerName: e.target.value})} className="w-full border p-2 rounded-lg" placeholder="VD: Anh Dũng" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Số điện thoại *</label>
+                    <input required type="tel" value={newBooking.phone} onChange={e => setNewBooking({...newBooking, phone: e.target.value})} className="w-full border p-2 rounded-lg" placeholder="VD: 09..." />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Chọn Phòng *</label>
+                    <select required value={newBooking.roomName} onChange={e => setNewBooking({...newBooking, roomName: e.target.value})} className="w-full border p-2 rounded-lg">
+                      <option value="">-- Chọn phòng --</option>
+                      {roomsList.map(r => <option key={r.id} value={r.name}>{r.name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Ngày nhận phòng *</label>
+                    <input required type="date" value={newBooking.checkIn} onChange={e => setNewBooking({...newBooking, checkIn: e.target.value})} className="w-full border p-2 rounded-lg" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Gói giờ / Trả phòng *</label>
+                    <input required type="text" value={newBooking.checkOut} onChange={e => setNewBooking({...newBooking, checkOut: e.target.value})} className="w-full border p-2 rounded-lg" placeholder="VD: Gói 2H, Gói Đêm..." />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Tổng tiền (VNĐ) *</label>
+                    <input required type="number" value={newBooking.total} onChange={e => setNewBooking({...newBooking, total: Number(e.target.value)})} className="w-full border p-2 rounded-lg" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Phương thức TT</label>
+                    <select value={newBooking.paymentMethod} onChange={e => setNewBooking({...newBooking, paymentMethod: e.target.value})} className="w-full border p-2 rounded-lg">
+                      <option value="cash">Tiền mặt</option>
+                      <option value="qr">Chuyển khoản (QR)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Trạng thái tạo</label>
+                    <select value={newBooking.status} onChange={e => setNewBooking({...newBooking, status: e.target.value})} className="w-full border p-2 rounded-lg">
+                      <option value="approved">Đã duyệt (Chờ khách tới)</option>
+                      <option value="checked_in">Khách đã vào phòng (Check-in)</option>
+                      <option value="paid">Đã thanh toán (Chờ Check-in)</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div className="p-6 border-t border-gray-100 bg-gray-50 shrink-0 flex justify-end gap-4">
+              <button onClick={() => setShowAddModal(false)} className="px-6 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300">
+                Hủy
+              </button>
+              <button form="manual-booking-form" type="submit" className="px-6 py-2 bg-yellow-600 text-white font-bold rounded-lg hover:bg-yellow-700">
+                Tạo Đơn
               </button>
             </div>
           </motion.div>
