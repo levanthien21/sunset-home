@@ -42,7 +42,15 @@ function StaffDashboard() {
     const load = async () => {
       const { getBookings, getRooms } = await import('../../utils/db');
       setBookings(await getBookings());
-      setRoomsList(await getRooms());
+      const rawRooms = await getRooms();
+      const formattedRooms = rawRooms.map((r: any) => ({
+        ...r,
+        combos: [
+          ...(r.combos || []),
+          { id: 'test-5k', name: 'Gói Test (Nội bộ)', price: 5000 }
+        ]
+      }));
+      setRoomsList(formattedRooms);
     };
     load();
   }, []);
