@@ -21,6 +21,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchAndSetRole = async (currentUser: User | null) => {
+    if (currentUser) {
+      try {
+        const { data } = await supabase.from('profiles').select('role').eq('id', currentUser.id).single();
+        if (data?.role) {
+          localStorage.setItem('auth_role', data.role);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      localStorage.removeItem('auth_role');
+    }
+  };
+
   useEffect(() => {
     if (!supabase) {
       setLoading(false);
@@ -31,14 +46,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
+      fetchAndSetRole(session?.user ?? null).finally(() => setLoading(false));
     });
 
     // Listen for changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
+      fetchAndSetRole(session?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
@@ -46,6 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     if (supabase) {
+      localStorage.removeItem('auth_role');
       await supabase.auth.signOut();
     }
   };

@@ -45,10 +45,29 @@ function Navbar() {
         {/* Right - Action */}
         <div className="flex-shrink-0 flex justify-end items-center space-x-4">
           {user ? (
-            <Link to="/profile" className="flex items-center space-x-2 text-sm hover:text-yellow-500 transition-colors">
-              <UserIcon size={18} />
-              <span className="hidden md:inline font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</span>
-            </Link>
+            <>
+              <Link to="/profile" className="flex items-center space-x-2 text-sm hover:text-yellow-500 transition-colors">
+                <UserIcon size={18} />
+                <span className="hidden md:inline font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</span>
+              </Link>
+              <button 
+                onClick={handleLogout}
+                className="flex items-center text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors"
+              >
+                <LogOut size={18} className="md:hidden" />
+                <span className="hidden md:block">Đăng xuất</span>
+              </button>
+              {localStorage.getItem("auth_role") === "admin" && (
+                <Link to="/admin" className="flex items-center text-[11px] uppercase tracking-[0.2em] font-bold text-purple-600 hover:text-purple-700 transition-colors ml-4">
+                  [ VÀO ADMIN ]
+                </Link>
+              )}
+              {localStorage.getItem("auth_role") === "staff" && (
+                <Link to="/staff" className="flex items-center text-[11px] uppercase tracking-[0.2em] font-bold text-blue-600 hover:text-blue-700 transition-colors ml-4">
+                  [ LỄ TÂN ]
+                </Link>
+              )}
+            </>
           ) : (
             <Link to="/login" className="flex items-center text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
               <UserIcon size={18} className="md:hidden" />
