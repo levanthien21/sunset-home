@@ -158,24 +158,50 @@ export default function BookingPage() {
       
       // 1. Kiểm tra chống đặt trùng phòng (Double Booking)
       const allBookings = await getBookings();
-      const sameDayBookings = allBookings.filter((b: any) => 
+      const sameRoomBookings = allBookings.filter((b: any) => 
         b.roomName === selectedRoomDetails?.name && 
-        b.checkIn?.startsWith(bookingDate) && 
         b.status !== 'cancelled'
       );
 
-      // Nếu phòng đã được đặt 3 lần trong ngày, coi như kín lịch
-      if (sameDayBookings.length >= 3) {
-        alert('Rất tiếc! Phòng này vừa được khách khác đặt hết lịch trong ngày. Vui lòng chọn phòng hoặc ngày khác.');
-        setIsProcessing(false);
-        setStep(2);
-        return;
-      }
+      const parseBookingInterval = (checkInStr: string, checkOutStr: string) => {
+        const start = new Date(checkInStr);
+        if (isNaN(start.getTime())) return { start: new Date(0), end: new Date(0) };
+        const extraMatch = checkOutStr.match(/\(\+(\d+)h\)/);
+        const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
+        let end = new Date(start.getTime());
+        
+        if (checkOutStr.includes('2H') || checkOutStr.includes('2 giờ')) {
+          end = new Date(start.getTime() + (2 + extra) * 60 * 60 * 1000);
+        } else if (checkOutStr.includes('4H') || checkOutStr.includes('4 giờ')) {
+          end = new Date(start.getTime() + (4 + extra) * 60 * 60 * 1000);
+        } else if (checkOutStr.toLowerCase().includes('đêm')) {
+          end.setDate(end.getDate() + 1);
+          end.setHours(10, 0, 0, 0);
+          end = new Date(end.getTime() + extra * 60 * 60 * 1000);
+        } else if (checkOutStr.toLowerCase().includes('ngày')) {
+          end.setDate(end.getDate() + 1);
+          end.setHours(12, 0, 0, 0);
+          end = new Date(end.getTime() + extra * 60 * 60 * 1000);
+        } else {
+          // Default 1h for unknown packages (like test)
+          end = new Date(start.getTime() + (1 + extra) * 60 * 60 * 1000);
+        }
+        return { start, end };
+      };
 
-      // Nếu trùng chính xác giờ nhận phòng
-      const hasExactTimeOverlap = sameDayBookings.some((b: any) => b.checkIn === `${bookingDate} ${expectedTime}`);
-      if (hasExactTimeOverlap) {
-        alert('Rất tiếc! Đã có khách khác vừa nhanh tay đặt phòng vào khung giờ này. Vui lòng chọn giờ đến khác.');
+      const newComboName = selectedComboDetails?.name || '';
+      const newCheckOutStr = `${newComboName}${extraHours > 0 ? ` (+${extraHours}h)` : ''}`;
+      const newCheckInStr = `${bookingDate} ${expectedTime}`;
+      const newInterval = parseBookingInterval(newCheckInStr, newCheckOutStr);
+
+      const hasOverlap = sameRoomBookings.some((b: any) => {
+        if (!b.checkIn || !b.checkOut) return false;
+        const bInterval = parseBookingInterval(b.checkIn, b.checkOut);
+        return newInterval.start < bInterval.end && newInterval.end > bInterval.start;
+      });
+
+      if (hasOverlap) {
+        alert('Rất tiếc! Đã có khách khác vừa nhanh tay đặt phòng vào khung giờ này. Vui lòng chọn giờ hoặc phòng khác.');
         setIsProcessing(false);
         return;
       }
