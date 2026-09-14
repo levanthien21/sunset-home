@@ -135,7 +135,11 @@ function StaffDashboard() {
   };
 
   const getRoomRealtimeStatus = (roomName: string) => {
-    const roomBookings = bookings.filter(b => b.roomName === roomName);
+    const roomInfo = roomsList.find((r: any) => r.name === roomName);
+    if (roomInfo && roomInfo.status === 'maintenance') {
+      return { status: 'maintenance', booking: null };
+    }
+    const roomBookings = bookings.filter((b: any) => b.roomName === roomName);
     const active = roomBookings.find(b => b.status === "checked_in");
     if (active) return { status: "occupied", booking: active };
     const dirty = roomBookings.find(b => b.status === "checked_out_dirty");
@@ -324,7 +328,8 @@ function StaffDashboard() {
             available: { wrapper: "bg-white border-green-200 hover:border-green-500", header: "text-green-700", badge: "bg-green-100 text-green-700", inner: "bg-gray-50/50" },
             occupied: { wrapper: "bg-red-50 border-red-200 hover:border-red-300", header: "text-red-700", badge: "bg-red-100 text-red-700", inner: "bg-white/60" },
             dirty: { wrapper: "bg-yellow-50 border-yellow-300 hover:border-yellow-400", header: "text-yellow-700", badge: "bg-yellow-100 text-yellow-700", inner: "bg-white/60" },
-            holding: { wrapper: "bg-purple-50 border-purple-300 hover:border-purple-400 opacity-90", header: "text-purple-700", badge: "bg-purple-100 text-purple-700 animate-pulse", inner: "bg-white/60" }
+            holding: { wrapper: "bg-purple-50 border-purple-300 hover:border-purple-400 opacity-90", header: "text-purple-700", badge: "bg-purple-100 text-purple-700 animate-pulse", inner: "bg-white/60" },
+            maintenance: { wrapper: "bg-gray-100 border-gray-300 opacity-70 cursor-not-allowed", header: "text-gray-600", badge: "bg-gray-200 text-gray-700", inner: "bg-gray-50/50" }
           };
           const currentStyle = styles[status as keyof typeof styles];
 
@@ -332,6 +337,10 @@ function StaffDashboard() {
             <div 
               key={room.id}
               onClick={() => {
+                if (status === "maintenance") {
+                  alert("Phòng đang bảo trì. Bạn không thể thao tác trên phòng này!");
+                  return;
+                }
                 if (status === "holding") {
                   alert("Phòng đang có khách chọn trực tuyến và chờ thanh toán. Vui lòng đợi trong vài phút để tránh trùng đơn!");
                   return;
@@ -352,7 +361,7 @@ function StaffDashboard() {
               <div className="flex justify-between items-start mb-4">
                 <h3 className={`text-2xl font-black font-serif ${currentStyle.header}`}>{room.name}</h3>
                 <div className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${currentStyle.badge}`}>
-                  {status === "available" ? "🟢 TRỐNG" : status === "occupied" ? "🔴 ĐANG Ở" : status === "dirty" ? "🟡 CHỜ DỌN" : "🟣 KHÁCH ĐANG CHỌN"}
+                  {status === "available" ? "🟢 TRỐNG" : status === "occupied" ? "🔴 ĐANG Ở" : status === "dirty" ? "🟡 CHỜ DỌN" : status === "maintenance" ? "⚫ BẢO TRÌ" : "🟣 KHÁCH ĐANG CHỌN"}
                 </div>
               </div>
               

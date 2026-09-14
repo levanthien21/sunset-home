@@ -25,7 +25,8 @@ export default function AdminRooms() {
       await updateRoom(editingRoom.id, {
         name: editingRoom.name,
         extra_hour_price: editingRoom.extra_hour_price,
-        combos: editingRoom.combos
+        combos: editingRoom.combos,
+        status: editingRoom.status
       });
       alert("Cập nhật phòng thành công!");
       setEditingRoom(null);

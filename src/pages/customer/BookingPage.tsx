@@ -42,7 +42,7 @@ export default function BookingPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   
   // Data Logic
-  const filteredRooms = rooms.filter(r => r.branchId === branch);
+  const filteredRooms = rooms.filter(r => r.branchId === branch && r.status !== 'maintenance');
   const selectedBranchDetails = branches.find(b => b.id === branch);
   const selectedRoomDetails = rooms.find(r => r.id === room);
   const selectedComboDetails = selectedRoomDetails?.combos.find((c: any) => c.id === combo);
