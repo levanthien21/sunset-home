@@ -128,7 +128,26 @@ export default function AdminRooms() {
                   </div>
                 </div>
 
-                <div>
+                
+                <div className="mt-4 mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <label className="flex items-center cursor-pointer">
+                    <div className="relative">
+                      <input 
+                        type="checkbox" 
+                        className="sr-only" 
+                        checked={editingRoom.status === 'maintenance'}
+                        onChange={(e) => setEditingRoom({...editingRoom, status: e.target.checked ? 'maintenance' : 'available'})}
+                      />
+                      <div className={`block w-14 h-8 rounded-full transition-colors ${editingRoom.status === 'maintenance' ? 'bg-red-500' : 'bg-green-500'}`}></div>
+                      <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform ${editingRoom.status === 'maintenance' ? 'transform translate-x-6' : ''}`}></div>
+                    </div>
+                    <div className="ml-3 text-sm font-bold text-gray-700">
+                      {editingRoom.status === 'maintenance' ? 'ĐANG BẢO TRÌ (Khóa phòng)' : 'HOẠT ĐỘNG BÌNH THƯỜNG'}
+                    </div>
+                  </label>
+                  <p className="text-xs text-gray-500 mt-2">Khi bật chế độ bảo trì, lễ tân và khách hàng sẽ không thể đặt phòng này.</p>
+                </div>
+<div>
                   <div className="flex justify-between items-center mb-4">
                     <label className="block text-xs font-bold text-gray-500 uppercase">Các gói giờ (Combos)</label>
                     <button 
