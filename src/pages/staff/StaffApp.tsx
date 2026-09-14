@@ -212,6 +212,98 @@ function StaffDashboard() {
         </div>
       </div>
 
+      
+      {/* HỆ THỐNG CẢNH BÁO THÔNG MINH */}
+      <div className="mb-6 space-y-2">
+        {bookings.filter(b => b.status === "approved" || b.status === "pending").map(b => {
+          if(!b.checkIn) return null;
+          try {
+            const safeCheckInStr = b.checkIn.replace(" ", "T");
+            const checkInTime = new Date(safeCheckInStr).getTime();
+            const now = new Date().getTime();
+            const diffMins = Math.floor((checkInTime - now) / 60000);
+            
+            if (diffMins > 0 && diffMins <= 60) {
+              return (
+                <div key={b.id || b.bookingId} className="bg-yellow-50 border-l-4 border-yellow-500 p-3 rounded-r-lg shadow-sm flex items-center">
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full animate-ping mr-3"></div>
+                  <span className="text-sm font-bold text-yellow-800">
+                    SẮP CÓ KHÁCH: Phòng {b.roomName} đón khách ({b.customerName || "Khách lẻ"}) trong {diffMins} phút nữa.
+                  </span>
+                </div>
+              );
+            }
+            if (diffMins <= 0 && diffMins >= -60) {
+              return (
+                <div key={b.id || b.bookingId} className="bg-red-50 border-l-4 border-red-500 p-3 rounded-r-lg shadow-sm flex items-center">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-ping mr-3"></div>
+                  <span className="text-sm font-bold text-red-800">
+                    KHÁCH TRỄ GIỜ: Phòng {b.roomName} đã đến giờ nhận phòng ({b.checkIn}) nhưng chưa thấy check-in!
+                  </span>
+                </div>
+              );
+            }
+          } catch(e) {}
+          return null;
+        })}
+        {bookings.filter(b => b.status === "checked_in").map(b => {
+          if(!b.checkIn || !b.checkOut) return null;
+          try {
+            const start = new Date(b.checkIn.replace(" ", "T"));
+            const extraMatch = b.checkOut.match(/\(\+(\d+)h\)/);
+            const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
+            let end = new Date(start.getTime());
+            
+            if (b.checkOut.includes("2H") || b.checkOut.includes("2 giờ")) end = new Date(start.getTime() + (2 + extra) * 3600000);
+            else if (b.checkOut.includes("4H") || b.checkOut.includes("4 giờ")) end = new Date(start.getTime() + (4 + extra) * 3600000);
+            else return null;
+
+            const now = new Date().getTime();
+            const diffMins = Math.floor((end.getTime() - now) / 60000);
+            
+            if (diffMins > 0 && diffMins <= 30) {
+              return (
+                <div key={b.id || b.bookingId} className="bg-orange-50 border-l-4 border-orange-500 p-3 rounded-r-lg shadow-sm flex items-center">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full animate-ping mr-3"></div>
+                  <span className="text-sm font-bold text-orange-800">
+                    SẮP HẾT GIỜ: Phòng {b.roomName} còn {diffMins} phút nữa là hết giờ lưu trú.
+                  </span>
+                </div>
+              );
+            }
+            if (diffMins <= 0) {
+              return (
+                <div key={b.id || b.bookingId} className="bg-red-50 border-l-4 border-red-500 p-3 rounded-r-lg shadow-sm flex items-center">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-ping mr-3"></div>
+                  <span className="text-sm font-bold text-red-800">
+                    QUÁ GIỜ: Phòng {b.roomName} đã lố {Math.abs(diffMins)} phút. Vui lòng liên hệ khách!
+                  </span>
+                </div>
+              );
+            }
+          } catch(e) {}
+          return null;
+        })}
+        {bookings.filter(b => b.status === "checked_out_dirty").map(b => {
+            const upcoming = bookings.find(ub => (ub.status === "approved" || ub.status === "pending") && ub.roomName === b.roomName);
+            if (upcoming && upcoming.checkIn) {
+                const checkInTime = new Date(upcoming.checkIn.replace(" ", "T")).getTime();
+                const diffMins = Math.floor((checkInTime - new Date().getTime()) / 60000);
+                if (diffMins > 0 && diffMins <= 120) {
+                    return (
+                        <div key={"dirty_warn_"+b.roomName} className="bg-purple-50 border-l-4 border-purple-500 p-3 rounded-r-lg shadow-sm flex items-center">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full animate-ping mr-3"></div>
+                        <span className="text-sm font-bold text-purple-800">
+                            ƯU TIÊN DỌN PHÒNG: Phòng {b.roomName} đang dơ nhưng khách mới sẽ đến trong {diffMins} phút nữa!
+                        </span>
+                        </div>
+                    )
+                }
+            }
+            return null;
+        })}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {roomsList.map(room => {
           const { status, booking } = getRoomRealtimeStatus(room.name);
@@ -311,6 +403,65 @@ function StaffDashboard() {
                     )}
                   </p>
                 </div>
+
+                
+                {selectedBooking.status === "checked_in" && (
+                  <div className="mt-4 border-t pt-4 border-gray-100">
+                    <h4 className="font-bold text-gray-900 mb-2 uppercase text-xs tracking-wider">Gia hạn thêm giờ</h4>
+                    <div className="flex gap-2">
+                      <input 
+                        type="number" 
+                        min="1"
+                        placeholder="Số giờ"
+                        id="extendHoursInput"
+                        className="w-24 p-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
+                      />
+                      <button 
+                        onClick={async () => {
+                          const input = document.getElementById("extendHoursInput");
+                          const hours = parseInt(input.value);
+                          if (!hours || hours < 1) return alert("Vui lòng nhập số giờ hợp lệ");
+                          
+                          const nextBooking = bookings
+                            .filter(b => b.roomName === selectedBooking.roomName && (b.status === "approved" || b.status === "pending" || b.status === "paid"))
+                            .sort((a,b) => new Date(a.checkIn.replace(" ","T")).getTime() - new Date(b.checkIn.replace(" ","T")).getTime())[0];
+                            
+                          if (nextBooking) {
+                             const currentStart = new Date(selectedBooking.checkIn.replace(" ", "T"));
+                             const extraMatch = selectedBooking.checkOut.match(/\(\+(\d+)h\)/);
+                             const currentExtra = extraMatch ? parseInt(extraMatch[1]) : 0;
+                             let currentEnd = new Date(currentStart.getTime());
+                             
+                             if (selectedBooking.checkOut.includes("2H") || selectedBooking.checkOut.includes("2 giờ")) currentEnd = new Date(currentStart.getTime() + (2 + currentExtra) * 3600000);
+                             else if (selectedBooking.checkOut.includes("4H") || selectedBooking.checkOut.includes("4 giờ")) currentEnd = new Date(currentStart.getTime() + (4 + currentExtra) * 3600000);
+                             
+                             const newEndWithBuffer = new Date(currentEnd.getTime() + (hours * 3600000) + (30 * 60000));
+                             const nextStart = new Date(nextBooking.checkIn.replace(" ", "T"));
+                             
+                             if (newEndWithBuffer > nextStart) {
+                               alert("❌ Lỗi: Không thể gia hạn! Phòng đã có khách mới đặt vào lúc " + nextBooking.checkIn + ". Bạn phải chừa ít nhất 30p dọn phòng.");
+                               return;
+                             }
+                          }
+                          
+                          try {
+                            const { updateBookingAddons } = await import("../../utils/db");
+                            const newAddons = [...(selectedBooking.addons || []), { name: "Gia hạn " + hours + "H", price: hours * 50000 }];
+                            const newTotal = Number(selectedBooking.total) + (hours * 50000);
+                            await updateBookingAddons(selectedBooking.id || selectedBooking.bookingId, newAddons, newTotal);
+                            alert("Đã gia hạn thành công " + hours + " giờ!");
+                            window.location.reload();
+                          } catch (err) {
+                            alert("Lỗi gia hạn!");
+                          }
+                        }}
+                        className="px-4 py-2 bg-purple-600 text-white text-sm font-bold rounded-lg hover:bg-purple-700"
+                      >
+                        Gia hạn
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 <div className="mt-8">
                   <h4 className="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider border-b pb-2">Thao tác</h4>
