@@ -174,7 +174,7 @@ function AdminDashboard() {
     }
   };
 
-  const approvedBookings = bookings.filter(b => b.status === 'approved');
+  const approvedBookings = bookings.filter(b => ['approved', 'paid'].includes(b.status));
   const expectedRevenue = approvedBookings.reduce((sum, b) => sum + b.total, 0);
   const collectedRevenue = approvedBookings.reduce((sum, b) => sum + (b.amountPaid || 0), 0);
 

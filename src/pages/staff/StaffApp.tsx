@@ -82,18 +82,34 @@ function StaffDashboard() {
                     )}
                   </td>
                   <td className="p-4">
-                    {b.status === 'pending' ? (
+                    {b.status === 'pending' && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                        <Clock size={12} className="mr-1" /> Chờ duyệt
+                        <Clock size={12} className="mr-1" /> Chờ xác nhận
                       </span>
-                    ) : (
+                    )}
+                    {b.status === 'pending_payment' && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                        <Clock size={12} className="mr-1" /> Chờ thanh toán
+                      </span>
+                    )}
+                    {b.status === 'paid' && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <CheckCircle2 size={12} className="mr-1" /> Đã thanh toán
+                      </span>
+                    )}
+                    {b.status === 'approved' && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         <CheckCircle2 size={12} className="mr-1" /> Đã duyệt
                       </span>
                     )}
+                    {b.status === 'cancelled' && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        <Clock size={12} className="mr-1" /> Đã hủy
+                      </span>
+                    )}
                   </td>
                   <td className="p-4 text-right">
-                    {b.status === 'pending' && (
+                    {['pending', 'pending_payment', 'paid'].includes(b.status) && (
                       <button 
                         onClick={() => handleApprove(b.id)}
                         className="px-4 py-2 bg-gray-900 text-white text-xs uppercase tracking-wider font-semibold rounded-sm hover:bg-yellow-600 transition-colors"
