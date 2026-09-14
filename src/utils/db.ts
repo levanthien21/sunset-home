@@ -31,9 +31,13 @@ export const addBooking = async (booking: any) => {
         .from('bookings')
         .insert([booking]);
         
-      if (error) throw error;
+      if (error) {
+        console.error("Lỗi Supabase chi tiết:", error);
+        throw error;
+      }
     } catch (e) {
       console.error("Lỗi lưu dữ liệu Supabase:", e);
+      throw e; // Bắt buộc throw để UI chặn lại, không cho redirect sang PayOS nếu DB lỗi
     }
   } else {
     const existing = JSON.parse(localStorage.getItem('sunset_bookings') || '[]');

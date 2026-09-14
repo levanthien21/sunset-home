@@ -193,8 +193,8 @@ export default function BookingPage() {
         bookingType: 'full',
         status: 'pending_payment',
         date: new Date().toISOString(),
-        paymentMethod: 'qr',
-        note
+        paymentMethod: 'qr'
+        // note: note // Cột note chưa có trên Supabase nên tạm thời bỏ đi để tránh lỗi 400
       };
       
       await addBooking(newBooking);
