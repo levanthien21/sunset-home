@@ -154,9 +154,11 @@ function StaffDashboard() {
                   </td>
                   <td className="p-4">
                     <div className="font-bold text-gray-900">{b.total?.toLocaleString('vi-VN')}đ</div>
-                    {b.paymentMethod === 'qr' && (
+                    {b.paymentMethod === 'qr' ? (
                       <span className="inline-block mt-1 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] uppercase font-bold rounded-sm border border-blue-100">PayOS</span>
-                    )}
+                    ) : b.paymentMethod === 'transfer' ? (
+                      <span className="inline-block mt-1 px-2 py-0.5 bg-purple-50 text-purple-600 text-[10px] uppercase font-bold rounded-sm border border-purple-100">Chuyển khoản</span>
+                    ) : null}
                   </td>
                   <td className="p-4">
                     {b.status === 'pending' ? (
@@ -271,7 +273,7 @@ function StaffDashboard() {
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-gray-600">Phương thức</p>
-                    <p className="font-medium text-gray-900">{selectedBooking.paymentMethod === 'qr' ? 'Chuyển khoản (PayOS)' : 'Tiền mặt'}</p>
+                    <p className="font-medium text-gray-900">{selectedBooking.paymentMethod === 'qr' ? 'PayOS' : selectedBooking.paymentMethod === 'transfer' ? 'Chuyển khoản trực tiếp' : 'Tiền mặt'}</p>
                   </div>
                 </div>
               </div>
@@ -360,7 +362,7 @@ function StaffDashboard() {
                     <label className="block text-xs font-bold text-gray-500 mb-1">Phương thức TT</label>
                     <select value={newBooking.paymentMethod} onChange={e => setNewBooking({...newBooking, paymentMethod: e.target.value})} className="w-full border p-2 rounded-lg">
                       <option value="cash">Tiền mặt</option>
-                      <option value="qr">Chuyển khoản (QR)</option>
+                      <option value="transfer">Chuyển khoản trực tiếp</option>
                     </select>
                   </div>
                   <div>

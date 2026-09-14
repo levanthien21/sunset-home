@@ -113,11 +113,13 @@ export default function AdminBookings() {
                     <div className="text-xs text-gray-500">{b.checkOut}</div>
                   </td>
                   <td className="p-4">
-                    <div className="font-bold text-gray-900">{b.total?.toLocaleString('vi-VN')} đ</div>
-                    {b.paymentMethod === 'qr' && (
-                      <span className="inline-block mt-1 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] uppercase font-bold rounded-sm">PayOS</span>
-                    )}
-                  </td>
+                  <div className="font-bold text-gray-900">{b.total?.toLocaleString('vi-VN')}đ</div>
+                  {b.paymentMethod === 'qr' ? (
+                    <span className="inline-block mt-1 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] uppercase font-bold rounded-sm border border-blue-100">PayOS</span>
+                  ) : b.paymentMethod === 'transfer' ? (
+                    <span className="inline-block mt-1 px-2 py-0.5 bg-purple-50 text-purple-600 text-[10px] uppercase font-bold rounded-sm border border-purple-100">Chuyển khoản</span>
+                  ) : null}
+                </td>
                   <td className="p-4">
                     {b.status === 'pending' || b.status === 'pending_payment' ? (
                       <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-yellow-50 text-yellow-700"><Clock className="w-3 h-3 mr-1" /> Chờ xử lý</span>
