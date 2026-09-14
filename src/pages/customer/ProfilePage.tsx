@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { getBookings, supabase } from '../../utils/db';
+import { getBookings } from '../../utils/db';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Calendar, Clock, CreditCard, ChevronRight } from 'lucide-react';
+import { LogOut, Calendar, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function ProfilePage() {

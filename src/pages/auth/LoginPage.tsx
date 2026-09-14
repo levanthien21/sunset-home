@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../../utils/db';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, User, LogIn, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function LoginPage() {

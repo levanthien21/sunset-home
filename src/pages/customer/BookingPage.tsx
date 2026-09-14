@@ -58,6 +58,10 @@ export default function BookingPage() {
     if (dateParam) {
       setBookingDate(dateParam);
     }
+    if (branchParam) {
+      setBranch(parseInt(branchParam));
+      setStep(2);
+    }
   }, []);
 
   useEffect(() => {
@@ -66,12 +70,8 @@ export default function BookingPage() {
       if (!email) setEmail(user.email || '');
     }
   }, [user]);
-    
-    if (branchParam) {
-      setBranch(parseInt(branchParam));
-      setStep(2); // Skip directly to room selection
-    }
 
+  useEffect(() => {
     const fetchDB = async () => {
       setIsLoadingRooms(true);
       setIsLoadingBranches(true);
