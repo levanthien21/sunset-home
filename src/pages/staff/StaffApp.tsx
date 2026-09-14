@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { LogOut, X, Plus, BedDouble, Coffee } from "lucide-react";
+import { LogOut, X, Plus, BedDouble, Coffee, Calendar as CalendarIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
@@ -7,6 +7,7 @@ function StaffDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [roomsList, setRoomsList] = useState<any[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toLocaleDateString("en-CA"));
   
   // Modals
   const [showAddModal, setShowAddModal] = useState(false);
@@ -50,7 +51,7 @@ function StaffDashboard() {
       const combo = selectedRoom.combos[manualForm.selectedComboIndex];
       if (combo) {
         const comboPrice = combo.price || 0;
-        const extraHoursPrice = (manualForm.extraHours || 0) * (selectedRoom.extraHourPrice || 50000);
+        const extraHoursPrice = (manualForm.extraHours || 0) * (selectedRoom.extra_hour_price || 50000);
         setManualForm(prev => ({ ...prev, total: comboPrice + extraHoursPrice }));
       }
     }
@@ -127,59 +128,102 @@ function StaffDashboard() {
     }
   };
 
-  const getRoomStatus = (roomName: string) => {
+  const getRoomRealtimeStatus = (roomName: string) => {
     const roomBookings = bookings.filter(b => b.roomName === roomName);
     const active = roomBookings.find(b => b.status === "checked_in");
     if (active) return { status: "occupied", booking: active };
     const dirty = roomBookings.find(b => b.status === "checked_out_dirty");
     if (dirty) return { status: "dirty", booking: dirty };
-    const pending = roomBookings.find(b => b.status === "pending" || b.status === "approved" || b.status === "paid");
-    if (pending) return { status: "booked", booking: pending };
     return { status: "available", booking: null };
+  };
+
+  const getBookedSlotsForRoom = (roomName: string, date: string) => {
+    return bookings
+      .filter(b => b.roomName === roomName && b.checkIn?.startsWith(date) && b.status !== 'cancelled' && b.status !== 'completed' && b.status !== 'checked_out_dirty')
+      .map(b => {
+        const timeStr = b.checkIn.split(' ')[1] || '';
+        let endStr = 'N/A';
+        const start = new Date(b.checkIn.replace(' ', 'T'));
+        
+        const extraMatch = b.checkOut.match(/\(\+(\d+)h\)/);
+        const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
+        
+        if (b.checkOut.includes('2H') || b.checkOut.includes('2 giờ')) {
+          const end = new Date(start.getTime() + (2 + extra) * 60 * 60 * 1000);
+          endStr = end.toTimeString().substring(0, 5);
+        } else if (b.checkOut.includes('4H') || b.checkOut.includes('4 giờ')) {
+          const end = new Date(start.getTime() + (4 + extra) * 60 * 60 * 1000);
+          endStr = end.toTimeString().substring(0, 5);
+        } else if (b.checkOut.toLowerCase().includes('đêm')) {
+          endStr = '10:00(hsau)';
+        } else if (b.checkOut.toLowerCase().includes('ngày')) {
+          endStr = '12:00(hsau)';
+        }
+        
+        return {
+           time: `${timeStr} - ${endStr}`,
+           status: b.status,
+           customer: b.customerName || 'Khách',
+           bookingInfo: b
+        };
+      })
+      .sort((a, b) => a.time.localeCompare(b.time));
   };
 
   return (
     <div className="p-8 font-sans max-w-7xl mx-auto pb-24">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-serif text-gray-900">Sơ đồ Phòng</h1>
-          <p className="text-gray-500 mt-1">Quản lý trạng thái phòng thời gian thực (Lễ tân)</p>
+          <h1 className="text-3xl font-serif text-gray-900">Sơ đồ Phòng & Khung giờ</h1>
+          <p className="text-gray-500 mt-1">Quản lý trạng thái thực và lịch đặt phòng theo giờ (Lễ tân)</p>
         </div>
-        <button 
-          onClick={() => setShowAddModal(true)}
-          className="px-5 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center shadow-lg"
-        >
-          <Plus className="w-5 h-5 mr-2" /> Tạo Đơn Chạm
-        </button>
+        
+        <div className="flex flex-wrap items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-gray-100">
+          <div className="flex items-center bg-gray-50 px-4 py-2 rounded-xl border border-gray-200">
+            <CalendarIcon className="w-5 h-5 text-gray-500 mr-2" />
+            <input 
+              type="date" 
+              value={selectedDate} 
+              onChange={e => setSelectedDate(e.target.value)}
+              className="bg-transparent text-sm font-bold text-gray-900 outline-none"
+            />
+          </div>
+          <button 
+            onClick={() => setShowAddModal(true)}
+            className="px-5 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center"
+          >
+            <Plus className="w-5 h-5 mr-1" /> Tạo Đơn Chạm
+          </button>
+        </div>
       </div>
 
-      <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
+      <div className="flex flex-wrap gap-4 mb-8 pb-2">
         <div className="flex items-center text-sm font-bold text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
-          <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div> Trống
+          <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div> Đang Trống
         </div>
         <div className="flex items-center text-sm font-bold text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
-          <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div> Đã Đặt
-        </div>
-        <div className="flex items-center text-sm font-bold text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
-          <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div> Có Khách
+          <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div> Đang Có Khách
         </div>
         <div className="flex items-center text-sm font-bold text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
           <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div> Chờ Dọn
         </div>
+        <div className="flex items-center text-sm font-bold text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
+          <div className="w-3 h-3 rounded-full bg-blue-100 border border-blue-300 mr-2"></div> Khung giờ đã khách đặt
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {roomsList.map(room => {
-          const { status, booking } = getRoomStatus(room.name);
+          const { status, booking } = getRoomRealtimeStatus(room.name);
+          const slots = getBookedSlotsForRoom(room.name, selectedDate);
+          
           const bgColors = {
             available: "bg-white border-green-200 hover:border-green-400",
-            booked: "bg-blue-50 border-blue-200",
             occupied: "bg-red-50 border-red-200",
             dirty: "bg-yellow-50 border-yellow-300"
           };
           const textColors = {
             available: "text-green-600",
-            booked: "text-blue-700",
             occupied: "text-red-700",
             dirty: "text-yellow-700"
           };
@@ -190,7 +234,7 @@ function StaffDashboard() {
               key={room.id}
               onClick={() => {
                 if (status === "available") {
-                  setManualForm(prev => ({ ...prev, roomName: room.name }));
+                  setManualForm(prev => ({ ...prev, roomName: room.name, bookingDate: selectedDate }));
                   setShowAddModal(true);
                 } else if (status === "dirty") {
                   if (window.confirm("Phòng " + room.name + " đã dọn dẹp xong?")) {
@@ -200,20 +244,40 @@ function StaffDashboard() {
                   setSelectedBooking(booking);
                 }
               }}
-              className={"relative p-6 rounded-2xl border-2 shadow-sm cursor-pointer transition-all flex flex-col items-center justify-center text-center " + bgColors[status as keyof typeof bgColors]}
+              className={"relative p-5 rounded-2xl border-2 shadow-sm cursor-pointer transition-all flex flex-col items-center justify-start text-center min-h-[220px] " + bgColors[status as keyof typeof bgColors]}
             >
-              <BedDouble className={"w-10 h-10 mb-3 " + textColors[status as keyof typeof textColors]} />
+              <BedDouble className={"w-8 h-8 mb-2 " + textColors[status as keyof typeof textColors]} />
               <h3 className="text-xl font-bold text-gray-900 mb-1">{room.name}</h3>
-              <p className={"text-xs font-bold uppercase tracking-wider " + textColors[status as keyof typeof textColors]}>
-                {status === "available" ? "Sẵn sàng" : 
-                 status === "booked" ? "Đã đặt" :
-                 status === "occupied" ? "Đang ở" : "Chờ dọn"}
+              <p className={"text-[10px] font-bold uppercase tracking-wider mb-4 " + textColors[status as keyof typeof textColors]}>
+                {status === "available" ? "Hiện Tại: Trống" : 
+                 status === "occupied" ? "Hiện Tại: Đang ở" : "Hiện Tại: Chờ dọn"}
               </p>
-              {booking && status !== "dirty" && (
-                <div className="mt-3 text-[10px] bg-white/60 px-2 py-1 rounded-md font-mono font-bold text-gray-700 truncate max-w-full">
-                  {booking.customerName}
+              
+              <div className="w-full mt-auto bg-gray-50/50 p-2 rounded-xl border border-gray-100/50 flex-1 flex flex-col">
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 border-b pb-1">
+                  Lịch ngày {selectedDate.split("-").reverse().join("/")}
                 </div>
-              )}
+                <div className="space-y-1.5 overflow-y-auto max-h-[100px] flex-1">
+                  {slots.length > 0 ? slots.map((s, idx) => (
+                    <div 
+                      key={idx} 
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent triggering the card's onClick
+                        setSelectedBooking(s.bookingInfo);
+                      }}
+                      className={`text-[10px] px-2 py-1.5 rounded-lg font-mono font-bold text-left hover:brightness-95 transition-all
+                        ${s.status === 'checked_in' ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-blue-100 text-blue-700 border border-blue-200'}`}
+                    >
+                      <div>{s.time}</div>
+                      <div className="font-sans font-medium text-[9px] truncate text-gray-600 mt-0.5 opacity-80">{s.customer}</div>
+                    </div>
+                  )) : (
+                    <div className="text-[10px] text-gray-400 italic flex items-center justify-center h-full">
+                      Chưa có ai đặt
+                    </div>
+                  )}
+                </div>
+              </div>
             </motion.div>
           );
         })}
