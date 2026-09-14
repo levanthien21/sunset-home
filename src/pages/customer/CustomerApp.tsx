@@ -1,9 +1,8 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { User as UserIcon, LogOut } from 'lucide-react';
+import { User as UserIcon } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { supabase } from '../../utils/db';
 import ProfilePage from './ProfilePage';
 
 import LandingPage from './LandingPage';
@@ -51,13 +50,6 @@ function Navbar() {
                 <UserIcon size={18} />
                 <span className="hidden md:inline font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</span>
               </Link>
-              <button 
-                onClick={async () => { await supabase?.auth.signOut(); localStorage.removeItem('auth_role'); window.location.reload(); }}
-                className="flex items-center text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors"
-              >
-                <LogOut size={18} className="md:hidden" />
-                <span className="hidden md:block">Đăng xuất</span>
-              </button>
               {localStorage.getItem("auth_role") === "admin" && (
                 <Link to="/admin" className="flex items-center text-[11px] uppercase tracking-[0.2em] font-bold text-purple-600 hover:text-purple-700 transition-colors ml-4">
                   [ VÀO ADMIN ]
