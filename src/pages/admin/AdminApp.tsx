@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import AdminUsers from './AdminUsers';
 import AdminReports from './AdminReports';
 import AdminBookings from './AdminBookings';
+import AdminRooms from './AdminRooms';
 
 function AdminDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -468,13 +469,17 @@ export default function AdminApp() {
             <Settings size={18} />
             <span className="text-sm font-medium tracking-wide">Quản lý Đơn</span>
           </Link>
+          <Link to="/admin/rooms" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
+            <Edit2 size={18} />
+            <span className="text-sm font-medium tracking-wide">Phòng & Giá</span>
+          </Link>
           <Link to="/admin/reports" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
             <BarChart3 size={18} />
             <span className="text-sm font-medium tracking-wide">Báo cáo</span>
           </Link>
           <Link to="/admin/users" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
             <Users size={18} />
-            <span className="text-sm font-medium tracking-wide">Khách hàng</span>
+            <span className="text-sm font-medium tracking-wide">Tài khoản</span>
           </Link>
         </nav>
         <div className="p-6 border-t border-gray-800">
@@ -496,6 +501,7 @@ export default function AdminApp() {
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
           <Route path="/bookings" element={<AdminBookings />} />
+          <Route path="/rooms" element={<AdminRooms />} />
           <Route path="/reports" element={<AdminReports />} />
           <Route path="/users" element={<AdminUsers />} />
         </Routes>

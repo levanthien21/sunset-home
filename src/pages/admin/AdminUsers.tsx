@@ -109,17 +109,33 @@ export default function AdminUsers() {
                       </div>
                     </td>
                     <td className="p-5">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
-                        user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                        user.role === 'staff' ? 'bg-blue-100 text-blue-700' :
-                        'bg-gray-100 text-gray-600'
-                      }`}>
-                        {user.role === 'admin' ? 'Quản trị viên' : 
-                         user.role === 'staff' ? 'Nhân viên' : 'Khách hàng'}
-                      </span>
+                      <select
+                        value={user.role || 'customer'}
+                        onChange={async (e) => {
+                          const newRole = e.target.value;
+                          if (window.confirm(`Bạn có chắc muốn cấp quyền ${newRole} cho người dùng này?`)) {
+                            try {
+                              const { updateUserRole } = await import('../../utils/db');
+                              await updateUserRole(user.id, newRole);
+                              setUsers(users.map(u => u.id === user.id ? { ...u, role: newRole } : u));
+                            } catch (err) {
+                              alert('Lỗi cập nhật phân quyền!');
+                            }
+                          }
+                        }}
+                        className={`text-xs font-bold px-3 py-1.5 rounded-full border outline-none focus:ring-2 focus:ring-yellow-500 cursor-pointer ${
+                          user.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                          user.role === 'staff' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                          'bg-gray-50 text-gray-600 border-gray-200'
+                        }`}
+                      >
+                        <option value="customer" className="text-gray-900 font-medium">Khách hàng</option>
+                        <option value="staff" className="text-blue-900 font-medium">Lễ tân</option>
+                        <option value="admin" className="text-purple-900 font-medium">Quản lý</option>
+                      </select>
                     </td>
-                    <td className="p-5 text-gray-500 text-sm">
-                      <div className="flex items-center">
+                    <td className="p-5">
+                      <div className="flex items-center text-gray-500 text-sm">
                         <Calendar className="w-4 h-4 mr-2 text-gray-400" />
                         {new Date(user.created_at).toLocaleDateString('vi-VN')}
                       </div>

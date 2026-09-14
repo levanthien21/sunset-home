@@ -189,23 +189,33 @@ export const addRoom = async (roomData: any) => {
 };
 
 export const updateRoom = async (roomId: string, updateData: any) => {
-  if (!supabase) return;
-  try {
-    const { error } = await supabase.from('rooms').update(updateData).match({ id: roomId });
+  if (supabase) {
+    const { data, error } = await supabase.from('rooms').update(updateData).eq('id', roomId).select();
     if (error) throw error;
-  } catch (e) {
-    console.error("Lỗi cập nhật phòng:", e);
-    throw e;
+    return data;
   }
 };
 
 export const deleteRoom = async (roomId: string) => {
-  if (!supabase) return;
-  try {
-    const { error } = await supabase.from('rooms').delete().match({ id: roomId });
+  if (supabase) {
+    const { error } = await supabase.from('rooms').delete().eq('id', roomId);
     if (error) throw error;
-  } catch (e) {
-    console.error("Lỗi xóa phòng:", e);
-    throw e;
+    return true;
+  }
+};
+
+export const updateUserRole = async (userId: string, newRole: string) => {
+  if (supabase) {
+    const { data, error } = await supabase.from('profiles').update({ role: newRole }).eq('id', userId).select();
+    if (error) throw error;
+    return data;
+  }
+};
+
+export const updateBookingAddons = async (bookingId: string, addons: any[], newTotal: number) => {
+  if (supabase) {
+    const { data, error } = await supabase.from('bookings').update({ addons: addons, total: newTotal }).eq('id', bookingId).select();
+    if (error) throw error;
+    return data;
   }
 };

@@ -1,17 +1,18 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { LogOut, X, Plus, BedDouble, Coffee } from "lucide-react";
+const fs = require("fs");
+const code = `import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Home, LogOut, CheckCircle2, Clock, Search, LogIn, LogOut as CheckOutIcon, X, Plus, Trash2, Edit2, Shield, Calendar, BedDouble, Check, Coffee } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 function StaffDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [roomsList, setRoomsList] = useState<any[]>([]);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
   
   // Modals
   const [showAddModal, setShowAddModal] = useState(false);
-
+  const [showAddonsModal, setShowAddonsModal] = useState(false);
   
   const [manualForm, setManualForm] = useState({
     customerName: "",
@@ -36,7 +37,7 @@ function StaffDashboard() {
       ...r,
       combos: [
         ...(r.combos || []),
-        { id: "test-5k", name: "Gï¿½i Test (N?i b?)", price: 5000 }
+        { id: "test-5k", name: "Gói Test (N?i b?)", price: 5000 }
       ]
     }));
     setRoomsList(formattedRooms);
@@ -63,23 +64,23 @@ function StaffDashboard() {
       const { updateBookingStatus } = await import("../../utils/db");
       await updateBookingStatus(id, newStatus);
       if (newStatus === "checked_out_dirty") {
-        alert("Khï¿½ch dï¿½ Check-out. Phï¿½ng dang ch? d?n d?p!");
+        alert("Khách dã Check-out. Phòng dang ch? d?n d?p!");
       } else if (newStatus === "completed") {
-        alert("ï¿½ï¿½ d?n xong. Phï¿½ng s?n sï¿½ng dï¿½n khï¿½ch!");
+        alert("Ðã d?n xong. Phòng s?n sàng dón khách!");
       } else {
-        alert("C?p nh?t tr?ng thï¿½i thï¿½nh cï¿½ng!");
+        alert("C?p nh?t tr?ng thái thành công!");
       }
       setSelectedBooking(null);
       loadData();
     } catch (e) {
-      alert("L?i c?p nh?t tr?ng thï¿½i");
+      alert("L?i c?p nh?t tr?ng thái");
     }
   };
 
   const handleAddBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (manualForm.selectedComboIndex < 0) {
-      alert("Vui lï¿½ng ch?n Gï¿½i gi?!");
+      alert("Vui lòng ch?n Gói gi?!");
       return;
     }
     const selectedRoom = roomsList.find(r => r.name === manualForm.roomName);
@@ -91,7 +92,7 @@ function StaffDashboard() {
     const newBooking = {
       bookingId: "M" + Date.now().toString().slice(-6),
       roomName: manualForm.roomName,
-      customerName: manualForm.customerName || "Khï¿½ch vï¿½ng lai",
+      customerName: manualForm.customerName || "Khách vãng lai",
       phone: manualForm.phone,
       checkIn: manualForm.bookingDate + " " + manualForm.expectedTime,
       checkOut: checkOutStr,
@@ -104,7 +105,7 @@ function StaffDashboard() {
     try {
       const { addBooking } = await import("../../utils/db");
       await addBooking(newBooking);
-      alert("T?o don th? cï¿½ng thï¿½nh cï¿½ng!");
+      alert("T?o don th? công thành công!");
       setShowAddModal(false);
       loadData();
     } catch (err) {
@@ -125,7 +126,7 @@ function StaffDashboard() {
       setAddonForm({ name: "", price: 0 });
       loadData();
     } catch (err) {
-      alert("L?i thï¿½m ph? thu!");
+      alert("L?i thêm ph? thu!");
     }
   };
 
@@ -144,14 +145,14 @@ function StaffDashboard() {
     <div className="p-8 font-sans max-w-7xl mx-auto pb-24">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-serif text-gray-900">So d? Phï¿½ng</h1>
-          <p className="text-gray-500 mt-1">Qu?n lï¿½ tr?ng thï¿½i phï¿½ng th?i gian th?c (L? tï¿½n)</p>
+          <h1 className="text-3xl font-serif text-gray-900">So d? Phòng</h1>
+          <p className="text-gray-500 mt-1">Qu?n lý tr?ng thái phòng th?i gian th?c (L? tân)</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
           className="px-5 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center shadow-lg"
         >
-          <Plus className="w-5 h-5 mr-2" /> T?o ï¿½on Ch?m
+          <Plus className="w-5 h-5 mr-2" /> T?o Ðon Ch?m
         </button>
       </div>
 
@@ -160,10 +161,10 @@ function StaffDashboard() {
           <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div> Tr?ng
         </div>
         <div className="flex items-center text-sm font-bold text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
-          <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div> ï¿½ï¿½ ï¿½?t
+          <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div> Ðã Ð?t
         </div>
         <div className="flex items-center text-sm font-bold text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
-          <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div> Cï¿½ Khï¿½ch
+          <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div> Có Khách
         </div>
         <div className="flex items-center text-sm font-bold text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
           <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div> Ch? D?n
@@ -195,7 +196,7 @@ function StaffDashboard() {
                   setManualForm(prev => ({ ...prev, roomName: room.name }));
                   setShowAddModal(true);
                 } else if (status === "dirty") {
-                  if (window.confirm("Phï¿½ng " + room.name + " dï¿½ d?n d?p xong?")) {
+                  if (window.confirm("Phòng " + room.name + " dã d?n d?p xong?")) {
                     handleUpdateStatus(booking.id || booking.bookingId, "completed");
                   }
                 } else {
@@ -207,9 +208,9 @@ function StaffDashboard() {
               <BedDouble className={"w-10 h-10 mb-3 " + textColors[status as keyof typeof textColors]} />
               <h3 className="text-xl font-bold text-gray-900 mb-1">{room.name}</h3>
               <p className={"text-xs font-bold uppercase tracking-wider " + textColors[status as keyof typeof textColors]}>
-                {status === "available" ? "S?n sï¿½ng" : 
-                 status === "booked" ? "ï¿½ï¿½ d?t" :
-                 status === "occupied" ? "ï¿½ang ?" : "Ch? d?n"}
+                {status === "available" ? "S?n sàng" : 
+                 status === "booked" ? "Ðã d?t" :
+                 status === "occupied" ? "Ðang ?" : "Ch? d?n"}
               </p>
               {booking && status !== "dirty" && (
                 <div className="mt-3 text-[10px] bg-white/60 px-2 py-1 rounded-md font-mono font-bold text-gray-700 truncate max-w-full">
@@ -233,15 +234,15 @@ function StaffDashboard() {
             </div>
             
             <div className="p-6 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* C?t trï¿½i: Thï¿½ng tin */}
+              {/* C?t trái: Thông tin */}
               <div>
-                <h4 className="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider border-b pb-2">Thï¿½ng tin khï¿½ch</h4>
+                <h4 className="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider border-b pb-2">Thông tin khách</h4>
                 <div className="space-y-3 text-sm">
-                  <p><span className="text-gray-500 w-24 inline-block">Khï¿½ch hï¿½ng:</span> <span className="font-bold">{selectedBooking.customerName || "Khï¿½ch vï¿½ng lai"}</span></p>
-                  <p><span className="text-gray-500 w-24 inline-block">S? ï¿½T:</span> <span className="font-bold">{selectedBooking.phone || "Khï¿½ng cï¿½"}</span></p>
-                  <p><span className="text-gray-500 w-24 inline-block">Nh?n phï¿½ng:</span> <span className="font-bold text-blue-600">{selectedBooking.checkIn}</span></p>
-                  <p><span className="text-gray-500 w-24 inline-block">Gï¿½i (Tr?):</span> <span className="font-bold text-red-600">{selectedBooking.checkOut}</span></p>
-                  <p><span className="text-gray-500 w-24 inline-block">Thanh toï¿½n:</span> 
+                  <p><span className="text-gray-500 w-24 inline-block">Khách hàng:</span> <span className="font-bold">{selectedBooking.customerName || "Khách vãng lai"}</span></p>
+                  <p><span className="text-gray-500 w-24 inline-block">S? ÐT:</span> <span className="font-bold">{selectedBooking.phone || "Không có"}</span></p>
+                  <p><span className="text-gray-500 w-24 inline-block">Nh?n phòng:</span> <span className="font-bold text-blue-600">{selectedBooking.checkIn}</span></p>
+                  <p><span className="text-gray-500 w-24 inline-block">Gói (Tr?):</span> <span className="font-bold text-red-600">{selectedBooking.checkOut}</span></p>
+                  <p><span className="text-gray-500 w-24 inline-block">Thanh toán:</span> 
                     {selectedBooking.paymentMethod === "transfer" ? (
                       <span className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs font-bold ml-1">CHUY?N KHO?N</span>
                     ) : (
@@ -251,14 +252,14 @@ function StaffDashboard() {
                 </div>
 
                 <div className="mt-8">
-                  <h4 className="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider border-b pb-2">Thao tï¿½c</h4>
+                  <h4 className="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider border-b pb-2">Thao tác</h4>
                   <div className="flex flex-wrap gap-2">
                     {(selectedBooking.status === "pending" || selectedBooking.status === "approved" || selectedBooking.status === "paid") && (
                       <button 
                         onClick={() => handleUpdateStatus(selectedBooking.id || selectedBooking.bookingId, "checked_in")}
                         className="px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700"
                       >
-                        Khï¿½ch Check-in
+                        Khách Check-in
                       </button>
                     )}
                     {selectedBooking.status === "checked_in" && (
@@ -266,14 +267,14 @@ function StaffDashboard() {
                         onClick={() => handleUpdateStatus(selectedBooking.id || selectedBooking.bookingId, "checked_out_dirty")}
                         className="px-4 py-2 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-700"
                       >
-                        Khï¿½ch Check-out
+                        Khách Check-out
                       </button>
                     )}
                     <button 
                       onClick={() => handleUpdateStatus(selectedBooking.id || selectedBooking.bookingId, "cancelled")}
                       className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-bold rounded-lg hover:bg-gray-300"
                     >
-                      H?y ï¿½on
+                      H?y Ðon
                     </button>
                   </div>
                 </div>
@@ -293,7 +294,7 @@ function StaffDashboard() {
                     </div>
                   ))}
                   {(!selectedBooking.addons || selectedBooking.addons.length === 0) && (
-                    <div className="text-center text-gray-400 text-sm py-4 italic">Chua cï¿½ ph? thu</div>
+                    <div className="text-center text-gray-400 text-sm py-4 italic">Chua có ph? thu</div>
                   )}
                 </div>
 
@@ -302,7 +303,7 @@ function StaffDashboard() {
                     <input 
                       required
                       type="text"
-                      placeholder="Tï¿½n d?ch v? (VD: Nu?c su?i)"
+                      placeholder="Tên d?ch v? (VD: Nu?c su?i)"
                       value={addonForm.name}
                       onChange={e => setAddonForm({...addonForm, name: e.target.value})}
                       className="w-full p-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
@@ -311,13 +312,13 @@ function StaffDashboard() {
                       <input 
                         required
                         type="number"
-                        placeholder="Giï¿½ ti?n (VNï¿½)"
+                        placeholder="Giá ti?n (VNÐ)"
                         value={addonForm.price || ""}
                         onChange={e => setAddonForm({...addonForm, price: Number(e.target.value)})}
                         className="w-full p-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
                       />
                       <button type="submit" className="bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-yellow-700 flex-shrink-0">
-                        Thï¿½m
+                        Thêm
                       </button>
                     </div>
                   </form>
@@ -325,7 +326,7 @@ function StaffDashboard() {
 
                 <div className="border-t border-gray-200 pt-4 mt-auto">
                   <div className="flex justify-between items-center text-lg">
-                    <span className="font-bold text-gray-500 uppercase text-xs">T?ng thanh toï¿½n</span>
+                    <span className="font-bold text-gray-500 uppercase text-xs">T?ng thanh toán</span>
                     <span className="font-black text-red-600 text-2xl">{Number(selectedBooking.total).toLocaleString("vi-VN")}d</span>
                   </div>
                 </div>
@@ -340,7 +341,7 @@ function StaffDashboard() {
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-              <h3 className="text-xl font-serif font-bold text-gray-900">T?o ï¿½on Th? Cï¿½ng</h3>
+              <h3 className="text-xl font-serif font-bold text-gray-900">T?o Ðon Th? Công</h3>
               <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
                 <X className="w-6 h-6" />
               </button>
@@ -350,10 +351,10 @@ function StaffDashboard() {
               <form id="manual-booking-form" onSubmit={handleAddBooking} className="space-y-5">
                 <div className="grid grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Tï¿½n khï¿½ch hï¿½ng</label>
+                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Tên khách hàng</label>
                     <input 
                       type="text" 
-                      placeholder="Tï¿½y ch?n"
+                      placeholder="Tùy ch?n"
                       value={manualForm.customerName} 
                       onChange={e => setManualForm({...manualForm, customerName: e.target.value})} 
                       className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
@@ -363,7 +364,7 @@ function StaffDashboard() {
                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">S? di?n tho?i</label>
                     <input 
                       type="text" 
-                      placeholder="Tï¿½y ch?n"
+                      placeholder="Tùy ch?n"
                       value={manualForm.phone} 
                       onChange={e => setManualForm({...manualForm, phone: e.target.value})} 
                       className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
@@ -373,7 +374,7 @@ function StaffDashboard() {
 
                 <div className="grid grid-cols-3 gap-5">
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Phï¿½ng</label>
+                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Phòng</label>
                     <select 
                       required
                       value={manualForm.roomName} 
@@ -387,7 +388,7 @@ function StaffDashboard() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Ngï¿½y nh?n</label>
+                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Ngày nh?n</label>
                     <input 
                       required 
                       type="date" 
@@ -410,21 +411,21 @@ function StaffDashboard() {
 
                 <div className="grid grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Gï¿½i gi? (Combo)</label>
+                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Gói gi? (Combo)</label>
                     <select 
                       required
                       value={manualForm.selectedComboIndex} 
                       onChange={e => setManualForm({...manualForm, selectedComboIndex: Number(e.target.value)})} 
                       className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none bg-yellow-50"
                     >
-                      <option value={-1}>-- Ch?n Gï¿½i --</option>
+                      <option value={-1}>-- Ch?n Gói --</option>
                       {manualForm.roomName && roomsList.find(r => r.name === manualForm.roomName)?.combos?.map((c: any, idx: number) => (
                         <option key={idx} value={idx}>{c.name} - {c.price.toLocaleString("vi-VN")}d</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Gia h?n thï¿½m (Gi?)</label>
+                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Gia h?n thêm (Gi?)</label>
                     <input 
                       type="number" 
                       min="0"
@@ -436,26 +437,26 @@ function StaffDashboard() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Thanh toï¿½n</label>
+                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Thanh toán</label>
                   <select 
                     value={manualForm.paymentMethod} 
                     onChange={e => setManualForm({...manualForm, paymentMethod: e.target.value})} 
                     className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none"
                   >
-                    <option value="transfer">Khï¿½ch Chuy?n kho?n Tr?c ti?p / Ti?n m?t</option>
-                    <option value="qr">Chuy?n kho?n qua quï¿½t mï¿½ PayOS (Khï¿½ng khuy?n ngh? cho L? tï¿½n)</option>
+                    <option value="transfer">Khách Chuy?n kho?n Tr?c ti?p / Ti?n m?t</option>
+                    <option value="qr">Chuy?n kho?n qua quét mã PayOS (Không khuy?n ngh? cho L? tân)</option>
                   </select>
                 </div>
                 
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Tr?ng thï¿½i don</label>
+                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Tr?ng thái don</label>
                   <select 
                     value={manualForm.status} 
                     onChange={e => setManualForm({...manualForm, status: e.target.value})} 
                     className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none"
                   >
-                    <option value="approved">ï¿½ï¿½ Xï¿½c Nh?n (Chua Check-in)</option>
-                    <option value="checked_in">Check-in Ngay (Khï¿½ch dang ?)</option>
+                    <option value="approved">Ðã Xác Nh?n (Chua Check-in)</option>
+                    <option value="checked_in">Check-in Ngay (Khách dang ?)</option>
                   </select>
                 </div>
 
@@ -468,7 +469,7 @@ function StaffDashboard() {
               </div>
               <div className="flex gap-4">
                 <button onClick={() => setShowAddModal(false)} className="px-6 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300">H?y</button>
-                <button form="manual-booking-form" type="submit" className="px-6 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800">T?o ï¿½on</button>
+                <button form="manual-booking-form" type="submit" className="px-6 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800">T?o Ðon</button>
               </div>
             </div>
           </div>
@@ -490,11 +491,11 @@ export default function StaffApp() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9F8F6]">
-      {/* Navbar L? tï¿½n */}
+      {/* Navbar L? tân */}
       <div className="bg-gray-900 text-white p-4 flex justify-between items-center">
         <div className="flex items-center">
           <h2 className="text-xl font-serif tracking-widest uppercase ml-4">Sunset</h2>
-          <span className="ml-4 px-3 py-1 bg-yellow-600 rounded-full text-xs font-bold uppercase tracking-widest">L? tï¿½n</span>
+          <span className="ml-4 px-3 py-1 bg-yellow-600 rounded-full text-xs font-bold uppercase tracking-widest">L? tân</span>
         </div>
         <button 
           onClick={() => {
@@ -503,7 +504,7 @@ export default function StaffApp() {
           }}
           className="flex items-center text-sm font-bold text-gray-300 hover:text-white bg-white/10 px-4 py-2 rounded-lg"
         >
-          <LogOut className="w-4 h-4 mr-2" /> ï¿½ang xu?t
+          <LogOut className="w-4 h-4 mr-2" /> Ðang xu?t
         </button>
       </div>
 
@@ -515,3 +516,5 @@ export default function StaffApp() {
     </div>
   );
 }
+`;
+fs.writeFileSync("src/pages/staff/StaffApp.tsx", code);
