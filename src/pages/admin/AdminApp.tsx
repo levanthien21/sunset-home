@@ -1,4 +1,5 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../../utils/db';
 import { Home, Settings, LogOut, BarChart3, TrendingUp, Plus, Trash2, Edit2, X, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import AdminUsers from './AdminUsers';
@@ -484,7 +485,8 @@ export default function AdminApp() {
         </nav>
         <div className="p-6 border-t border-gray-800">
           <button 
-            onClick={() => {
+            onClick={async () => {
+              await supabase?.auth.signOut();
               localStorage.removeItem('auth_role');
               navigate('/login');
             }}

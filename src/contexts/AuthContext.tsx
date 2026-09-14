@@ -26,7 +26,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         const { data } = await supabase!.from('profiles').select('role').eq('id', currentUser.id).single();
         if (data?.role) {
-          localStorage.setItem('auth_role', data.role);
+          if (data.role === 'banned') {
+            await supabase!.auth.signOut();
+            localStorage.removeItem('auth_role');
+          } else {
+            localStorage.setItem('auth_role', data.role);
+          }
         }
       } catch (e) {
         console.error(e);

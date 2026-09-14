@@ -720,7 +720,7 @@ export default function StaffApp() {
   useEffect(() => {
     const role = localStorage.getItem("auth_role");
     if (role !== "staff" && role !== "admin") {
-      navigate("/portal");
+      navigate("/login");
     }
   }, [navigate]);
 
@@ -735,7 +735,7 @@ export default function StaffApp() {
         <button 
           onClick={() => {
             localStorage.removeItem("auth_role");
-            navigate("/portal");
+            navigate("/login");
           }}
           className="flex items-center text-sm font-bold text-gray-300 hover:text-white bg-white/10 px-4 py-2 rounded-lg"
         >

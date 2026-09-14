@@ -144,14 +144,14 @@ export default function AdminUsers() {
             <table className="w-full text-left">
               <thead className="bg-gray-50/50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500 font-bold">
                 <tr>
-                  <th className="p-5">Khách hàng</th>
+                  <th className="p-5">Người dùng</th>
                   <th className="p-5">Email</th>
                   <th className="p-5">Phân quyền</th>
                   <th className="p-5">Ngày tham gia</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {users.filter(u => activeTab === 'staff' ? (u.role === 'admin' || u.role === 'staff') : (u.role === 'customer' || !u.role)).map((user, i) => (
+                {users.filter(u => activeTab === 'staff' ? (u.role === 'admin' || u.role === 'staff' || u.role === 'banned') : (u.role === 'customer' || !u.role)).map((user, i) => (
                   <motion.tr 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -184,10 +184,12 @@ export default function AdminUsers() {
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
                         user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
                         user.role === 'staff' ? 'bg-blue-100 text-blue-700' :
+                        user.role === 'banned' ? 'bg-red-100 text-red-700' :
                         'bg-gray-100 text-gray-600'
                       }`}>
                         {user.role === 'admin' ? 'Quản trị viên' : 
-                         user.role === 'staff' ? 'Nhân viên' : 'Khách hàng'}
+                         user.role === 'staff' ? 'Nhân viên' : 
+                         user.role === 'banned' ? 'Đã khóa' : 'Khách hàng'}
                       </span>
                     </td>
                     <td className="p-5 text-gray-500 text-sm">
