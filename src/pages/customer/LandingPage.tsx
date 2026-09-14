@@ -40,26 +40,6 @@ export default function LandingPage() {
             0364.135.809
           </div>
         </a>
-
-        {/* Zalo */}
-        <a href="https://zalo.me/0364135809" target="_blank" rel="noreferrer" className="group flex items-center relative">
-          <div className="w-12 h-12 bg-[#0068FF] rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(0,104,255,0.4)] relative z-10 hover:scale-110 transition-transform">
-            <span className="font-bold text-[13px] tracking-wider">Zalo</span>
-          </div>
-          <div className="bg-white px-4 py-2 rounded-r-full shadow-md -ml-6 pl-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 absolute left-8 whitespace-nowrap text-[#0068FF] font-bold text-sm pointer-events-none">
-            Chat Zalo
-          </div>
-        </a>
-
-        {/* TikTok */}
-        <a href="https://www.tiktok.com/@sunset_homestay?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="group flex items-center relative">
-          <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(0,0,0,0.4)] relative z-10 hover:scale-110 transition-transform">
-            <svg viewBox="0 0 448 512" fill="currentColor" className="w-[18px] h-[18px]"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
-          </div>
-          <div className="bg-white px-4 py-2 rounded-r-full shadow-md -ml-6 pl-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 absolute left-8 whitespace-nowrap text-black font-bold text-sm pointer-events-none">
-            TikTok
-          </div>
-        </a>
       </div>
 
       {/* Scroll to Top */}
@@ -107,16 +87,16 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex items-center justify-center space-x-4 mb-8 md:mb-12 hidden"
+            className="flex items-center justify-center space-x-6 mb-8 md:mb-12"
           >
-            <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#1877F2] hover:border-[#1877F2] transition-all duration-300 shadow-lg">
-              <svg fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+            <a href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#1877F2] hover:border-[#1877F2] hover:scale-110 transition-all duration-300 shadow-lg" title="Facebook">
+              <svg fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
             </a>
-            <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#0068FF] hover:border-[#0068FF] transition-all duration-300 shadow-lg">
-              <span className="text-[10px] font-bold tracking-wider">Zalo</span>
+            <a href="https://zalo.me/0364135809" target="_blank" rel="noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#0068FF] hover:border-[#0068FF] hover:scale-110 transition-all duration-300 shadow-lg" title="Zalo">
+              <span className="text-xs font-bold tracking-wider">Zalo</span>
             </a>
-            <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-black hover:border-black transition-all duration-300 shadow-lg">
-              <svg viewBox="0 0 448 512" fill="currentColor" className="w-4 h-4"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+            <a href="https://www.tiktok.com/@sunset_homestay?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-black hover:border-black hover:scale-110 transition-all duration-300 shadow-lg" title="TikTok">
+              <svg viewBox="0 0 448 512" fill="currentColor" className="w-5 h-5"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
             </a>
           </motion.div>
 
