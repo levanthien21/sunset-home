@@ -50,8 +50,9 @@ function Navbar() {
               <span className="hidden md:inline font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</span>
             </Link>
           ) : (
-            <Link to="/login" className="text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors hidden md:block">
-              Đăng nhập
+            <Link to="/login" className="flex items-center text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
+              <UserIcon size={18} className="md:hidden" />
+              <span className="hidden md:block">Đăng nhập</span>
             </Link>
           )}
 
