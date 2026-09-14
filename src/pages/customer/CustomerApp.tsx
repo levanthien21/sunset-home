@@ -151,7 +151,7 @@ export default function CustomerApp() {
           <div className="flex space-x-6">
             <a href="#" className="hover:text-white transition-colors">Instagram</a>
             <a href="#" className="hover:text-white transition-colors">Facebook</a>
-            <a href="#" className="hover:text-white transition-colors">TikTok</a>
+            <a href="https://www.tiktok.com/@sunset_homestay?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">TikTok</a>
           </div>
         </div>
       </footer>
