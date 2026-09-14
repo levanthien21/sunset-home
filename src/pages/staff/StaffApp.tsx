@@ -254,9 +254,11 @@ function StaffDashboard() {
             const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
             let end = new Date(start.getTime());
             
-            if (b.checkOut.includes("2H") || b.checkOut.includes("2 giờ")) end = new Date(start.getTime() + (2 + extra) * 3600000);
-            else if (b.checkOut.includes("4H") || b.checkOut.includes("4 giờ")) end = new Date(start.getTime() + (4 + extra) * 3600000);
-            else return null;
+            let baseHours = 1;
+            const hourMatch = b.checkOut.match(/(\d+)\s*(H|giờ)/i);
+            if (hourMatch) baseHours = parseInt(hourMatch[1]);
+            end = b.end_time ? new Date(b.end_time) : new Date(start.getTime() + (baseHours + extra) * 3600000);
+            if (!end || isNaN(end.getTime())) return null;
 
             const now = new Date().getTime();
             const diffMins = Math.floor((end.getTime() - now) / 60000);
@@ -429,8 +431,10 @@ function StaffDashboard() {
                              const currentExtra = extraMatch ? parseInt(extraMatch[1]) : 0;
                              let currentEnd = new Date(currentStart.getTime());
                              
-                             if (selectedBooking.checkOut.includes("2H") || selectedBooking.checkOut.includes("2 giờ")) currentEnd = new Date(currentStart.getTime() + (2 + currentExtra) * 3600000);
-                             else if (selectedBooking.checkOut.includes("4H") || selectedBooking.checkOut.includes("4 giờ")) currentEnd = new Date(currentStart.getTime() + (4 + currentExtra) * 3600000);
+                             let baseHours = 1;
+                             const hourMatch = selectedBooking.checkOut.match(/(\d+)\s*(H|giờ)/i);
+                             if (hourMatch) baseHours = parseInt(hourMatch[1]);
+                             currentEnd = selectedBooking.end_time ? new Date(selectedBooking.end_time) : new Date(currentStart.getTime() + (baseHours + currentExtra) * 3600000);
                              
                              const newEndWithBuffer = new Date(currentEnd.getTime() + (hours * 3600000) + (30 * 60000));
                              const nextStart = new Date(nextBooking.checkIn.replace(" ", "T"));
