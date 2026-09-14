@@ -2,9 +2,11 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, X, ChevronRight, BedDouble, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function BookingPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [branch, setBranch] = useState<number | null>(null);
   const [room, setRoom] = useState<string | null>(null);
@@ -56,6 +58,14 @@ export default function BookingPage() {
     if (dateParam) {
       setBookingDate(dateParam);
     }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      if (!name) setName(user.user_metadata?.full_name || '');
+      if (!email) setEmail(user.email || '');
+    }
+  }, [user]);
     
     if (branchParam) {
       setBranch(parseInt(branchParam));
@@ -193,8 +203,8 @@ export default function BookingPage() {
         bookingType: 'full',
         status: 'pending_payment',
         date: new Date().toISOString(),
-        paymentMethod: 'qr'
-        // note: note // Cột note chưa có trên Supabase nên tạm thời bỏ đi để tránh lỗi 400
+        paymentMethod: 'qr',
+        user_id: user?.id || null
       };
       
       await addBooking(newBooking);

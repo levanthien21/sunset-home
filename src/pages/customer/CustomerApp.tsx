@@ -1,6 +1,9 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { User as UserIcon } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import ProfilePage from './ProfilePage';
 
 import LandingPage from './LandingPage';
 import BookingPage from './BookingPage';
@@ -8,6 +11,7 @@ import PoliciesPage from './PoliciesPage';
 
 function Navbar() {
   const location = useLocation();
+  const { user } = useAuth();
   const isHome = location.pathname === '/' || location.pathname === '';
   const [scrolled, setScrolled] = useState(false);
 
@@ -39,7 +43,18 @@ function Navbar() {
         </div>
 
         {/* Right - Action */}
-        <div className="flex-shrink-0 flex justify-end items-center">
+        <div className="flex-shrink-0 flex justify-end items-center space-x-4">
+          {user ? (
+            <Link to="/profile" className="flex items-center space-x-2 text-sm hover:text-yellow-500 transition-colors">
+              <UserIcon size={18} />
+              <span className="hidden md:inline font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</span>
+            </Link>
+          ) : (
+            <Link to="/login" className="text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors hidden md:block">
+              Đăng nhập
+            </Link>
+          )}
+
           <Link 
             to="/booking" 
             className={`px-5 py-2.5 md:px-8 md:py-3 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold rounded-full transition-all duration-300 border animate-[pulse_3s_infinite] hover:animate-none ${
@@ -79,6 +94,7 @@ export default function CustomerApp() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/booking" element={<BookingPage />} />
             <Route path="/policies" element={<PoliciesPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </AnimatePresence>
       </div>
