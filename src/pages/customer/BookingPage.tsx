@@ -231,10 +231,31 @@ export default function BookingPage() {
     }
   };
 
-  const isRoomAvailableToday = (roomName: string) => {
-    const today = new Date().toISOString().split('T')[0];
-    const bookingsToday = existingBookings.filter(b => b.roomName === roomName && b.checkIn?.startsWith(today) && b.status !== 'cancelled');
-    return bookingsToday.length < 3; 
+  const getBookedSlotsForRoom = (roomName: string, date: string) => {
+    return existingBookings
+      .filter(b => b.roomName === roomName && b.checkIn?.startsWith(date) && b.status !== 'cancelled')
+      .map(b => {
+        const timeStr = b.checkIn.split(' ')[1] || '';
+        let endStr = 'N/A';
+        const start = new Date(b.checkIn);
+        
+        const extraMatch = b.checkOut.match(/\(\+(\d+)h\)/);
+        const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
+        
+        if (b.checkOut.includes('2H') || b.checkOut.includes('2 giờ')) {
+          const end = new Date(start.getTime() + (2 + extra) * 60 * 60 * 1000);
+          endStr = end.toTimeString().substring(0, 5);
+        } else if (b.checkOut.includes('4H') || b.checkOut.includes('4 giờ')) {
+          const end = new Date(start.getTime() + (4 + extra) * 60 * 60 * 1000);
+          endStr = end.toTimeString().substring(0, 5);
+        } else if (b.checkOut.toLowerCase().includes('đêm')) {
+          endStr = '10:00 sáng hsau';
+        } else if (b.checkOut.toLowerCase().includes('ngày')) {
+          endStr = '12:00 trưa hsau';
+        }
+        
+        return `${timeStr} - ${endStr}`;
+      });
   };
 
   return (
@@ -341,7 +362,8 @@ export default function BookingPage() {
               ) : (
                 <div className="space-y-6">
                   {[...filteredRooms].sort((a, b) => a.name.localeCompare(b.name)).map(r => {
-                  const isAvailable = bookingDate ? true : isRoomAvailableToday(r.name);
+                  const bookedSlots = getBookedSlotsForRoom(r.name, bookingDate);
+                  const isAvailable = bookedSlots.length < 3; // Ví dụ: 3 slot là đầy
                   const isSelected = room === r.id;
                   
                   return (
@@ -365,7 +387,7 @@ export default function BookingPage() {
                           <div className="absolute top-2 left-2 md:top-3 md:left-3 z-10">
                             {isAvailable ? (
                               <span className="px-2 py-1 md:px-3 md:py-1.5 bg-green-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-md">
-                                {bookingDate ? 'Đang trống' : 'Hôm nay: Trống'}
+                                {bookingDate ? 'Còn phòng' : 'Hôm nay: Trống'}
                               </span>
                             ) : (
                               <span className="px-2 py-1 md:px-3 md:py-1.5 bg-red-500/90 text-white backdrop-blur-md text-[10px] uppercase tracking-wider font-bold rounded-full shadow-md">
@@ -428,6 +450,22 @@ export default function BookingPage() {
                                  <Check className="w-3 h-3 mr-1.5"/> Giữ chỗ thanh toán qua mã QR
                                </p>
                             </div>
+
+                            {/* Các khung giờ đã kín */}
+                            {bookedSlots.length > 0 && (
+                              <div className="mt-2 bg-amber-50 p-2.5 rounded-lg border border-amber-100">
+                                <p className="text-[11px] font-bold text-amber-800 mb-1 flex items-center">
+                                  <Clock className="w-3 h-3 mr-1.5" /> Khung giờ đã được đặt ngày {bookingDate.split('-').reverse().join('/')}:
+                                </p>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {bookedSlots.map((slot, idx) => (
+                                    <span key={idx} className="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-md font-medium">
+                                      {slot}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
 
                           {/* Khu vực Giá & Nút chọn (Gắn chặt dưới đáy) */}
