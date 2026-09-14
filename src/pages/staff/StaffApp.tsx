@@ -418,7 +418,7 @@ function StaffDashboard() {
                       />
                       <button 
                         onClick={async () => {
-                          const input = document.getElementById("extendHoursInput");
+                          const input = document.getElementById("extendHoursInput") as HTMLInputElement;
                           const hours = parseInt(input.value);
                           if (!hours || hours < 1) return alert("Vui lòng nhập số giờ hợp lệ");
                           
