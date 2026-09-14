@@ -164,7 +164,8 @@ export default function BookingPage() {
       );
 
       const parseBookingInterval = (checkInStr: string, checkOutStr: string) => {
-        const start = new Date(checkInStr);
+        const safeCheckInStr = checkInStr.replace(' ', 'T');
+        const start = new Date(safeCheckInStr);
         if (isNaN(start.getTime())) return { start: new Date(0), end: new Date(0) };
         const extraMatch = checkOutStr.match(/\(\+(\d+)h\)/);
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
@@ -263,7 +264,7 @@ export default function BookingPage() {
       .map(b => {
         const timeStr = b.checkIn.split(' ')[1] || '';
         let endStr = 'N/A';
-        const start = new Date(b.checkIn);
+        const start = new Date(b.checkIn.replace(' ', 'T'));
         
         const extraMatch = b.checkOut.match(/\(\+(\d+)h\)/);
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
