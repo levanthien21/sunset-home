@@ -11,17 +11,32 @@ function StaffDashboard() {
   
   const [showAddModal, setShowAddModal] = useState(false);
   const [roomsList, setRoomsList] = useState<any[]>([]);
-  const [newBooking, setNewBooking] = useState({
+  
+  const [manualForm, setManualForm] = useState({
     customerName: '',
     phone: '',
     roomName: '',
-    checkIn: '',
-    checkOut: '',
+    bookingDate: new Date().toLocaleDateString('en-CA'), // YYYY-MM-DD
+    expectedTime: '14:00',
+    selectedComboIndex: -1,
+    extraHours: 0,
     total: 0,
-    paymentMethod: 'cash',
+    paymentMethod: 'transfer',
     status: 'approved',
-    guests: 2
   });
+
+  // Calculate total whenever room/combo/extrahours change
+  useEffect(() => {
+    const selectedRoom = roomsList.find(r => r.name === manualForm.roomName);
+    if (selectedRoom && selectedRoom.combos && manualForm.selectedComboIndex >= 0) {
+      const combo = selectedRoom.combos[manualForm.selectedComboIndex];
+      if (combo) {
+        const comboPrice = combo.price || 0;
+        const extraHoursPrice = (manualForm.extraHours || 0) * (selectedRoom.extraHourPrice || 50000);
+        setManualForm(prev => ({ ...prev, total: comboPrice + extraHoursPrice }));
+      }
+    }
+  }, [manualForm.roomName, manualForm.selectedComboIndex, manualForm.extraHours, roomsList]);
 
   useEffect(() => {
     const load = async () => {
@@ -34,11 +49,39 @@ function StaffDashboard() {
 
   const handleAddBooking = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (manualForm.selectedComboIndex < 0) {
+      alert("Vui lòng chọn Gói giờ / Trả phòng!");
+      return;
+    }
+
+    const selectedRoom = roomsList.find(r => r.name === manualForm.roomName);
+    const combo = selectedRoom?.combos?.[manualForm.selectedComboIndex];
+    const comboName = combo?.name || "Khách tự đặt";
+    const checkOutStr = `${comboName}${manualForm.extraHours > 0 ? ` (+${manualForm.extraHours}h)` : ''}`;
+
     const { addBooking } = await import('../../utils/db');
     try {
+      const newBookingId = Date.now().toString();
       await addBooking({
-        ...newBooking,
-        id: Date.now().toString(),
+        bookingId: newBookingId,
+        id: newBookingId,
+        branchName: selectedRoom?.branch_id === 1 ? 'Chi nhánh 1 (Bến Lức)' : 'Chi nhánh 2 (Hậu Nghĩa)',
+        roomName: manualForm.roomName,
+        customerName: manualForm.customerName,
+        phone: manualForm.phone,
+        email: '',
+        checkIn: `${manualForm.bookingDate} ${manualForm.expectedTime}`,
+        checkOut: checkOutStr,
+        guests: 2,
+        addons: [],
+        total: manualForm.total,
+        amountPaid: manualForm.total,
+        bookingType: 'full',
+        status: manualForm.status,
+        date: new Date().toISOString(),
+        paymentMethod: manualForm.paymentMethod,
+        user_id: null,
         created_at: new Date().toISOString()
       });
       alert('Tạo đơn thủ công thành công!');
@@ -324,54 +367,71 @@ function StaffDashboard() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1">Tên khách hàng *</label>
-                    <input required type="text" value={newBooking.customerName} onChange={e => setNewBooking({...newBooking, customerName: e.target.value})} className="w-full border p-2 rounded-lg" placeholder="VD: Anh Dũng" />
+                    <input required type="text" value={manualForm.customerName} onChange={e => setManualForm({...manualForm, customerName: e.target.value})} className="w-full border p-2 rounded-lg" placeholder="VD: Anh Dũng" />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1">Số điện thoại *</label>
-                    <input required type="tel" value={newBooking.phone} onChange={e => setNewBooking({...newBooking, phone: e.target.value})} className="w-full border p-2 rounded-lg" placeholder="VD: 09..." />
+                    <input required type="tel" value={manualForm.phone} onChange={e => setManualForm({...manualForm, phone: e.target.value})} className="w-full border p-2 rounded-lg" placeholder="VD: 09..." />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1">Chọn Phòng *</label>
-                    <select required value={newBooking.roomName} onChange={e => setNewBooking({...newBooking, roomName: e.target.value})} className="w-full border p-2 rounded-lg">
+                    <select required value={manualForm.roomName} onChange={e => setManualForm({...manualForm, roomName: e.target.value, selectedComboIndex: -1, extraHours: 0})} className="w-full border p-2 rounded-lg">
                       <option value="">-- Chọn phòng --</option>
                       {roomsList.map(r => <option key={r.id} value={r.name}>{r.name}</option>)}
                     </select>
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1">Ngày nhận phòng *</label>
-                    <input required type="date" value={newBooking.checkIn} onChange={e => setNewBooking({...newBooking, checkIn: e.target.value})} className="w-full border p-2 rounded-lg" />
+                    <input required type="date" value={manualForm.bookingDate} onChange={e => setManualForm({...manualForm, bookingDate: e.target.value})} className="w-full border p-2 rounded-lg" />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Giờ Check-in *</label>
+                    <input required type="time" value={manualForm.expectedTime} onChange={e => setManualForm({...manualForm, expectedTime: e.target.value})} className="w-full border p-2 rounded-lg" />
+                  </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1">Gói giờ / Trả phòng *</label>
-                    <input required type="text" value={newBooking.checkOut} onChange={e => setNewBooking({...newBooking, checkOut: e.target.value})} className="w-full border p-2 rounded-lg" placeholder="VD: Gói 2H, Gói Đêm..." />
+                    <select required value={manualForm.selectedComboIndex} onChange={e => setManualForm({...manualForm, selectedComboIndex: Number(e.target.value)})} className="w-full border p-2 rounded-lg" disabled={!manualForm.roomName}>
+                      <option value={-1}>-- Chọn Gói --</option>
+                      {manualForm.roomName && roomsList.find(r => r.name === manualForm.roomName)?.combos?.map((c: any, idx: number) => (
+                        <option key={idx} value={idx}>{c.name} - {c.price.toLocaleString('vi-VN')}đ</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-1">Tổng tiền (VNĐ) *</label>
-                    <input required type="number" value={newBooking.total} onChange={e => setNewBooking({...newBooking, total: Number(e.target.value)})} className="w-full border p-2 rounded-lg" />
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Giờ phát sinh (nếu có)</label>
+                    <select value={manualForm.extraHours} onChange={e => setManualForm({...manualForm, extraHours: Number(e.target.value)})} className="w-full border p-2 rounded-lg" disabled={!manualForm.roomName}>
+                      {[0, 1, 2, 3, 4, 5].map(h => (
+                        <option key={h} value={h}>+{h} giờ</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4 border-t pt-4 mt-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1">Phương thức TT</label>
-                    <select value={newBooking.paymentMethod} onChange={e => setNewBooking({...newBooking, paymentMethod: e.target.value})} className="w-full border p-2 rounded-lg">
+                    <select value={manualForm.paymentMethod} onChange={e => setManualForm({...manualForm, paymentMethod: e.target.value})} className="w-full border p-2 rounded-lg">
                       <option value="cash">Tiền mặt</option>
                       <option value="transfer">Chuyển khoản trực tiếp</option>
                     </select>
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-1">Trạng thái tạo</label>
-                    <select value={newBooking.status} onChange={e => setNewBooking({...newBooking, status: e.target.value})} className="w-full border p-2 rounded-lg">
+                    <select value={manualForm.status} onChange={e => setManualForm({...manualForm, status: e.target.value})} className="w-full border p-2 rounded-lg">
                       <option value="approved">Đã duyệt (Chờ khách tới)</option>
                       <option value="checked_in">Khách đã vào phòng (Check-in)</option>
                       <option value="paid">Đã thanh toán (Chờ Check-in)</option>
                     </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1">Tổng tiền (VNĐ) *</label>
+                    <input required type="number" value={manualForm.total} onChange={e => setManualForm({...manualForm, total: Number(e.target.value)})} className="w-full border p-2 rounded-lg bg-gray-100 font-bold text-gray-900" />
                   </div>
                 </div>
               </form>
