@@ -297,7 +297,7 @@ export default function BookingPage() {
                   <div className="w-10 h-10 border-4 border-stone-200 border-t-yellow-600 rounded-full animate-spin"></div>
                 </div>
               ) : (
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-6 md:gap-8 md:grid-cols-2 max-w-4xl mx-auto">
                   {branches.map((b: any) => (
                     <button
                       key={b.id}
@@ -307,21 +307,26 @@ export default function BookingPage() {
                         setRoom(null);
                         setStep(2);
                       }}
-                      className={`text-left rounded-2xl overflow-hidden border-2 transition-all ${!b.has_rooms ? 'opacity-50 cursor-not-allowed' : 'hover:border-yellow-600 border-stone-200 bg-white'}`}
+                      className={`group relative text-left rounded-3xl overflow-hidden transition-all duration-500 w-full aspect-[4/5] md:aspect-square ${!b.has_rooms ? 'opacity-60 cursor-not-allowed grayscale' : 'hover:shadow-2xl hover:-translate-y-2'}`}
                     >
-                      <div className="h-40 relative">
-                        <img src={b.img} alt={b.name} className="w-full h-full object-cover" />
-                        {!b.has_rooms && (
-                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                            <span className="text-white font-semibold px-4 py-2 bg-stone-900/80 rounded-full">Sắp ra mắt</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-5">
-                        <h3 className="font-bold text-lg text-stone-900">{b.name}</h3>
-                        <p className="text-stone-500 text-sm flex items-start mt-2">
-                          <MapPin className="w-4 h-4 mr-1 shrink-0 mt-0.5" />
-                          {b.address}
+                      <img 
+                        src={b.img} 
+                        alt={b.name} 
+                        className={`w-full h-full object-cover transition-transform duration-1000 ${b.has_rooms ? 'group-hover:scale-110' : ''}`} 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10"></div>
+                      
+                      {!b.has_rooms && (
+                        <div className="absolute top-6 right-6">
+                          <span className="text-white text-xs font-bold uppercase tracking-widest px-4 py-2 bg-stone-900/80 backdrop-blur-md rounded-full shadow-lg border border-white/10">Sắp ra mắt</span>
+                        </div>
+                      )}
+                      
+                      <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 transform transition-transform duration-500 group-hover:translate-y-[-8px]">
+                        <h3 className="font-serif font-bold text-2xl md:text-3xl text-white mb-2 md:mb-3 drop-shadow-md">{b.name}</h3>
+                        <p className="text-white/80 text-sm md:text-base flex items-start">
+                          <MapPin className="w-5 h-5 mr-2 shrink-0 opacity-80" />
+                          <span className="leading-relaxed drop-shadow-sm">{b.address}</span>
                         </p>
                       </div>
                     </button>
