@@ -76,7 +76,7 @@ export default function LandingPage() {
             transition={{ duration: 1, delay: 0.5 }}
             className="text-xs sm:text-sm md:text-base text-white/90 max-w-lg mx-auto font-light leading-relaxed mb-10 md:mb-12 tracking-wide drop-shadow-md"
           >
-            Tận hưởng không gian lãng mạn, tinh tế được thiết kế dành riêng cho những kỷ niệm khó quên tại Sài Gòn.
+            Tận hưởng không gian lãng mạn, tinh tế được thiết kế dành riêng cho những kỷ niệm khó quên tại Tây Ninh.
           </motion.p>
           
           {/* Social Icons */}
