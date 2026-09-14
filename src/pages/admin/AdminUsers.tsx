@@ -10,6 +10,7 @@ export default function AdminUsers() {
   const [assignEmail, setAssignEmail] = useState('');
   const [assignRole, setAssignRole] = useState('staff');
   const [assignLoading, setAssignLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'staff' | 'customer'>('staff');
 
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function AdminUsers() {
     <div className="p-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-serif text-gray-900 mb-2">Quản lý Khách hàng</h1>
+          <h1 className="text-3xl font-serif text-gray-900 mb-2">Quản lý Tài khoản</h1>
           <p className="text-gray-500">Danh sách tài khoản đã đăng ký trên hệ thống.</p>
         </div>
         <div className="bg-white px-6 py-3 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-3">
@@ -112,7 +113,23 @@ export default function AdminUsers() {
         </div>
       )}
 
+      
+      <div className="flex space-x-4 mb-6 border-b border-gray-200">
+        <button 
+          onClick={() => setActiveTab('staff')}
+          className={`py-3 px-4 font-bold text-sm border-b-2 transition-colors ${activeTab === 'staff' ? 'border-yellow-600 text-yellow-700' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+        >
+          Nhân sự & Quản lý
+        </button>
+        <button 
+          onClick={() => setActiveTab('customer')}
+          className={`py-3 px-4 font-bold text-sm border-b-2 transition-colors ${activeTab === 'customer' ? 'border-yellow-600 text-yellow-700' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+        >
+          Khách hàng
+        </button>
+      </div>
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
         {loading ? (
           <div className="p-12 flex justify-center">
             <div className="w-8 h-8 border-4 border-gray-200 border-t-yellow-600 rounded-full animate-spin"></div>
@@ -133,7 +150,7 @@ export default function AdminUsers() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {users.map((user, i) => (
+                {users.filter(u => activeTab === 'staff' ? (u.role === 'admin' || u.role === 'staff') : (u.role === 'customer' || !u.role)).map((user, i) => (
                   <motion.tr 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
