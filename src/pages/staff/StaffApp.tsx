@@ -45,13 +45,9 @@ function StaffDashboard() {
 
   useEffect(() => {
     loadData();
-    const pollHolds = setInterval(async () => {
-      try {
-        const { getBookingHolds } = await import("../../utils/db");
-        const holdsData = await getBookingHolds();
-        setHolds(holdsData);
-      } catch (e) {}
-    }, 10000);
+    const pollHolds = setInterval(() => {
+      loadData();
+    }, 3000);
     return () => clearInterval(pollHolds);
   }, []);
 
