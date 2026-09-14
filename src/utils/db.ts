@@ -25,6 +25,38 @@ export const getBookings = async () => {
 };
 
 export const addBooking = async (booking: any) => {
+  // B? sung start_time v� end_time cho Database m?i
+  try {
+    if (booking.checkIn && booking.checkOut) {
+      const safeCheckInStr = booking.checkIn.replace(" ", "T");
+      const start = new Date(safeCheckInStr);
+      if (!isNaN(start.getTime())) {
+        booking.start_time = start.toISOString();
+        const extraMatch = booking.checkOut.match(/\(\+(\d+)h\)/);
+        const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
+        let end = new Date(start.getTime());
+        if (booking.checkOut.includes("2H") || booking.checkOut.includes("2 gi?")) {
+          end = new Date(start.getTime() + (2 + extra) * 3600000);
+        } else if (booking.checkOut.includes("4H") || booking.checkOut.includes("4 gi?")) {
+          end = new Date(start.getTime() + (4 + extra) * 3600000);
+        } else if (booking.checkOut.toLowerCase().includes("d�m")) {
+          end.setDate(end.getDate() + 1);
+          end.setHours(10, 0, 0, 0);
+          end = new Date(end.getTime() + extra * 3600000);
+        } else if (booking.checkOut.toLowerCase().includes("ng�y")) {
+          end.setDate(end.getDate() + 1);
+          end.setHours(12, 0, 0, 0);
+          end = new Date(end.getTime() + extra * 3600000);
+        } else {
+          end = new Date(start.getTime() + (1 + extra) * 3600000); // M?c d?nh 1h
+        }
+        booking.end_time = end.toISOString();
+      }
+    }
+  } catch(e) {
+    console.error("L?i t�nh to�n start_time/end_time:", e);
+  }
+
   if (supabase) {
     try {
       const { error } = await supabase
@@ -217,5 +249,24 @@ export const updateBookingAddons = async (bookingId: string, addons: any[], newT
     const { data, error } = await supabase.from('bookings').update({ addons: addons, total: newTotal }).eq('id', bookingId).select();
     if (error) throw error;
     return data;
+  }
+};
+
+
+export const checkAvailabilityWithRPC = async (roomName: string, startTime: string, endTime: string) => {
+  if (!supabase) return true;
+  try {
+    const { data, error } = await supabase.rpc("check_room_availability", {
+      p_room_name: roomName,
+      p_start_time: startTime,
+      p_end_time: endTime
+    });
+    if (error) {
+       console.error("RPC Error:", error);
+       return true; // fallback to true if error
+    }
+    return data;
+  } catch(e) {
+    return true;
   }
 };
