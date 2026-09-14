@@ -448,7 +448,7 @@ export default function AdminApp() {
   useEffect(() => {
     const role = localStorage.getItem('auth_role');
     if (role !== 'admin') {
-      navigate('/portal');
+      navigate('/login');
     }
   }, [navigate]);
 
@@ -486,7 +486,7 @@ export default function AdminApp() {
           <button 
             onClick={() => {
               localStorage.removeItem('auth_role');
-              navigate('/portal');
+              navigate('/login');
             }}
             className="flex items-center space-x-3 text-red-400 p-2 hover:bg-white/5 rounded-sm transition-colors w-full"
           >

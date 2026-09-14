@@ -20,12 +20,23 @@ export default function LoginPage() {
     }
     setLoading(true);
     setError('');
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
+        const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
+      setLoading(false);
       setError('Email hoặc mật khẩu không chính xác.');
     } else {
-      navigate('/');
+      if (authData.user) {
+        const { data: profile } = await supabase.from('profiles').select('role').eq('id', authData.user.id).single();
+        const role = profile?.role || 'customer';
+        localStorage.setItem('auth_role', role);
+        setLoading(false);
+        if (role === 'admin') navigate('/admin');
+        else if (role === 'staff') navigate('/staff');
+        else navigate('/');
+      } else {
+        setLoading(false);
+        navigate('/');
+      }
     }
   };
 
