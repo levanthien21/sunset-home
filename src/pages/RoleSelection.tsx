@@ -1,25 +1,43 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Lock, User, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { supabase } from '../utils/db';
 
 export default function RoleSelection() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const user = username.trim().toLowerCase();
-    if (user === 'admin' && password === 'admin123') {
-      localStorage.setItem('auth_role', 'admin');
-      navigate('/admin');
-    } else if (user === 'staff' && password === 'staff123') {
-      localStorage.setItem('auth_role', 'staff');
-      navigate('/staff');
-    } else {
+    if (!supabase) {
+      setError('Hệ thống chưa kết nối cơ sở dữ liệu.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    
+    const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password });
+    
+    if (error) {
+      setLoading(false);
       setError('Tài khoản hoặc mật khẩu không chính xác!');
+    } else if (authData.user) {
+      const { data: profile } = await supabase.from('profiles').select('role').eq('id', authData.user.id).single();
+      const role = profile?.role || 'customer';
+      
+      localStorage.setItem('auth_role', role);
+      setLoading(false);
+      
+      if (role === 'admin') navigate('/admin');
+      else if (role === 'staff') navigate('/staff');
+      else {
+        setError('Tài khoản này không có quyền truy cập nội bộ!');
+        await supabase.auth.signOut();
+      }
     }
   };
 
@@ -36,7 +54,7 @@ export default function RoleSelection() {
       >
         <div className="text-center mb-8">
           <h1 className="text-3xl font-serif text-stone-900 tracking-widest uppercase mb-2">Sunset</h1>
-          <p className="text-xs text-yellow-600 tracking-widest uppercase font-bold">Hệ thống quản lý</p>
+          <p className="text-xs text-yellow-600 tracking-widest uppercase font-bold">Cổng Đăng Nhập Nội Bộ</p>
         </div>
         
         <form onSubmit={handleLogin} className="space-y-5">
@@ -47,17 +65,17 @@ export default function RoleSelection() {
           )}
           
           <div>
-            <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Tên đăng nhập</label>
+            <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Email nội bộ</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-stone-400" />
+                <Mail className="h-5 w-5 text-stone-400" />
               </div>
               <input 
-                type="text" 
-                value={username}
-                onChange={e => setUsername(e.target.value)}
+                type="email" 
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 className="w-full pl-11 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all"
-                placeholder="Nhập admin hoặc staff..."
+                placeholder="Nhập email nhân sự..."
                 required
               />
             </div>
@@ -82,19 +100,16 @@ export default function RoleSelection() {
           
           <button 
             type="submit"
-            className="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-4 rounded-xl transition-all shadow-md mt-2 uppercase tracking-wider text-sm"
+            disabled={loading}
+            className="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-4 rounded-xl transition-all shadow-md mt-2 uppercase tracking-wider text-sm disabled:opacity-70 flex justify-center items-center"
           >
-            Đăng nhập
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              'Vào Hệ Thống'
+            )}
           </button>
         </form>
-        
-        <div className="mt-8 pt-6 border-t border-stone-100 text-center">
-          <p className="text-xs text-stone-400 font-medium">
-            Demo Accounts:<br/>
-            Admin: admin / admin123<br/>
-            Staff: staff / staff123
-          </p>
-        </div>
       </motion.div>
     </div>
   );
