@@ -62,12 +62,15 @@ export default function PayOSReturnPage() {
                 console.log("Đã gửi email thành công!");
               } else {
                 console.warn("Chưa cấu hình EmailJS, không thể gửi email.");
+                alert("Thanh toán thành công nhưng chưa thể gửi email do thiếu cấu hình EmailJS.");
               }
             } else {
               console.error("Không tìm thấy thông tin đơn phòng để gửi email:", orderId);
+              alert("Lỗi: Đã thanh toán thành công nhưng không tìm thấy đơn hàng trong hệ thống! Vui lòng liên hệ Admin.");
             }
           } catch (emailError) {
             console.error("Lỗi khi gửi email sau khi thanh toán thành công:", emailError);
+            alert("Lỗi khi gửi email. Chi tiết: " + emailError.message);
           }
         } else {
           // Giao dịch thất bại

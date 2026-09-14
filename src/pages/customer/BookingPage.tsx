@@ -694,7 +694,7 @@ export default function BookingPage() {
                       {isProcessing ? (
                         <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       ) : (
-                        "Thanh toán qua PayOS"
+                        "Thanh toán qua PayOS (v2.1)"
                       )}
                     </button>
                     {(!isStep2Valid || !isStep3Valid) && (
