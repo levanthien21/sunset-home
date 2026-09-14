@@ -30,15 +30,35 @@ export default function LandingPage() {
       className="bg-[#F9F8F6] relative"
     >
       {/* Floating Hotline Icons */}
-      <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-4">
-        <a href="tel:0987654321" className="w-12 h-12 bg-[#B8860B] rounded-full flex items-center justify-center text-white shadow-[0_0_15px_rgba(184,134,11,0.5)] hover:scale-110 hover:bg-[#a07409] transition-transform flex-shrink-0 animate-bounce">
-          <PhoneCall className="w-5 h-5" />
+      <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-3 group/widget">
+        {/* Phone */}
+        <a href="tel:0364135809" className="group flex items-center relative">
+          <div className="w-12 h-12 bg-[#B8860B] rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(184,134,11,0.4)] relative z-10 hover:scale-110 transition-transform">
+            <PhoneCall className="w-5 h-5 animate-pulse" />
+          </div>
+          <div className="bg-white px-4 py-2 rounded-r-full shadow-md -ml-6 pl-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 absolute left-8 whitespace-nowrap text-[#B8860B] font-bold text-sm pointer-events-none">
+            0364.135.809
+          </div>
         </a>
-        <a href="https://zalo.me/0987654321" target="_blank" rel="noreferrer" className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#0068FF] shadow-[0_0_15px_rgba(0,104,255,0.4)] hover:scale-110 transition-transform flex-shrink-0 font-bold text-[13px]">
-          Zalo
+
+        {/* Zalo */}
+        <a href="https://zalo.me/0364135809" target="_blank" rel="noreferrer" className="group flex items-center relative">
+          <div className="w-12 h-12 bg-[#0068FF] rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(0,104,255,0.4)] relative z-10 hover:scale-110 transition-transform">
+            <span className="font-bold text-[13px] tracking-wider">Zalo</span>
+          </div>
+          <div className="bg-white px-4 py-2 rounded-r-full shadow-md -ml-6 pl-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 absolute left-8 whitespace-nowrap text-[#0068FF] font-bold text-sm pointer-events-none">
+            Chat Zalo
+          </div>
         </a>
-        <a href="https://www.tiktok.com/@sunset_homestay?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:scale-110 hover:bg-stone-900 transition-transform flex-shrink-0">
-          <svg viewBox="0 0 448 512" fill="currentColor" className="w-5 h-5"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+
+        {/* TikTok */}
+        <a href="https://www.tiktok.com/@sunset_homestay?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="group flex items-center relative">
+          <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(0,0,0,0.4)] relative z-10 hover:scale-110 transition-transform">
+            <svg viewBox="0 0 448 512" fill="currentColor" className="w-[18px] h-[18px]"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+          </div>
+          <div className="bg-white px-4 py-2 rounded-r-full shadow-md -ml-6 pl-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 absolute left-8 whitespace-nowrap text-black font-bold text-sm pointer-events-none">
+            TikTok
+          </div>
         </a>
       </div>
 

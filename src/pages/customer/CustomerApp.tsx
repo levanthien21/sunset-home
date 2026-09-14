@@ -130,7 +130,7 @@ export default function CustomerApp() {
             <ul className="space-y-3 text-white/70 text-xs md:text-sm font-light">
               <li className="flex items-start">
                 <span className="w-16 flex-shrink-0 font-medium text-white/40">Hotline:</span>
-                <a href="tel:1900xxxx" className="hover:text-[#B8860B] transition-colors font-medium">1900 xxxx</a>
+                <a href="tel:0364135809" className="hover:text-[#B8860B] transition-colors font-medium">0364.135.809</a>
               </li>
               <li className="flex items-start">
                 <span className="w-16 flex-shrink-0 font-medium text-white/40">Email:</span>
@@ -138,7 +138,7 @@ export default function CustomerApp() {
               </li>
               <li className="flex items-start">
                 <span className="w-16 flex-shrink-0 font-medium text-white/40">Zalo:</span>
-                <a href="#" className="hover:text-[#B8860B] transition-colors">Zalo Official</a>
+                <a href="https://zalo.me/0364135809" target="_blank" rel="noreferrer" className="hover:text-[#B8860B] transition-colors">Zalo Official</a>
               </li>
             </ul>
           </div>
