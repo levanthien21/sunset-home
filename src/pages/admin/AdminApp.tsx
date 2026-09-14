@@ -1,6 +1,8 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { Home, MapPin, Settings, LogOut, BarChart3, TrendingUp, Plus, Trash2, Edit2, X } from 'lucide-react';
+import { Home, Settings, LogOut, BarChart3, TrendingUp, Plus, Trash2, Edit2, X, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import AdminUsers from './AdminUsers';
+import AdminReports from './AdminReports';
 
 function AdminDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -457,17 +459,21 @@ export default function AdminApp() {
           <p className="text-xs text-yellow-500 tracking-widest uppercase mt-1">Admin Portal</p>
         </div>
         <nav className="flex-1 px-4 space-y-2 mt-8">
-          <Link to="/admin" className="flex items-center space-x-3 p-3 bg-white/10 rounded-sm text-white">
+          <Link to="/admin" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
             <Home size={18} />
             <span className="text-sm font-medium tracking-wide">Tổng quan</span>
           </Link>
-          <a href="#" className="flex items-center space-x-3 p-3 hover:bg-white/5 rounded-sm text-gray-400 transition-colors">
-            <MapPin size={18} />
-            <span className="text-sm font-medium tracking-wide">Cơ sở & Phòng</span>
-          </a>
-          <a href="#" className="flex items-center space-x-3 p-3 hover:bg-white/5 rounded-sm text-gray-400 transition-colors">
+          <Link to="/admin/reports" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
+            <BarChart3 size={18} />
+            <span className="text-sm font-medium tracking-wide">Báo cáo</span>
+          </Link>
+          <Link to="/admin/users" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
+            <Users size={18} />
+            <span className="text-sm font-medium tracking-wide">Khách hàng</span>
+          </Link>
+          <a href="#" className="flex items-center space-x-3 p-3 hover:bg-white/5 rounded-sm text-gray-500 transition-colors cursor-not-allowed" title="Tính năng đang phát triển">
             <Settings size={18} />
-            <span className="text-sm font-medium tracking-wide">Cài đặt</span>
+            <span className="text-sm font-medium tracking-wide">Cài đặt (Sớm ra mắt)</span>
           </a>
         </nav>
         <div className="p-6 border-t border-gray-800">
@@ -488,6 +494,8 @@ export default function AdminApp() {
       <div className="flex-1 overflow-auto">
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
+          <Route path="/reports" element={<AdminReports />} />
+          <Route path="/users" element={<AdminUsers />} />
         </Routes>
       </div>
     </div>
