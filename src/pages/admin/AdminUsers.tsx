@@ -78,6 +78,7 @@ export default function AdminUsers() {
             <option value="staff">Lễ tân</option>
             <option value="admin">Quản lý (Admin)</option>
             <option value="customer">Khách hàng</option>
+            <option value="banned">Khóa (Banned)</option>
           </select>
           <button 
             disabled={assignLoading || !assignEmail}
