@@ -47,7 +47,7 @@ export default function AdminBookings() {
   });
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <div className="mb-8 flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-serif text-gray-900 mb-2">Quản lý Đơn đặt phòng</h1>

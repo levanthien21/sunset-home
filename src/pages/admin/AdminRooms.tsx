@@ -38,7 +38,7 @@ export default function AdminRooms() {
   };
 
   return (
-    <div className="p-8 font-sans max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 font-sans max-w-6xl mx-auto">
       <div className="flex justify-between items-end mb-8">
         <div>
           <h1 className="text-3xl font-serif text-gray-900 mb-2">Quản lý Phòng & Giá</h1>

@@ -453,38 +453,32 @@ export default function AdminApp() {
     }
   }, [navigate]);
 
+  const navItems = [
+    { to: '/admin', icon: <Home size={20} />, label: 'Tổng quan' },
+    { to: '/admin/bookings', icon: <Settings size={20} />, label: 'Quản lý Đơn' },
+    { to: '/admin/rooms', icon: <Edit2 size={20} />, label: 'Phòng & Giá' },
+    { to: '/admin/reports', icon: <BarChart3 size={20} />, label: 'Báo cáo' },
+    { to: '/admin/users', icon: <Users size={20} />, label: 'Tài khoản' },
+  ];
+
   return (
     <div className="flex h-screen bg-[#F9F8F6] font-sans">
-      {/* Sidebar */}
-      <div className="w-64 bg-gray-900 text-white flex flex-col">
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex w-64 bg-gray-900 text-white flex-col flex-shrink-0">
         <div className="p-8 border-b border-gray-800">
           <h2 className="text-2xl font-serif text-white tracking-widest uppercase">Sunset</h2>
           <p className="text-xs text-yellow-500 tracking-widest uppercase mt-1">Admin Portal</p>
         </div>
         <nav className="flex-1 px-4 space-y-2 mt-8">
-          <Link to="/admin" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
-            <Home size={18} />
-            <span className="text-sm font-medium tracking-wide">Tổng quan</span>
-          </Link>
-          <Link to="/admin/bookings" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
-            <Settings size={18} />
-            <span className="text-sm font-medium tracking-wide">Quản lý Đơn</span>
-          </Link>
-          <Link to="/admin/rooms" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
-            <Edit2 size={18} />
-            <span className="text-sm font-medium tracking-wide">Phòng & Giá</span>
-          </Link>
-          <Link to="/admin/reports" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
-            <BarChart3 size={18} />
-            <span className="text-sm font-medium tracking-wide">Báo cáo</span>
-          </Link>
-          <Link to="/admin/users" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
-            <Users size={18} />
-            <span className="text-sm font-medium tracking-wide">Tài khoản</span>
-          </Link>
+          {navItems.map(item => (
+            <Link key={item.to} to={item.to} className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
+              {item.icon}
+              <span className="text-sm font-medium tracking-wide">{item.label}</span>
+            </Link>
+          ))}
         </nav>
         <div className="p-6 border-t border-gray-800">
-          <button 
+          <button
             onClick={async () => {
               await supabase?.auth.signOut();
               localStorage.removeItem('auth_role');
@@ -498,15 +492,49 @@ export default function AdminApp() {
         </div>
       </div>
 
+      {/* Mobile Header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-gray-900 text-white px-4 py-3 flex items-center justify-between shadow-lg">
+        <div>
+          <h2 className="text-lg font-serif text-white tracking-widest uppercase">Sunset</h2>
+          <p className="text-[10px] text-yellow-500 tracking-widest uppercase">Admin Portal</p>
+        </div>
+        <button
+          onClick={async () => {
+            await supabase?.auth.signOut();
+            localStorage.removeItem('auth_role');
+            navigate('/login');
+          }}
+          className="flex items-center text-red-400 bg-white/10 px-3 py-1.5 rounded-lg text-xs font-bold"
+        >
+          <LogOut size={14} className="mr-1" /> Xuất
+        </button>
+      </div>
+
       {/* Content */}
-      <div className="flex-1 overflow-auto">
-        <Routes>
-          <Route path="/" element={<AdminDashboard />} />
-          <Route path="/bookings" element={<AdminBookings />} />
-          <Route path="/rooms" element={<AdminRooms />} />
-          <Route path="/reports" element={<AdminReports />} />
-          <Route path="/users" element={<AdminUsers />} />
-        </Routes>
+      <div className="flex-1 overflow-auto md:overflow-auto pt-0 md:pt-0">
+        <div className="pt-14 md:pt-0 pb-20 md:pb-0 h-full overflow-auto">
+          <Routes>
+            <Route path="/" element={<AdminDashboard />} />
+            <Route path="/bookings" element={<AdminBookings />} />
+            <Route path="/rooms" element={<AdminRooms />} />
+            <Route path="/reports" element={<AdminReports />} />
+            <Route path="/users" element={<AdminUsers />} />
+          </Routes>
+        </div>
+      </div>
+
+      {/* Mobile Bottom Nav */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-gray-900 border-t border-gray-800 flex">
+        {navItems.map(item => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className="flex-1 flex flex-col items-center justify-center py-2 text-gray-400 hover:text-yellow-500 transition-colors"
+          >
+            <div className="mb-1">{item.icon}</div>
+            <span className="text-[9px] font-bold uppercase tracking-wider leading-none text-center">{item.label.split(' ')[0]}</span>
+          </Link>
+        ))}
       </div>
     </div>
   );

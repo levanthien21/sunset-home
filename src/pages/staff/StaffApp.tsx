@@ -183,8 +183,8 @@ function StaffDashboard() {
   };
 
   return (
-    <div className="p-8 font-sans max-w-7xl mx-auto pb-24">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div className="p-3 md:p-8 font-sans max-w-7xl mx-auto pb-24">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-3">
         <div>
           <h1 className="text-3xl font-serif text-gray-900">Sơ đồ Phòng & Khung giờ</h1>
           <p className="text-gray-500 mt-1">Quản lý trạng thái thực và lịch đặt phòng theo giờ (Lễ tân)</p>
@@ -319,7 +319,7 @@ function StaffDashboard() {
       </div>
 
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5 mb-8">
         {roomsList.map(room => {
           const { status, booking } = getRoomRealtimeStatus(room.name);
           const slots = getBookedSlotsForRoom(room.name, selectedDate);
@@ -356,10 +356,10 @@ function StaffDashboard() {
                   setSelectedBooking(booking);
                 }
               }}
-              className={`relative rounded-3xl border-2 p-5 cursor-pointer transition-all hover:shadow-lg flex flex-col ${currentStyle.wrapper}`}
+              className={`relative rounded-3xl border-2 p-3 md:p-5 cursor-pointer transition-all hover:shadow-lg flex flex-col ${currentStyle.wrapper}`}
             >
               <div className="flex justify-between items-start mb-4">
-                <h3 className={`text-2xl font-black font-serif ${currentStyle.header}`}>{room.name}</h3>
+                <h3 className={`text-lg md:text-2xl font-black font-serif ${currentStyle.header}`}>{room.name}</h3>
                 <div className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${currentStyle.badge}`}>
                   {status === "available" ? "🟢 TRỐNG" : status === "occupied" ? "🔴 ĐANG Ở" : status === "dirty" ? "🟡 CHỜ DỌN" : status === "maintenance" ? "⚫ BẢO TRÌ" : "🟣 KHÁCH ĐANG CHỌN"}
                 </div>
@@ -726,20 +726,20 @@ export default function StaffApp() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9F8F6]">
-      {/* Navbar Lễ tân */}
-      <div className="bg-gray-900 text-white p-4 flex justify-between items-center">
+      {/* Navbar */}
+      <div className="bg-gray-900 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-30 shadow-lg">
         <div className="flex items-center">
-          <h2 className="text-xl font-serif tracking-widest uppercase ml-4">Sunset</h2>
-          <span className="ml-4 px-3 py-1 bg-yellow-600 rounded-full text-xs font-bold uppercase tracking-widest">Lễ tân</span>
+          <h2 className="text-lg font-serif tracking-widest uppercase">Sunset</h2>
+          <span className="ml-3 px-2 py-0.5 bg-yellow-600 rounded-full text-[10px] font-bold uppercase tracking-widest">Lễ tân</span>
         </div>
-        <button 
+        <button
           onClick={() => {
             localStorage.removeItem("auth_role");
             navigate("/login");
           }}
-          className="flex items-center text-sm font-bold text-gray-300 hover:text-white bg-white/10 px-4 py-2 rounded-lg"
+          className="flex items-center text-xs font-bold text-gray-300 hover:text-white bg-white/10 px-3 py-1.5 rounded-lg"
         >
-          <LogOut className="w-4 h-4 mr-2" /> Đăng xuất
+          <LogOut className="w-3.5 h-3.5 mr-1.5" /> Đăng xuất
         </button>
       </div>
 

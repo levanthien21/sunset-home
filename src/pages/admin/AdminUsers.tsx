@@ -41,7 +41,7 @@ export default function AdminUsers() {
   }, []);
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-serif text-gray-900 mb-2">Quản lý Tài khoản</h1>
@@ -140,8 +140,8 @@ export default function AdminUsers() {
             Chưa có người dùng nào đăng ký tài khoản.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
+          <div className="overflow-x-auto md:overflow-x-visible">
+            <table className="w-full min-w-[600px] text-left">
               <thead className="bg-gray-50/50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500 font-bold">
                 <tr>
                   <th className="p-5">Người dùng</th>
