@@ -1,11 +1,13 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { Home, LogOut, CheckCircle2, Clock, Search, LogIn, LogOut as CheckOutIcon } from 'lucide-react';
+import { Home, LogOut, CheckCircle2, Clock, Search, LogIn, LogOut as CheckOutIcon, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 function StaffDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -145,11 +147,17 @@ function StaffDashboard() {
                       </span>
                     )}
                   </td>
-                  <td className="p-4 text-right">
+                  <td className="p-4 text-right flex items-center justify-end space-x-2">
+                    <button 
+                      onClick={() => setSelectedBooking(b)}
+                      className="text-xs bg-stone-100 text-stone-700 px-3 py-2 rounded-sm hover:bg-stone-200 font-bold uppercase tracking-wider transition-colors"
+                    >
+                      Chi tiết
+                    </button>
                     {(b.status === 'pending' || b.status === 'pending_payment') && (
                       <button 
                         onClick={() => handleUpdateStatus(b.id || b.bookingId, 'approved')}
-                        className="text-xs bg-stone-900 text-white px-4 py-2 rounded-sm hover:bg-stone-800 font-bold uppercase tracking-wider transition-colors mr-2"
+                        className="text-xs bg-stone-900 text-white px-3 py-2 rounded-sm hover:bg-stone-800 font-bold uppercase tracking-wider transition-colors"
                       >
                         Duyệt
                       </button>
@@ -158,7 +166,7 @@ function StaffDashboard() {
                     {(b.status === 'approved' || b.status === 'paid') && (
                       <button 
                         onClick={() => handleUpdateStatus(b.id || b.bookingId, 'checked_in')}
-                        className="text-xs bg-blue-600 text-white px-4 py-2 rounded-sm hover:bg-blue-700 font-bold uppercase tracking-wider transition-colors flex items-center inline-flex ml-auto"
+                        className="text-xs bg-blue-600 text-white px-3 py-2 rounded-sm hover:bg-blue-700 font-bold uppercase tracking-wider transition-colors flex items-center inline-flex"
                       >
                         <LogIn className="w-3 h-3 mr-1" /> Check-in
                       </button>
@@ -167,7 +175,7 @@ function StaffDashboard() {
                     {b.status === 'checked_in' && (
                       <button 
                         onClick={() => handleUpdateStatus(b.id || b.bookingId, 'checked_out')}
-                        className="text-xs bg-gray-800 text-white px-4 py-2 rounded-sm hover:bg-gray-900 font-bold uppercase tracking-wider transition-colors flex items-center inline-flex ml-auto"
+                        className="text-xs bg-gray-800 text-white px-3 py-2 rounded-sm hover:bg-gray-900 font-bold uppercase tracking-wider transition-colors flex items-center inline-flex"
                       >
                         <CheckOutIcon className="w-3 h-3 mr-1" /> Check-out
                       </button>
@@ -179,6 +187,78 @@ function StaffDashboard() {
           </table>
         )}
       </div>
+
+      {/* Booking Details Modal */}
+      {selectedBooking && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden"
+          >
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+              <h3 className="text-xl font-serif font-bold text-gray-900">Chi tiết Đơn đặt phòng</h3>
+              <button onClick={() => setSelectedBooking(null)} className="text-gray-400 hover:text-gray-600">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Khách hàng</h4>
+                  <p className="font-medium text-gray-900">{selectedBooking.customerName}</p>
+                  <p className="text-gray-600 text-sm mt-1">{selectedBooking.phone}</p>
+                  <p className="text-gray-600 text-sm">{selectedBooking.email}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Thông tin phòng</h4>
+                  <p className="font-medium text-gray-900">{selectedBooking.roomName}</p>
+                  <p className="text-gray-600 text-sm mt-1">Check-in: {selectedBooking.checkIn}</p>
+                  <p className="text-gray-600 text-sm">Gói: {selectedBooking.checkOut}</p>
+                  <p className="text-gray-600 text-sm">Số lượng khách: {selectedBooking.guests}</p>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-100 pt-6">
+                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Tài chính</h4>
+                <div className="bg-gray-50 p-4 rounded-lg flex justify-between items-center">
+                  <div>
+                    <p className="text-sm text-gray-600">Tổng thanh toán</p>
+                    <p className="text-2xl font-bold text-gray-900">{selectedBooking.total?.toLocaleString('vi-VN')} đ</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600">Phương thức</p>
+                    <p className="font-medium text-gray-900">{selectedBooking.paymentMethod === 'qr' ? 'Chuyển khoản (PayOS)' : 'Tiền mặt'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end">
+              {selectedBooking.status !== 'cancelled' && (
+                <button 
+                  onClick={() => {
+                    if (window.confirm('Bạn có chắc chắn muốn hủy đơn này?')) {
+                      handleUpdateStatus(selectedBooking.id || selectedBooking.bookingId, 'cancelled');
+                      setSelectedBooking(null);
+                    }
+                  }}
+                  className="px-4 py-2 bg-red-100 text-red-600 font-bold rounded-lg mr-4 hover:bg-red-200"
+                >
+                  Hủy đơn
+                </button>
+              )}
+              <button 
+                onClick={() => setSelectedBooking(null)}
+                className="px-6 py-2 bg-gray-900 text-white font-bold rounded-lg hover:bg-gray-800"
+              >
+                Đóng
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

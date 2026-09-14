@@ -3,6 +3,7 @@ import { Home, Settings, LogOut, BarChart3, TrendingUp, Plus, Trash2, Edit2, X, 
 import { useState, useEffect } from 'react';
 import AdminUsers from './AdminUsers';
 import AdminReports from './AdminReports';
+import AdminBookings from './AdminBookings';
 
 function AdminDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -463,6 +464,10 @@ export default function AdminApp() {
             <Home size={18} />
             <span className="text-sm font-medium tracking-wide">Tổng quan</span>
           </Link>
+          <Link to="/admin/bookings" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
+            <Settings size={18} />
+            <span className="text-sm font-medium tracking-wide">Quản lý Đơn</span>
+          </Link>
           <Link to="/admin/reports" className="flex items-center space-x-3 p-3 hover:bg-white/10 rounded-sm text-gray-300 transition-colors">
             <BarChart3 size={18} />
             <span className="text-sm font-medium tracking-wide">Báo cáo</span>
@@ -471,10 +476,6 @@ export default function AdminApp() {
             <Users size={18} />
             <span className="text-sm font-medium tracking-wide">Khách hàng</span>
           </Link>
-          <a href="#" className="flex items-center space-x-3 p-3 hover:bg-white/5 rounded-sm text-gray-500 transition-colors cursor-not-allowed" title="Tính năng đang phát triển">
-            <Settings size={18} />
-            <span className="text-sm font-medium tracking-wide">Cài đặt (Sớm ra mắt)</span>
-          </a>
         </nav>
         <div className="p-6 border-t border-gray-800">
           <button 
@@ -494,6 +495,7 @@ export default function AdminApp() {
       <div className="flex-1 overflow-auto">
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
+          <Route path="/bookings" element={<AdminBookings />} />
           <Route path="/reports" element={<AdminReports />} />
           <Route path="/users" element={<AdminUsers />} />
         </Routes>
