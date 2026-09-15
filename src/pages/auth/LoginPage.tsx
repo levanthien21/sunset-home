@@ -10,7 +10,30 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
+
+  
+  const handleResetPassword = async () => {
+    if (!email) {
+      setError('Vui lòng nhập email để khôi phục mật khẩu.');
+      return;
+    }
+    if (!supabase) return;
+    setIsResetting(true);
+    setError('');
+    setResetMessage('');
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/reset-password',
+    });
+    setIsResetting(false);
+    if (error) {
+      setError(error.message);
+    } else {
+      setResetMessage('Vui lòng kiểm tra email của bạn để đặt lại mật khẩu.');
+    }
+  };
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +46,7 @@ export default function LoginPage() {
         const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       setLoading(false);
-      setError('Email hoặc mật khẩu không chính xác.');
+      setError('Email hoặc mật khẩu không chính xác. Nếu bạn tạo tài khoản bằng Google, vui lòng Đăng nhập bằng Google hoặc bấm Quên mật khẩu.');
     } else {
       if (authData.user) {
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', authData.user.id).single();
@@ -80,6 +103,11 @@ export default function LoginPage() {
             {error}
           </div>
         )}
+        {resetMessage && (
+          <div className="mb-6 bg-emerald-50 text-emerald-600 p-3 rounded-xl text-sm font-medium text-center border border-emerald-100">
+            {resetMessage}
+          </div>
+        )}
 
         <button 
           onClick={handleGoogleLogin}
@@ -119,7 +147,12 @@ export default function LoginPage() {
           </div>
           
           <div>
-            <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Mật khẩu</label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-xs font-bold text-stone-500 uppercase tracking-wider">Mật khẩu</label>
+              <button type="button" onClick={handleResetPassword} disabled={isResetting} className="text-xs font-bold text-yellow-600 hover:text-yellow-700 transition-colors">
+                {isResetting ? 'Đang gửi...' : 'Quên mật khẩu?'}
+              </button>
+            </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Lock className="h-5 w-5 text-stone-400" />
