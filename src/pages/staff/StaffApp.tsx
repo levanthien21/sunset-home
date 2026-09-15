@@ -36,10 +36,7 @@ function StaffDashboard() {
     const rawRooms = await getRooms();
     const formattedRooms = rawRooms.map((r: any) => ({
       ...r,
-      combos: [
-        ...(r.combos || []),
-        { id: "test-5k", name: "Gói Test (Nội bộ)", price: 5000 }
-      ]
+      combos: r.combos || []
     }));
     setRoomsList(formattedRooms);
   };
@@ -730,7 +727,7 @@ function StaffDashboard() {
                     className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none"
                   >
                     <option value="transfer">Khách Chuyển khoản Trực tiếp / Tiền mặt</option>
-                    <option value="qr">Chuyển khoản qua quét mã PayOS (Không khuyến nghị cho Lễ tân)</option>
+                    <option value="qr">Tạo mã QR Ngân hàng tự động (Dành cho khách quét)</option>
                   </select>
                 </div>
                 
