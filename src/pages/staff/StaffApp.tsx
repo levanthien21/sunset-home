@@ -689,31 +689,36 @@ function StaffDashboard() {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Giờ nhận</label>
-                    <select 
-                      required 
-                      value={manualForm.expectedTime} 
-                      onChange={e => setManualForm({...manualForm, expectedTime: e.target.value})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
-                    >
-                      <option value="" disabled>-- Chọn --</option>
+                    <div className="grid grid-cols-4 gap-1 max-h-40 overflow-y-auto p-1 bg-gray-50 border border-gray-200 rounded-lg">
                       {Array.from({length: 48}).map((_, i) => {
                         const h = Math.floor(i/2).toString().padStart(2, '0');
                         const m = (i%2 === 0 ? '00' : '30');
                         const timeStr = `${h}:${m}`;
                         
-                        // Check if in past
                         const now = new Date();
                         const [y, mo, d] = manualForm.bookingDate.split('-').map(Number);
                         const slotDate = new Date(y, mo - 1, d, Number(h), Number(m));
                         const isPast = slotDate < now;
                         
+                        if (isPast) return null; // Ẩn giờ quá khứ
+                        
                         return (
-                          <option key={timeStr} value={timeStr} disabled={isPast}>
-                            {timeStr} {isPast ? '(Đã qua)' : ''}
-                          </option>
+                          <button
+                            key={timeStr}
+                            type="button"
+                            onClick={() => setManualForm({...manualForm, expectedTime: timeStr})}
+                            className={`py-1.5 px-1 text-xs font-bold rounded-md transition-all border ${
+                              manualForm.expectedTime === timeStr 
+                                ? 'bg-yellow-500 text-white border-yellow-600 shadow-sm' 
+                                : 'bg-white text-gray-700 border-gray-200 hover:border-yellow-400'
+                            }`}
+                          >
+                            {timeStr}
+                          </button>
                         );
                       })}
-                    </select>
+                    </div>
+                    {manualForm.expectedTime && <p className="text-[10px] text-green-600 mt-1 font-bold">Đã chọn: {manualForm.expectedTime}</p>}
                   </div>
                 </div>
 
@@ -734,13 +739,18 @@ function StaffDashboard() {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Gia hạn thêm (Giờ)</label>
-                    <input 
-                      type="number" 
-                      min="0"
+                    <select 
                       value={manualForm.extraHours} 
                       onChange={e => setManualForm({...manualForm, extraHours: Number(e.target.value)})} 
-                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
-                    />
+                      className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none bg-white" 
+                    >
+                      <option value={0}>Không thêm</option>
+                      <option value={1}>+ 1 giờ</option>
+                      <option value={2}>+ 2 giờ</option>
+                      <option value={3}>+ 3 giờ</option>
+                      <option value={4}>+ 4 giờ</option>
+                      <option value={5}>+ 5 giờ</option>
+                    </select>
                   </div>
                 </div>
 

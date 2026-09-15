@@ -582,42 +582,119 @@ export default function BookingPage() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3 md:gap-4">
-                        <div>
-                          <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2">Giờ đến</label>
-                          <div className={`relative w-full bg-stone-50 border ${expectedTime && !isTimeValid ? 'border-red-400 focus-within:ring-red-500' : 'border-stone-200 focus-within:ring-yellow-600'} rounded-xl focus-within:bg-white focus-within:ring-2 transition-all`}>
-                            <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 w-4 h-4 md:w-5 md:h-5 pointer-events-none z-10" />
-                            <input
-                              type="time"
-                              value={expectedTime}
-                              onChange={(e) => setExpectedTime(e.target.value)}
-                              className={`w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-transparent outline-none border-none block box-border text-base cursor-pointer appearance-none relative z-20 ${!expectedTime ? 'text-transparent' : 'text-stone-900'}`}
-                            />
-                            {!expectedTime && (
-                              <span className="absolute left-9 md:left-11 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none z-10 text-base">
-                                Chọn giờ...
-                              </span>
-                            )}
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-3 md:gap-4">
+                          <div>
+                            <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2">Thêm giờ (+{(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ)</label>
+                            <div className="relative w-full bg-stone-50 border border-stone-200 rounded-xl focus-within:bg-white focus-within:ring-2 focus-within:ring-yellow-600/50 transition-all">
+                              <PlusCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 w-4 h-4 md:w-5 md:h-5 pointer-events-none z-10" />
+                              <select
+                                value={extraHours}
+                                onChange={(e) => setExtraHours(parseInt(e.target.value) || 0)}
+                                className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-transparent outline-none border-none block box-border text-base text-stone-900 relative z-20 appearance-none"
+                              >
+                                <option value={0}>Không thêm</option>
+                                <option value={1}>+ 1 giờ</option>
+                                <option value={2}>+ 2 giờ</option>
+                                <option value={3}>+ 3 giờ</option>
+                                <option value={4}>+ 4 giờ</option>
+                                <option value={5}>+ 5 giờ</option>
+                              </select>
+                            </div>
                           </div>
-                          {expectedTime && !isTimeValid && (
-                            <p className="text-[10px] md:text-xs text-red-500 mt-1 font-medium">* Giờ đã qua</p>
-                          )}
+                          <div className="flex flex-col justify-end">
+                            <div className="bg-yellow-50 text-yellow-800 text-xs md:text-sm font-medium p-2.5 md:p-3 rounded-xl border border-yellow-200 text-center">
+                              {expectedTime ? (
+                                <>Đã chọn giờ đến: <b>{expectedTime}</b></>
+                              ) : (
+                                <>Vui lòng chọn giờ bên dưới 👇</>
+                              )}
+                            </div>
+                          </div>
                         </div>
+
                         <div>
-                          <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-1.5 md:mb-2 truncate" title={`Thêm giờ (+${(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ/h)`}>
-                            Thêm giờ (+{(selectedRoomDetails?.extraHourPrice || 0).toLocaleString()}đ)
+                          <label className="block text-xs md:text-sm font-semibold text-stone-900 mb-2 flex items-center">
+                            <Clock className="w-4 h-4 mr-1.5 text-stone-500" />
+                            Khung giờ còn trống (Tự động cập nhật)
                           </label>
-                          <div className="relative w-full bg-stone-50 border border-stone-200 rounded-xl focus-within:bg-white focus-within:ring-2 focus-within:ring-yellow-600/50 focus-within:border-yellow-600 transition-all">
-                            <PlusCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 w-4 h-4 md:w-5 md:h-5 pointer-events-none z-10" />
-                            <input
-                              type="number"
-                              min="0"
-                              max="10"
-                              value={extraHours}
-                              onChange={(e) => setExtraHours(parseInt(e.target.value) || 0)}
-                              className="w-full min-w-0 pl-9 md:pl-11 pr-3 py-2.5 md:py-3 bg-transparent outline-none border-none block box-border text-base appearance-none text-stone-900 relative z-20"
-                            />
+                          <div className="grid grid-cols-4 md:grid-cols-6 gap-2 max-h-[220px] overflow-y-auto p-1.5 bg-stone-50 border border-stone-200 rounded-xl custom-scrollbar">
+                            {Array.from({length: 48}).map((_, i) => {
+                              const h = Math.floor(i/2).toString().padStart(2, '0');
+                              const m = (i%2 === 0 ? '00' : '30');
+                              const timeStr = `${h}:${m}`;
+                              
+                              const now = new Date();
+                              const [y, mo, d] = bookingDate.split('-').map(Number);
+                              const slotDate = new Date(y, mo - 1, d, Number(h), Number(m));
+                              const isPast = slotDate < now;
+                              
+                              let isOverlapping = false;
+                              if (selectedComboDetails) {
+                                const ci = `${bookingDate} ${timeStr}`;
+                                const co = `${selectedComboDetails.name}${extraHours > 0 ? ` (+${extraHours}h)` : ''}`;
+                                
+                                const parseBookingInterval = (ciStr: string, coStr: string) => {
+                                  const safeCheckInStr = ciStr.replace(' ', 'T');
+                                  const start = new Date(safeCheckInStr);
+                                  if (isNaN(start.getTime())) return { start: new Date(0), end: new Date(0) };
+                                  const extraMatch = coStr.match(/\(\+(\d+)h\)/);
+                                  const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
+                                  let end = new Date(start.getTime());
+                                  
+                                  if (coStr.includes('2H') || coStr.includes('2 giờ')) {
+                                    end = new Date(start.getTime() + (2 + extra) * 60 * 60 * 1000);
+                                  } else if (coStr.includes('4H') || coStr.includes('4 giờ')) {
+                                    end = new Date(start.getTime() + (4 + extra) * 60 * 60 * 1000);
+                                  } else if (coStr.toLowerCase().includes('đêm')) {
+                                    end.setDate(end.getDate() + 1);
+                                    end.setHours(10, 0, 0, 0);
+                                    end = new Date(end.getTime() + extra * 60 * 60 * 1000);
+                                  } else if (coStr.toLowerCase().includes('ngày')) {
+                                    end.setDate(end.getDate() + 1);
+                                    end.setHours(12, 0, 0, 0);
+                                    end = new Date(end.getTime() + extra * 60 * 60 * 1000);
+                                  } else {
+                                    end = new Date(start.getTime() + (1 + extra) * 60 * 60 * 1000);
+                                  }
+                                  end = new Date(end.getTime() + 30 * 60 * 1000);
+                                  return { start, end };
+                                };
+                                
+                                const newInt = parseBookingInterval(ci, co);
+                                const sameRoomBookings = existingBookings.filter(b => b.roomName === selectedRoomDetails?.name && b.status !== 'cancelled' && b.status !== 'completed');
+                                
+                                isOverlapping = sameRoomBookings.some((b: any) => {
+                                  if (!b.checkIn || !b.checkOut) return false;
+                                  const bInt = parseBookingInterval(b.checkIn, b.checkOut);
+                                  return newInt.start < bInt.end && newInt.end > bInt.start;
+                                });
+                              }
+                              
+                              if (isPast) return null; // Ẩn giờ quá khứ
+                              
+                              return (
+                                <button
+                                  key={timeStr}
+                                  type="button"
+                                  disabled={isOverlapping || !combo}
+                                  onClick={() => setExpectedTime(timeStr)}
+                                  className={`py-2 px-1 text-sm font-bold rounded-lg transition-all border ${
+                                    expectedTime === timeStr 
+                                      ? 'bg-yellow-500 text-white border-yellow-600 shadow-md transform scale-105' 
+                                      : isOverlapping 
+                                        ? 'bg-stone-200/50 text-stone-400 border-stone-200 cursor-not-allowed' 
+                                        : !combo
+                                          ? 'bg-white text-stone-300 border-stone-200 cursor-not-allowed'
+                                          : 'bg-white text-stone-700 border-stone-200 hover:border-yellow-400 hover:text-yellow-600'
+                                  }`}
+                                >
+                                  {timeStr}
+                                </button>
+                              );
+                            })}
                           </div>
+                          {!combo && <p className="text-xs text-red-500 mt-2">* Vui lòng chọn gói phòng (Combo) trước khi chọn giờ.</p>}
                         </div>
                       </div>
 
