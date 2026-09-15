@@ -718,7 +718,43 @@ function StaffDashboard() {
                         );
                       })}
                     </div>
-                    {manualForm.expectedTime && <p className="text-[10px] text-green-600 mt-1 font-bold">Đã chọn: {manualForm.expectedTime}</p>}
+                    {manualForm.expectedTime && (() => {
+                      let endStr = '';
+                      const selectedRoom = roomsList.find(r => r.name === manualForm.roomName);
+                      const combo = selectedRoom?.combos?.[manualForm.selectedComboIndex];
+                      if (combo) {
+                        const start = new Date(`${manualForm.bookingDate}T${manualForm.expectedTime}`);
+                        let end = new Date(start.getTime());
+                        const co = combo.name;
+                        const extraHours = manualForm.extraHours || 0;
+                        if (co.includes('2H') || co.includes('2 giờ')) {
+                          end = new Date(start.getTime() + (2 + extraHours) * 60 * 60 * 1000);
+                        } else if (co.includes('4H') || co.includes('4 giờ')) {
+                          end = new Date(start.getTime() + (4 + extraHours) * 60 * 60 * 1000);
+                        } else if (co.toLowerCase().includes('đêm')) {
+                          end.setDate(end.getDate() + 1);
+                          end.setHours(10, 0, 0, 0);
+                          end = new Date(end.getTime() + extraHours * 60 * 60 * 1000);
+                        } else if (co.toLowerCase().includes('ngày')) {
+                          end.setDate(end.getDate() + 1);
+                          end.setHours(12, 0, 0, 0);
+                          end = new Date(end.getTime() + extraHours * 60 * 60 * 1000);
+                        } else {
+                          end = new Date(start.getTime() + (1 + extraHours) * 60 * 60 * 1000);
+                        }
+                        const h = end.getHours().toString().padStart(2, '0');
+                        const m = end.getMinutes().toString().padStart(2, '0');
+                        const isNextDay = end.getDate() !== start.getDate();
+                        endStr = `${h}:${m}${isNextDay ? ' (Hôm sau)' : ''}`;
+                      }
+                      return (
+                        <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg flex flex-col text-[11px] font-bold">
+                          <span className="text-green-700">Nhận phòng: {manualForm.expectedTime}</span>
+                          {endStr && <span className="text-red-600 mt-0.5">Trả phòng: {endStr}</span>}
+                          {!endStr && <span className="text-gray-500 font-normal mt-0.5 italic">* Chọn gói (Combo) để xem giờ trả</span>}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 

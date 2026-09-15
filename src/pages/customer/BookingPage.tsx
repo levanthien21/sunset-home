@@ -603,11 +603,43 @@ export default function BookingPage() {
                             </div>
                           </div>
                           <div className="flex flex-col justify-end">
-                            <div className="bg-yellow-50 text-yellow-800 text-xs md:text-sm font-medium p-2.5 md:p-3 rounded-xl border border-yellow-200 text-center">
+                            <div className="bg-yellow-50 text-yellow-800 text-xs md:text-sm font-medium p-2.5 md:p-3 rounded-xl border border-yellow-200 text-center flex flex-col items-center justify-center min-h-[64px]">
                               {expectedTime ? (
-                                <>Đã chọn giờ đến: <b>{expectedTime}</b></>
+                                (() => {
+                                  let endStr = '';
+                                  if (selectedComboDetails) {
+                                    const start = new Date(`${bookingDate}T${expectedTime}`);
+                                    let end = new Date(start.getTime());
+                                    const co = selectedComboDetails.name;
+                                    if (co.includes('2H') || co.includes('2 giờ')) {
+                                      end = new Date(start.getTime() + (2 + extraHours) * 60 * 60 * 1000);
+                                    } else if (co.includes('4H') || co.includes('4 giờ')) {
+                                      end = new Date(start.getTime() + (4 + extraHours) * 60 * 60 * 1000);
+                                    } else if (co.toLowerCase().includes('đêm')) {
+                                      end.setDate(end.getDate() + 1);
+                                      end.setHours(10, 0, 0, 0);
+                                      end = new Date(end.getTime() + extraHours * 60 * 60 * 1000);
+                                    } else if (co.toLowerCase().includes('ngày')) {
+                                      end.setDate(end.getDate() + 1);
+                                      end.setHours(12, 0, 0, 0);
+                                      end = new Date(end.getTime() + extraHours * 60 * 60 * 1000);
+                                    } else {
+                                      end = new Date(start.getTime() + (1 + extraHours) * 60 * 60 * 1000);
+                                    }
+                                    const h = end.getHours().toString().padStart(2, '0');
+                                    const m = end.getMinutes().toString().padStart(2, '0');
+                                    const isNextDay = end.getDate() !== start.getDate();
+                                    endStr = `${h}:${m}${isNextDay ? ' (Hôm sau)' : ''}`;
+                                  }
+                                  return (
+                                    <div className="flex flex-col">
+                                      <span>Nhận phòng: <b>{expectedTime}</b></span>
+                                      {endStr && <span className="text-red-600 mt-0.5">Trả phòng: <b>{endStr}</b></span>}
+                                    </div>
+                                  );
+                                })()
                               ) : (
-                                <>Vui lòng chọn giờ bên dưới 👇</>
+                                <span>Vui lòng chọn giờ bên dưới 👇</span>
                               )}
                             </div>
                           </div>
