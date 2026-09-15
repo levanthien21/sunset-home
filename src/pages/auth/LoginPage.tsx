@@ -30,14 +30,14 @@ export default function LoginPage() {
         const role = profile?.role || 'customer';
         localStorage.setItem('auth_role', role);
         setLoading(false);
-        if (role === 'banned') {
+        if (role.includes('banned')) {
           await supabase.auth.signOut();
           localStorage.removeItem('auth_role');
           setError('Tài khoản của bạn đã bị khóa bởi Quản trị viên.');
           return;
         }
-        if (role === 'admin') navigate('/admin');
-        else if (role === 'staff') navigate('/staff');
+        if (role.includes('admin')) navigate('/admin');
+        else if (role.includes('staff')) navigate('/staff');
         else navigate('/');
       } else {
         setLoading(false);

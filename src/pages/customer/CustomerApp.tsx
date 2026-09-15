@@ -50,12 +50,12 @@ function Navbar() {
                 <UserIcon size={16} className="sm:w-[18px] sm:h-[18px]" />
                 <span className="hidden md:inline font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</span>
               </Link>
-              {localStorage.getItem("auth_role") === "admin" && (
+              {localStorage.getItem('auth_role')?.includes('admin') && (
                 <Link to="/admin" className="flex items-center text-[9px] sm:text-[11px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold text-purple-600 hover:text-purple-700 transition-colors ml-2 sm:ml-4">
                   [ ADMIN ]
                 </Link>
               )}
-              {localStorage.getItem("auth_role") === "staff" && (
+              {localStorage.getItem('auth_role')?.includes('staff') && (
                 <Link to="/staff" className="flex items-center text-[9px] sm:text-[11px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold text-blue-600 hover:text-blue-700 transition-colors ml-2 sm:ml-4">
                   [ LỄ TÂN ]
                 </Link>

@@ -719,7 +719,7 @@ export default function StaffApp() {
 
   useEffect(() => {
     const role = localStorage.getItem("auth_role");
-    if (role !== "staff" && role !== "admin") {
+    if (!role?.includes('staff') && !role?.includes('admin')) {
       navigate("/login");
     }
   }, [navigate]);

@@ -77,6 +77,7 @@ export default function AdminUsers() {
           >
             <option value="staff">Lễ tân</option>
             <option value="admin">Quản lý (Admin)</option>
+            <option value="admin,staff">Cả hai (Quản lý & Lễ tân)</option>
             <option value="customer">Khách hàng</option>
             <option value="banned">Khóa (Banned)</option>
           </select>
@@ -151,7 +152,7 @@ export default function AdminUsers() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {users.filter(u => activeTab === 'staff' ? (u.role === 'admin' || u.role === 'staff' || u.role === 'banned') : (u.role === 'customer' || !u.role)).map((user, i) => (
+                {users.filter(u => activeTab === 'staff' ? (u.role?.includes('admin') || u.role?.includes('staff') || u.role?.includes('banned')) : (u.role === 'customer' || !u.role)).map((user, i) => (
                   <motion.tr 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -182,14 +183,16 @@ export default function AdminUsers() {
                     </td>
                     <td className="p-5">
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
-                        user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                        user.role === 'staff' ? 'bg-blue-100 text-blue-700' :
-                        user.role === 'banned' ? 'bg-red-100 text-red-700' :
+                        user.role?.includes('admin') && user.role?.includes('staff') ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-800' :
+                        user.role?.includes('admin') ? 'bg-purple-100 text-purple-700' :
+                        user.role?.includes('staff') ? 'bg-blue-100 text-blue-700' :
+                        user.role?.includes('banned') ? 'bg-red-100 text-red-700' :
                         'bg-gray-100 text-gray-600'
                       }`}>
-                        {user.role === 'admin' ? 'Quản trị viên' : 
-                         user.role === 'staff' ? 'Nhân viên' : 
-                         user.role === 'banned' ? 'Đã khóa' : 'Khách hàng'}
+                        {user.role?.includes('admin') && user.role?.includes('staff') ? 'Quản lý & Lễ tân' : 
+                         user.role?.includes('admin') ? 'Quản trị viên' : 
+                         user.role?.includes('staff') ? 'Nhân viên' : 
+                         user.role?.includes('banned') ? 'Đã khóa' : 'Khách hàng'}
                       </span>
                     </td>
                     <td className="p-5 text-gray-500 text-sm">

@@ -448,7 +448,7 @@ export default function AdminApp() {
 
   useEffect(() => {
     const role = localStorage.getItem('auth_role');
-    if (role !== 'admin') {
+    if (!role?.includes('admin')) {
       navigate('/login');
     }
   }, [navigate]);
