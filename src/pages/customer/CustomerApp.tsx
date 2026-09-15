@@ -25,7 +25,7 @@ function Navbar() {
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-700 ${isSolid ? 'bg-white shadow-sm border-b border-gray-100 py-2 md:py-4 text-gray-900' : 'bg-transparent py-3 md:py-6 text-white'}`}>
-      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-12 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-12 flex justify-between items-center">
         {/* Left - Logo */}
         <Link to="/" className="flex-shrink-0 flex flex-col">
           <h1 className="text-xl md:text-2xl font-serif tracking-[0.25em] uppercase font-light">Sunset</h1>
@@ -43,7 +43,7 @@ function Navbar() {
         </div>
 
         {/* Right - Action */}
-        <div className="flex-shrink-0 flex justify-end items-center space-x-3 sm:space-x-4 mt-2 sm:mt-0">
+        <div className="flex-shrink-0 flex justify-end items-center space-x-3 sm:space-x-4">
           {user ? (
             <>
               <Link to="/profile" className="flex items-center space-x-1 sm:space-x-2 text-sm hover:text-yellow-500 transition-colors">
