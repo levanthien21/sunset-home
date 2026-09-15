@@ -95,10 +95,7 @@ export default function BookingPage() {
             ...r,
             branchId: r.branch_id,
             extraHourPrice: Number(r.extra_hour_price),
-            combos: [
-              ...(r.combos || []),
-              { id: 'test-5k', name: 'Gói Test Thanh Toán 5k', price: 5000 }
-            ]
+            combos: r.combos || []
           }));
           setRooms(formattedRooms);
         }
@@ -378,7 +375,7 @@ export default function BookingPage() {
                      <span className="text-[11px] uppercase font-bold text-stone-500 tracking-wider mb-0.5">Ngày nhận phòng</span>
                      <input
                        type="date"
-                       min={new Date().toISOString().split('T')[0]}
+                       min={new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().split('T')[0]}
                        value={bookingDate}
                        onChange={(e) => setBookingDate(e.target.value)}
                        className="w-full bg-transparent border-none outline-none text-stone-900 font-bold text-base md:text-lg cursor-pointer appearance-none"
