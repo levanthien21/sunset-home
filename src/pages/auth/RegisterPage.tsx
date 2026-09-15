@@ -23,7 +23,7 @@ export default function RegisterPage() {
     setLoading(true);
     setError('');
     
-    const { error } = await supabase.auth.signUp({ 
+    const { data, error } = await supabase.auth.signUp({ 
       email, 
       password,
       options: {
@@ -37,8 +37,11 @@ export default function RegisterPage() {
     if (error) {
       setError(error.message);
     } else {
-      setSuccess('Đăng ký thành công! Đang chuyển hướng...');
-      setTimeout(() => navigate('/'), 2000);
+      if (data?.session) {
+        localStorage.setItem('auth_role', 'customer');
+      }
+      setSuccess('Đăng ký thành công! Đang tự động đăng nhập...');
+      setTimeout(() => navigate('/'), 1500);
     }
   };
 
