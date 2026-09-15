@@ -478,9 +478,7 @@ export default function AdminApp() {
             </Link>
           ))}
         </nav>
-        <div className="px-6 py-4 border-t border-gray-800 text-white flex justify-center">
-          <NotificationBell />
-        </div>
+
         <div className="p-6 border-t border-gray-800">
           <button
             onClick={async () => {
@@ -518,7 +516,12 @@ export default function AdminApp() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto md:overflow-auto pt-0 md:pt-0">
+      <div className="flex-1 overflow-auto md:overflow-auto pt-0 md:pt-0 relative">
+        <div className="hidden md:block fixed top-6 right-8 z-50">
+          <div className="bg-white rounded-full shadow-md">
+            <NotificationBell />
+          </div>
+        </div>
         <div className="pt-14 md:pt-0 pb-20 md:pb-0 h-full overflow-auto">
           <Routes>
             <Route path="/" element={<AdminDashboard />} />
