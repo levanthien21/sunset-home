@@ -184,7 +184,7 @@ export default function LandingPage() {
               Nhằm đảm bảo trải nghiệm nghỉ dưỡng hoàn hảo nhất, quý khách vui lòng lưu ý các quy định chung của Sunset Home.
             </p>
             <Link 
-              to="/customer/policies" 
+              to="/policies" 
               className="inline-flex items-center text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-[#1C1A17] hover:text-[#B8860B] transition-colors pb-1 border-b border-[#1C1A17]/20 hover:border-[#B8860B]"
             >
               Xem chi tiết toàn bộ
