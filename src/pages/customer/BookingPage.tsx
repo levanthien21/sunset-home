@@ -377,7 +377,15 @@ export default function BookingPage() {
                        type="date"
                        min={new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().split('T')[0]}
                        value={bookingDate}
-                       onChange={(e) => setBookingDate(e.target.value)}
+                       onChange={(e) => {
+                         const minDate = new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().split('T')[0];
+                         if (e.target.value < minDate) {
+                           alert("Vui lòng không chọn ngày trong quá khứ");
+                           setBookingDate(minDate);
+                         } else {
+                           setBookingDate(e.target.value);
+                         }
+                       }}
                        className="w-full bg-transparent border-none outline-none text-stone-900 font-bold text-base md:text-lg cursor-pointer appearance-none"
                      />
                   </div>

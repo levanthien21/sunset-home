@@ -675,7 +675,15 @@ function StaffDashboard() {
                       type="date"
                       min={new Date(new Date().getTime() + 7*60*60*1000).toISOString().split('T')[0]} 
                       value={manualForm.bookingDate} 
-                      onChange={e => setManualForm({...manualForm, bookingDate: e.target.value})} 
+                      onChange={(e) => {
+                        const minDate = new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().split('T')[0];
+                        if (e.target.value < minDate) {
+                          alert("Vui lòng không chọn ngày trong quá khứ");
+                          setManualForm({...manualForm, bookingDate: minDate});
+                        } else {
+                          setManualForm({...manualForm, bookingDate: e.target.value});
+                        }
+                      }} 
                       className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
                     />
                   </div>
