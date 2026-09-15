@@ -689,14 +689,31 @@ function StaffDashboard() {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Giờ nhận</label>
-                    <input 
+                    <select 
                       required 
-                      type="time"
-                      min={manualForm.bookingDate === new Date(new Date().getTime() + 7*60*60*1000).toISOString().split('T')[0] ? new Date(new Date().getTime() + 7*60*60*1000).toISOString().split('T')[1].substring(0,5) : undefined} 
                       value={manualForm.expectedTime} 
                       onChange={e => setManualForm({...manualForm, expectedTime: e.target.value})} 
                       className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
-                    />
+                    >
+                      <option value="" disabled>-- Chọn --</option>
+                      {Array.from({length: 48}).map((_, i) => {
+                        const h = Math.floor(i/2).toString().padStart(2, '0');
+                        const m = (i%2 === 0 ? '00' : '30');
+                        const timeStr = `${h}:${m}`;
+                        
+                        // Check if in past
+                        const now = new Date();
+                        const [y, mo, d] = manualForm.bookingDate.split('-').map(Number);
+                        const slotDate = new Date(y, mo - 1, d, Number(h), Number(m));
+                        const isPast = slotDate < now;
+                        
+                        return (
+                          <option key={timeStr} value={timeStr} disabled={isPast}>
+                            {timeStr} {isPast ? '(Đã qua)' : ''}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </div>
                 </div>
 
