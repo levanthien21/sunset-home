@@ -29,7 +29,7 @@ function Navbar() {
         {/* Left - Logo */}
         <Link to="/" className="flex-shrink-0 flex flex-col">
           <h1 className="text-xl md:text-2xl font-serif tracking-[0.25em] uppercase font-light">Sunset</h1>
-          <span className="text-[9px] uppercase tracking-[0.3em] opacity-70 mt-1">Boutique Homestay</span>
+          <span className="text-[9px] uppercase tracking-[0.3em] opacity-70 mt-1">Homestay</span>
         </Link>
 
         {/* Center - Navigation */}
@@ -120,7 +120,7 @@ export default function CustomerApp() {
           {/* Brand - 5 cols on desktop */}
           <div className="md:col-span-5">
             <h3 className="text-xl md:text-2xl font-serif mb-2 tracking-[0.2em] uppercase text-white">Sunset</h3>
-            <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/50 mb-6">Boutique Homestay</p>
+            <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/50 mb-6">Homestay</p>
             <p className="text-white/60 font-light max-w-sm leading-relaxed text-xs md:text-sm">
               Đánh thức mọi giác quan trong không gian lãng mạn, nơi mỗi góc nhỏ đều được chăm chút tỉ mỉ để tạo nên những kỷ niệm khó quên tại trung tâm thành phố.
             </p>
