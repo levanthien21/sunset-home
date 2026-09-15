@@ -24,8 +24,8 @@ function Navbar() {
   const isSolid = !isHome || scrolled;
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-700 ${isSolid ? 'bg-white shadow-sm border-b border-gray-100 py-4 text-gray-900' : 'bg-transparent py-6 text-white'}`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
+    <nav className={`fixed w-full z-50 transition-all duration-700 ${isSolid ? 'bg-white shadow-sm border-b border-gray-100 py-2 md:py-4 text-gray-900' : 'bg-transparent py-3 md:py-6 text-white'}`}>
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-12 flex flex-col sm:flex-row justify-between items-center gap-2">
         {/* Left - Logo */}
         <Link to="/" className="flex-shrink-0 flex flex-col">
           <h1 className="text-xl md:text-2xl font-serif tracking-[0.25em] uppercase font-light">Sunset</h1>
@@ -43,34 +43,34 @@ function Navbar() {
         </div>
 
         {/* Right - Action */}
-        <div className="flex-shrink-0 flex justify-end items-center space-x-4">
+        <div className="flex-shrink-0 flex justify-end items-center space-x-3 sm:space-x-4 mt-2 sm:mt-0">
           {user ? (
             <>
-              <Link to="/profile" className="flex items-center space-x-2 text-sm hover:text-yellow-500 transition-colors">
-                <UserIcon size={18} />
+              <Link to="/profile" className="flex items-center space-x-1 sm:space-x-2 text-sm hover:text-yellow-500 transition-colors">
+                <UserIcon size={16} className="sm:w-[18px] sm:h-[18px]" />
                 <span className="hidden md:inline font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</span>
               </Link>
               {localStorage.getItem("auth_role") === "admin" && (
-                <Link to="/admin" className="flex items-center text-[11px] uppercase tracking-[0.2em] font-bold text-purple-600 hover:text-purple-700 transition-colors ml-4">
-                  [ VÀO ADMIN ]
+                <Link to="/admin" className="flex items-center text-[9px] sm:text-[11px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold text-purple-600 hover:text-purple-700 transition-colors ml-2 sm:ml-4">
+                  [ ADMIN ]
                 </Link>
               )}
               {localStorage.getItem("auth_role") === "staff" && (
-                <Link to="/staff" className="flex items-center text-[11px] uppercase tracking-[0.2em] font-bold text-blue-600 hover:text-blue-700 transition-colors ml-4">
+                <Link to="/staff" className="flex items-center text-[9px] sm:text-[11px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold text-blue-600 hover:text-blue-700 transition-colors ml-2 sm:ml-4">
                   [ LỄ TÂN ]
                 </Link>
               )}
             </>
           ) : (
             <Link to="/login" className="flex items-center text-[11px] uppercase tracking-[0.2em] font-medium hover:text-yellow-500 transition-colors">
-              <UserIcon size={18} className="md:hidden" />
+              <UserIcon size={16} className="md:hidden" />
               <span className="hidden md:block">Đăng nhập</span>
             </Link>
           )}
 
           <Link 
             to="/booking" 
-            className={`px-5 py-2.5 md:px-8 md:py-3 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold rounded-full transition-all duration-300 border animate-[pulse_3s_infinite] hover:animate-none ${
+            className={`px-4 py-2 md:px-8 md:py-3 text-[9px] md:text-[11px] uppercase tracking-[0.1em] md:tracking-[0.2em] font-bold rounded-full transition-all duration-300 border animate-[pulse_3s_infinite] hover:animate-none ${
               isSolid 
                 ? 'bg-[#1C1A17] text-white border-[#1C1A17] hover:bg-yellow-600 hover:border-yellow-600 shadow-md hover:shadow-[0_0_20px_rgba(202,138,4,0.4)] hover:-translate-y-0.5' 
                 : 'bg-white/10 backdrop-blur-md text-white border-white/50 hover:bg-white hover:text-[#1C1A17] shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] hover:-translate-y-0.5'

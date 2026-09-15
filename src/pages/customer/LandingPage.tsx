@@ -30,13 +30,13 @@ export default function LandingPage() {
       className="bg-[#F9F8F6] relative"
     >
       {/* Floating Hotline Icons */}
-      <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-3 group/widget">
+      <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex flex-col gap-3 group/widget">
         {/* Phone */}
         <a href="tel:0364135809" className="group flex items-center relative">
-          <div className="w-12 h-12 bg-[#B8860B] rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(184,134,11,0.4)] relative z-10 hover:scale-110 transition-transform">
-            <PhoneCall className="w-5 h-5 animate-pulse" />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#B8860B] rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(184,134,11,0.4)] relative z-10 hover:scale-110 transition-transform">
+            <PhoneCall className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
           </div>
-          <div className="bg-white px-4 py-2 rounded-r-full shadow-md -ml-6 pl-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 absolute left-8 whitespace-nowrap text-[#B8860B] font-bold text-sm pointer-events-none">
+          <div className="bg-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-r-full shadow-md -ml-5 sm:-ml-6 pl-7 sm:pl-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 absolute left-7 sm:left-8 whitespace-nowrap text-[#B8860B] font-bold text-xs sm:text-sm pointer-events-none">
             0364.135.809
           </div>
         </a>
@@ -45,9 +45,9 @@ export default function LandingPage() {
       {/* Scroll to Top */}
       <button 
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-stone-900/80 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 hover:bg-stone-900 transition-all flex-shrink-0"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-10 h-10 sm:w-12 sm:h-12 bg-stone-900/80 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 hover:bg-stone-900 transition-all flex-shrink-0"
       >
-        <ChevronUp className="w-6 h-6" />
+        <ChevronUp className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
 
       {/* Hero Section */}
@@ -87,16 +87,16 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex items-center justify-center space-x-6 mb-8 md:mb-12"
+            className="flex items-center justify-center space-x-4 sm:space-x-6 mb-8 md:mb-12"
           >
-            <a href="#" className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#1877F2] hover:border-[#1877F2] hover:scale-110 transition-all duration-300 shadow-lg" title="Facebook">
-              <svg fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+            <a href="#" className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#1877F2] hover:border-[#1877F2] hover:scale-110 transition-all duration-300 shadow-lg" title="Facebook">
+              <svg fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
             </a>
-            <a href="https://zalo.me/0364135809" target="_blank" rel="noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#0068FF] hover:border-[#0068FF] hover:scale-110 transition-all duration-300 shadow-lg" title="Zalo">
-              <span className="text-xs font-bold tracking-wider">Zalo</span>
+            <a href="https://zalo.me/0364135809" target="_blank" rel="noreferrer" className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-[#0068FF] hover:border-[#0068FF] hover:scale-110 transition-all duration-300 shadow-lg" title="Zalo">
+              <span className="text-[10px] sm:text-xs font-bold tracking-wider">Zalo</span>
             </a>
-            <a href="https://www.tiktok.com/@sunset_homestay?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-black hover:border-black hover:scale-110 transition-all duration-300 shadow-lg" title="TikTok">
-              <svg viewBox="0 0 448 512" fill="currentColor" className="w-5 h-5"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+            <a href="https://www.tiktok.com/@sunset_homestay?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-black hover:border-black hover:scale-110 transition-all duration-300 shadow-lg" title="TikTok">
+              <svg viewBox="0 0 448 512" fill="currentColor" className="w-4 h-4 sm:w-5 sm:h-5"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
             </a>
           </motion.div>
 
