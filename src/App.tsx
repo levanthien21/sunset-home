@@ -7,6 +7,7 @@ import RoleSelection from './pages/RoleSelection';
 import PayOSReturnPage from './pages/customer/PayOSReturnPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/portal" element={<RoleSelection />} />
         <Route path="/staff/*" element={<StaffApp />} />
         <Route path="/admin/*" element={<AdminApp />} />
