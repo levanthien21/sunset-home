@@ -93,6 +93,54 @@ function StaffDashboard() {
     if (!combo) return;
 
     const checkOutStr = combo.name + (manualForm.extraHours > 0 ? " (+" + manualForm.extraHours + "h)" : "");
+    const checkInStr = manualForm.bookingDate + " " + manualForm.expectedTime;
+
+    // OVERLAP CHECK
+    const parseBookingInterval = (ci: string, co: string) => {
+        const safeCheckInStr = ci.replace(' ', 'T');
+        const start = new Date(safeCheckInStr);
+        if (isNaN(start.getTime())) return { start: new Date(0), end: new Date(0) };
+        const extraMatch = co.match(/\(\+(\d+)h\)/);
+        const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
+        let end = new Date(start.getTime());
+        
+        if (co.includes('2H') || co.includes('2 giờ')) {
+          end = new Date(start.getTime() + (2 + extra) * 60 * 60 * 1000);
+        } else if (co.includes('4H') || co.includes('4 giờ')) {
+          end = new Date(start.getTime() + (4 + extra) * 60 * 60 * 1000);
+        } else if (co.toLowerCase().includes('đêm')) {
+          end.setDate(end.getDate() + 1);
+          end.setHours(10, 0, 0, 0);
+          end = new Date(end.getTime() + extra * 60 * 60 * 1000);
+        } else if (co.toLowerCase().includes('ngày')) {
+          end.setDate(end.getDate() + 1);
+          end.setHours(12, 0, 0, 0);
+          end = new Date(end.getTime() + extra * 60 * 60 * 1000);
+        } else {
+          end = new Date(start.getTime() + (1 + extra) * 60 * 60 * 1000);
+        }
+        end = new Date(end.getTime() + 30 * 60 * 1000);
+        return { start, end };
+    };
+
+    const newInterval = parseBookingInterval(checkInStr, checkOutStr);
+    
+    const sameRoomBookings = bookings.filter((b) => 
+      b.roomName === manualForm.roomName && 
+      b.status !== 'cancelled' && b.status !== 'completed'
+    );
+
+    const hasOverlap = sameRoomBookings.some((b: any) => {
+      if (!b.checkIn || !b.checkOut) return false;
+      const bInterval = parseBookingInterval(b.checkIn, b.checkOut);
+      return newInterval.start < bInterval.end && newInterval.end > bInterval.start;
+    });
+
+    if (hasOverlap) {
+      alert('Phòng đã được đặt trong khoảng thời gian này (đã bao gồm 30p dọn dẹp). Vui lòng chọn giờ khác.');
+      return;
+    }
+    // END OVERLAP CHECK
     
     const newBooking = {
       bookingId: "M" + Date.now().toString().slice(-6),
@@ -627,7 +675,8 @@ function StaffDashboard() {
                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Ngày nhận</label>
                     <input 
                       required 
-                      type="date" 
+                      type="date"
+                      min={new Date(new Date().getTime() + 7*60*60*1000).toISOString().split('T')[0]} 
                       value={manualForm.bookingDate} 
                       onChange={e => setManualForm({...manualForm, bookingDate: e.target.value})} 
                       className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
@@ -637,7 +686,8 @@ function StaffDashboard() {
                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Giờ nhận</label>
                     <input 
                       required 
-                      type="time" 
+                      type="time"
+                      min={manualForm.bookingDate === new Date(new Date().getTime() + 7*60*60*1000).toISOString().split('T')[0] ? new Date(new Date().getTime() + 7*60*60*1000).toISOString().split('T')[1].substring(0,5) : undefined} 
                       value={manualForm.expectedTime} 
                       onChange={e => setManualForm({...manualForm, expectedTime: e.target.value})} 
                       className="w-full border border-gray-200 p-2.5 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 outline-none" 
