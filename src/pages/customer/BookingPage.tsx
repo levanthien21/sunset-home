@@ -400,8 +400,8 @@ export default function BookingPage() {
                   
                   return (
                     <div key={r.id} className={`bg-white rounded-2xl md:rounded-3xl transition-all overflow-hidden shadow-sm hover:shadow-xl border flex flex-col ${isSelected ? 'border-yellow-600 ring-1 ring-yellow-600' : 'border-stone-200'}`}>
-                      <div className="flex flex-row h-full items-stretch">
-                        <div className="w-[42%] md:w-5/12 lg:w-2/5 min-h-[220px] md:min-h-[280px] relative group shrink-0 overflow-hidden">
+                      <div className="flex flex-col sm:flex-row h-full items-stretch">
+                        <div className="w-full sm:w-[42%] md:w-5/12 lg:w-2/5 h-[200px] sm:h-auto sm:min-h-[280px] relative group shrink-0 overflow-hidden">
                           <img 
                             src={r.images[0]} 
                             onClick={() => setLightbox({ images: r.images, currentIndex: 0 })}
@@ -428,7 +428,7 @@ export default function BookingPage() {
                             )}
                           </div>
                         </div>
-                        <div className="p-4 md:p-5 lg:p-6 flex flex-col justify-between flex-1 w-[58%] md:w-7/12 lg:w-3/5">
+                        <div className="p-4 md:p-5 lg:p-6 flex flex-col justify-between flex-1 w-full sm:w-[58%] md:w-7/12 lg:w-3/5">
                           <div className="flex flex-col gap-3 md:gap-4">
                             {/* Tiêu đề & Địa điểm */}
                             <div>
@@ -476,7 +476,7 @@ export default function BookingPage() {
                             {/* Lợi ích */}
                             <div className="flex flex-col gap-1 mt-1">
                                <p className="text-[11px] text-green-600 font-medium flex items-center">
-                                 <Check className="w-3 h-3 mr-1.5"/> Miễn phí hủy trước 7 ngày
+                                 <Check className="w-3 h-3 mr-1.5"/> Thay đổi lịch trình linh hoạt
                                </p>
                                <p className="text-[11px] text-green-600 font-medium flex items-center">
                                  <Check className="w-3 h-3 mr-1.5"/> Giữ chỗ thanh toán qua mã QR
