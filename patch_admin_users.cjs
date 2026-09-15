@@ -1,70 +1,77 @@
 const fs = require('fs');
-let code = fs.readFileSync('src/pages/admin/AdminUsers.tsx', 'utf8');
 
-const stateToAdd = `  const [assignEmail, setAssignEmail] = useState('');
-  const [assignRole, setAssignRole] = useState('staff');
-  const [assignLoading, setAssignLoading] = useState(false);
-`;
+// Add inline role change to AdminUsers.tsx
+let content = fs.readFileSync('c:/Users/ASUS/Desktop/Sunset home/src/pages/admin/AdminUsers.tsx', 'utf8');
 
-code = code.replace(
-  'const [error, setError] = useState(\'\');',
-  'const [error, setError] = useState(\'\');\n' + stateToAdd
+// Add quick change button in the table - after the date column
+content = content.replace(
+  `                   <td className="p-5 text-gray-500 text-sm">
+                       <div className="flex items-center">
+                         <Calendar className="w-4 h-4 mr-2 text-gray-400" />
+                         {new Date(user.created_at).toLocaleDateString('vi-VN')}
+                       </div>
+                     </td>
+                   </motion.tr>`,
+  `                   <td className="p-5 text-gray-500 text-sm">
+                       <div className="flex items-center">
+                         <Calendar className="w-4 h-4 mr-2 text-gray-400" />
+                         {new Date(user.created_at).toLocaleDateString('vi-VN')}
+                       </div>
+                     </td>
+                     <td className="p-5">
+                       <select
+                         value={user.role || 'customer'}
+                         onChange={async (e) => {
+                           const newRole = e.target.value;
+                           if (!window.confirm(\`Đổi quyền của "\${user.full_name || user.email}" thành "\${newRole}"?\`)) return;
+                           try {
+                             const { updateUserRole } = await import('../../utils/db');
+                             await updateUserRole(user.id, newRole);
+                             setUsers(users.map(u => u.id === user.id ? { ...u, role: newRole } : u));
+                           } catch (err) {
+                             alert('Lỗi đổi quyền: ' + err);
+                           }
+                         }}
+                         className="px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                       >
+                         <option value="customer">Khách hàng</option>
+                         <option value="staff">Lễ tân</option>
+                         <option value="admin">Admin</option>
+                         <option value="admin,staff">Admin + Lễ tân</option>
+                         <option value="banned">Khóa</option>
+                       </select>
+                     </td>
+                   </motion.tr>`
 );
 
-const formToAdd = `
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-          <Shield className="w-5 h-5 mr-2 text-yellow-600" />
-          Phân cấp quyền nhanh bằng Email
-        </h2>
-        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-          <input 
-            type="email" 
-            placeholder="Nhập email nhân viên..." 
-            className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            value={assignEmail}
-            onChange={e => setAssignEmail(e.target.value)}
-          />
-          <select 
-            className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none"
-            value={assignRole}
-            onChange={e => setAssignRole(e.target.value)}
-          >
-            <option value="staff">Lễ tân</option>
-            <option value="admin">Quản lý (Admin)</option>
-            <option value="customer">Khách hàng</option>
-          </select>
-          <button 
-            disabled={assignLoading || !assignEmail}
-            className="px-6 py-3 bg-stone-900 text-white font-bold rounded-xl hover:bg-stone-800 disabled:opacity-50"
-            onClick={async () => {
-              const targetUser = users.find(u => u.email === assignEmail);
-              if (!targetUser) {
-                alert("Không tìm thấy email này trong hệ thống. Vui lòng yêu cầu nhân viên đăng ký tài khoản trước!");
-                return;
-              }
-              setAssignLoading(true);
-              try {
-                const { updateUserRole } = await import('../../utils/db');
-                await updateUserRole(targetUser.id, assignRole);
-                setUsers(users.map(u => u.id === targetUser.id ? { ...u, role: assignRole } : u));
-                alert("Cấp quyền thành công!");
-                setAssignEmail('');
-              } catch (err) {
-                alert("Lỗi cấp quyền! " + err);
-              }
-              setAssignLoading(false);
-            }}
-          >
-            {assignLoading ? "Đang xử lý..." : "Cấp Quyền"}
-          </button>
-        </div>
-      </div>
-`;
-
-code = code.replace(
-  '{error && (',
-  formToAdd + '\n      {error && ('
+// Add column header
+content = content.replace(
+  `                   <th className="p-5">Ngày tham gia</th>
+                 </tr>`,
+  `                   <th className="p-5">Ngày tham gia</th>
+                   <th className="p-5">Thao tác</th>
+                 </tr>`
 );
 
-fs.writeFileSync('src/pages/admin/AdminUsers.tsx', code);
+fs.writeFileSync('c:/Users/ASUS/Desktop/Sunset home/src/pages/admin/AdminUsers.tsx', content);
+console.log("AdminUsers.tsx patched");
+
+// Fix StaffApp.tsx logout to call supabase.auth.signOut()
+let staffContent = fs.readFileSync('c:/Users/ASUS/Desktop/Sunset home/src/pages/staff/StaffApp.tsx', 'utf8');
+
+// Fix logout button - it only removes auth_role but doesn't sign out
+staffContent = staffContent.replace(
+  `onClick={() => {
+              localStorage.removeItem("auth_role");
+              navigate("/login");
+            }}`,
+  `onClick={async () => {
+              const { supabase } = await import("../../utils/db");
+              await supabase?.auth.signOut();
+              localStorage.removeItem("auth_role");
+              navigate("/login");
+            }}`
+);
+
+fs.writeFileSync('c:/Users/ASUS/Desktop/Sunset home/src/pages/staff/StaffApp.tsx', staffContent);
+console.log("StaffApp.tsx logout patched");

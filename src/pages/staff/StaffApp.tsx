@@ -850,7 +850,9 @@ export default function StaffApp() {
         <div className="flex items-center space-x-2 text-white">
           <NotificationBell />
           <button
-            onClick={() => {
+            onClick={async () => {
+              const { supabase } = await import("../../utils/db");
+              await supabase?.auth.signOut();
               localStorage.removeItem("auth_role");
               navigate("/login");
             }}

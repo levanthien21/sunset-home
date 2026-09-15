@@ -197,15 +197,15 @@ function AdminDashboard() {
         </div>
         <div className="bg-white p-6 rounded-sm shadow-sm border border-gray-100">
           <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Tổng cơ sở</h3>
-          <p className="text-3xl font-serif mt-2">2</p>
+          <p className="text-3xl font-serif mt-2">{branches.length}</p>
         </div>
         <div className="bg-white p-6 rounded-sm shadow-sm border border-gray-100">
           <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Tổng phòng</h3>
           <p className="text-3xl font-serif mt-2">{rooms.length}</p>
         </div>
         <div className="bg-white p-6 rounded-sm shadow-sm border border-gray-100">
-          <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Nhân sự</h3>
-          <p className="text-3xl font-serif mt-2">4</p>
+          <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Đang lưu trú</h3>
+          <p className="text-3xl font-serif mt-2">{bookings.filter((b: any) => b.status === 'checked_in').length} phòng</p>
         </div>
       </div>
 

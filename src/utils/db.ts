@@ -35,20 +35,19 @@ export const addBooking = async (booking: any) => {
         const extraMatch = booking.checkOut.match(/\(\+(\d+)h\)/);
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
         let end = new Date(start.getTime());
-        if (booking.checkOut.includes("2H") || booking.checkOut.includes("2 gi?")) {
-          end = new Date(start.getTime() + (2 + extra) * 3600000);
-        } else if (booking.checkOut.includes("4H") || booking.checkOut.includes("4 gi?")) {
-          end = new Date(start.getTime() + (4 + extra) * 3600000);
-        } else if (booking.checkOut.toLowerCase().includes("d�m")) {
+        const hourMatch = booking.checkOut.match(/(\d+)\s*(h|gi[oờ])/i);
+        if (hourMatch) {
+          end = new Date(start.getTime() + (parseInt(hourMatch[1]) + extra) * 3600000);
+        } else if (booking.checkOut.toLowerCase().includes("m") && booking.checkOut.toLowerCase().includes("m") && (booking.checkOut.includes("đêm") || booking.checkOut.includes("dem") || booking.checkOut.includes("m"))) {
           end.setDate(end.getDate() + 1);
           end.setHours(10, 0, 0, 0);
           end = new Date(end.getTime() + extra * 3600000);
-        } else if (booking.checkOut.toLowerCase().includes("ng�y")) {
+        } else if (booking.checkOut.toLowerCase().includes("ng") && (booking.checkOut.includes("ngày") || booking.checkOut.includes("ngay"))) {
           end.setDate(end.getDate() + 1);
           end.setHours(12, 0, 0, 0);
           end = new Date(end.getTime() + extra * 3600000);
         } else {
-          end = new Date(start.getTime() + (1 + extra) * 3600000); // M?c d?nh 1h
+          end = new Date(start.getTime() + (1 + extra) * 3600000);
         }
         booking.end_time = end.toISOString();
       }
