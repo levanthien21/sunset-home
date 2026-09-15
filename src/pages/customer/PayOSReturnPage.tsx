@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { verifyPayOSReturn } from '../../utils/payos';
-import { updateBookingStatus } from '../../utils/db';
+import { updateBookingStatus, createNotification } from '../../utils/db';
 import { CheckCircle2, XCircle, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -40,6 +40,27 @@ export default function PayOSReturnPage() {
             const bookingDetails = allBookings.find((b: any) => b.id?.toString() === orderId?.toString() || b.bookingId?.toString() === orderId?.toString());
             
             if (bookingDetails) {
+              // Create in-app notifications
+              await createNotification({
+                userId: bookingDetails.user_id, // customer
+                title: 'Đặt phòng thành công',
+                message: `Bạn đã đặt thành công phòng ${bookingDetails.roomName}. Mã đơn: ${orderId}`,
+                link: '/profile'
+              });
+              
+              await createNotification({
+                targetRole: 'admin',
+                title: 'Có đơn đặt phòng mới',
+                message: `Khách ${bookingDetails.customerName} đã đặt phòng ${bookingDetails.roomName}. Mã đơn: ${orderId}`,
+                link: '/admin/bookings'
+              });
+              
+              await createNotification({
+                targetRole: 'staff',
+                title: 'Có đơn đặt phòng mới',
+                message: `Khách ${bookingDetails.customerName} đã đặt phòng ${bookingDetails.roomName}. Mã đơn: ${orderId}`,
+                link: '/staff'
+              });
               if (import.meta.env.VITE_EMAILJS_SERVICE_ID) {
                 const emailjs = (await import('@emailjs/browser')).default;
                 await emailjs.send(

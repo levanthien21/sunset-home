@@ -1,5 +1,6 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { LogOut, X, Plus, Coffee, Calendar as CalendarIcon } from "lucide-react";
+import NotificationBell from '../../components/NotificationBell';
 import { useState, useEffect } from "react";
 
 
@@ -732,15 +733,18 @@ export default function StaffApp() {
           <h2 className="text-lg font-serif tracking-widest uppercase">Sunset</h2>
           <span className="ml-3 px-2 py-0.5 bg-yellow-600 rounded-full text-[10px] font-bold uppercase tracking-widest">Lễ tân</span>
         </div>
-        <button
-          onClick={() => {
-            localStorage.removeItem("auth_role");
-            navigate("/login");
-          }}
-          className="flex items-center text-xs font-bold text-gray-300 hover:text-white bg-white/10 px-3 py-1.5 rounded-lg"
-        >
-          <LogOut className="w-3.5 h-3.5 mr-1.5" /> Đăng xuất
-        </button>
+        <div className="flex items-center space-x-2 text-white">
+          <NotificationBell />
+          <button
+            onClick={() => {
+              localStorage.removeItem("auth_role");
+              navigate("/login");
+            }}
+            className="flex items-center text-xs font-bold text-gray-300 hover:text-white bg-white/10 px-3 py-1.5 rounded-lg"
+          >
+            <LogOut className="w-3.5 h-3.5 mr-1.5" /> Đăng xuất
+          </button>
+        </div>
       </div>
 
       <div className="flex-1">

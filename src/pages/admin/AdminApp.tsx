@@ -1,5 +1,6 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../utils/db';
+import NotificationBell from '../../components/NotificationBell';
 import { Home, Settings, LogOut, BarChart3, TrendingUp, Plus, Trash2, Edit2, X, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import AdminUsers from './AdminUsers';
@@ -477,6 +478,9 @@ export default function AdminApp() {
             </Link>
           ))}
         </nav>
+        <div className="px-6 py-4 border-t border-gray-800 text-white flex justify-center">
+          <NotificationBell />
+        </div>
         <div className="p-6 border-t border-gray-800">
           <button
             onClick={async () => {
@@ -498,16 +502,19 @@ export default function AdminApp() {
           <h2 className="text-lg font-serif text-white tracking-widest uppercase">Sunset</h2>
           <p className="text-[10px] text-yellow-500 tracking-widest uppercase">Admin Portal</p>
         </div>
-        <button
-          onClick={async () => {
-            await supabase?.auth.signOut();
-            localStorage.removeItem('auth_role');
-            navigate('/login');
-          }}
-          className="flex items-center text-red-400 bg-white/10 px-3 py-1.5 rounded-lg text-xs font-bold"
-        >
-          <LogOut size={14} className="mr-1" /> Xuất
-        </button>
+        <div className="flex items-center space-x-2 text-white">
+          <NotificationBell />
+          <button
+            onClick={async () => {
+              await supabase?.auth.signOut();
+              localStorage.removeItem('auth_role');
+              navigate('/login');
+            }}
+            className="flex items-center text-red-400 bg-white/10 px-3 py-1.5 rounded-lg text-xs font-bold"
+          >
+            <LogOut size={14} className="mr-1" /> Xuất
+          </button>
+        </div>
       </div>
 
       {/* Content */}

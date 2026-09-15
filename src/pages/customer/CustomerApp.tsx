@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { User as UserIcon } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import NotificationBell from '../../components/NotificationBell';
 import ProfilePage from './ProfilePage';
 
 import LandingPage from './LandingPage';
@@ -46,6 +47,7 @@ function Navbar() {
         <div className="flex-shrink-0 flex justify-end items-center space-x-3 sm:space-x-4">
           {user ? (
             <>
+              <NotificationBell />
               <Link to="/profile" className="flex items-center space-x-1 sm:space-x-2 text-sm hover:text-yellow-500 transition-colors">
                 <UserIcon size={16} className="sm:w-[18px] sm:h-[18px]" />
                 <span className="hidden md:inline font-medium">{user.user_metadata?.full_name || user.email?.split('@')[0]}</span>
