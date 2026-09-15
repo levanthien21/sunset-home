@@ -101,10 +101,9 @@ function StaffDashboard() {
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
         let end = new Date(start.getTime());
         
-        if (co.includes('2H') || co.includes('2 giờ')) {
-          end = new Date(start.getTime() + (2 + extra) * 60 * 60 * 1000);
-        } else if (co.includes('4H') || co.includes('4 giờ')) {
-          end = new Date(start.getTime() + (4 + extra) * 60 * 60 * 1000);
+        const match = co.match(/(\d+)\s*(h|giờ)/i);
+        if (match) {
+          end = new Date(start.getTime() + (parseInt(match[1]) + extra) * 60 * 60 * 1000);
         } else if (co.toLowerCase().includes('đêm')) {
           end.setDate(end.getDate() + 1);
           end.setHours(10, 0, 0, 0);
@@ -206,11 +205,9 @@ function StaffDashboard() {
         const extraMatch = b.checkOut.match(/\(\+(\d+)h\)/);
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
         
-        if (b.checkOut.includes('2H') || b.checkOut.includes('2 giờ')) {
-          const end = new Date(start.getTime() + (2 + extra) * 60 * 60 * 1000);
-          endStr = end.toTimeString().substring(0, 5);
-        } else if (b.checkOut.includes('4H') || b.checkOut.includes('4 giờ')) {
-          const end = new Date(start.getTime() + (4 + extra) * 60 * 60 * 1000);
+        const match = b.checkOut.match(/(\d+)\s*(h|giờ)/i);
+        if (match) {
+          const end = new Date(start.getTime() + (parseInt(match[1]) + extra) * 60 * 60 * 1000);
           endStr = end.toTimeString().substring(0, 5);
         } else if (b.checkOut.toLowerCase().includes('đêm')) {
           endStr = '10:00(hsau)';
@@ -727,10 +724,9 @@ function StaffDashboard() {
                         let end = new Date(start.getTime());
                         const co = combo.name;
                         const extraHours = manualForm.extraHours || 0;
-                        if (co.includes('2H') || co.includes('2 giờ')) {
-                          end = new Date(start.getTime() + (2 + extraHours) * 60 * 60 * 1000);
-                        } else if (co.includes('4H') || co.includes('4 giờ')) {
-                          end = new Date(start.getTime() + (4 + extraHours) * 60 * 60 * 1000);
+                        const match = co.match(/(\d+)\s*(h|giờ)/i);
+                        if (match) {
+                          end = new Date(start.getTime() + (parseInt(match[1]) + extraHours) * 60 * 60 * 1000);
                         } else if (co.toLowerCase().includes('đêm')) {
                           end.setDate(end.getDate() + 1);
                           end.setHours(10, 0, 0, 0);
