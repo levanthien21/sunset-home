@@ -36,6 +36,8 @@ export default function BookingPage() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [cccd, setCccd] = useState('');
+  const [cccdDate, setCccdDate] = useState('');
   const [note, setNote] = useState('');
   
   const [bookingId, setBookingId] = useState('');
@@ -144,8 +146,9 @@ export default function BookingPage() {
 
   const isPhoneValid = /^(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(phone);
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isCccdValid = /^[0-9]{9,12}$/.test(cccd);
   const isStep2Valid = bookingDate && expectedTime && combo && isTimeValid;
-  const isStep3Valid = name.trim().length > 2 && isPhoneValid && isEmailValid;
+  const isStep3Valid = name.trim().length > 2 && isPhoneValid && isEmailValid && isCccdValid && cccdDate;
 
   const handlePaymentSubmit = async () => {
     setIsProcessing(true);
@@ -226,7 +229,9 @@ export default function BookingPage() {
         status: 'pending_payment',
         date: new Date().toISOString(),
         paymentMethod: 'qr',
-        user_id: user?.id || null
+        user_id: user?.id || null,
+        cccd,
+        cccdDate
       };
       
       await addBooking(newBooking);
@@ -776,6 +781,27 @@ export default function BookingPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="nguyenvana@gmail.com"
+                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                        <div>
+                          <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Số CCCD *</label>
+                          <input
+                            type="text"
+                            value={cccd}
+                            onChange={(e) => setCccd(e.target.value)}
+                            placeholder="012345678912"
+                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Ngày cấp *</label>
+                          <input
+                            type="date"
+                            value={cccdDate}
+                            onChange={(e) => setCccdDate(e.target.value)}
                             className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
                           />
                         </div>
