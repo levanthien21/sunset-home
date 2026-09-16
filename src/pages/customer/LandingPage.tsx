@@ -200,7 +200,7 @@ export default function LandingPage() {
               className="py-6 border-t border-[#1C1A17]/10 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6"
             >
               <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#1C1A17] sm:w-1/3">Thời gian</h4>
-              <p className="text-xs md:text-sm text-gray-600 font-light sm:w-2/3">Nhận phòng từ 14:00 — Trả phòng trước 12:00.</p>
+              <p className="text-xs md:text-sm text-gray-600 font-light sm:w-2/3">Gửi HD nhận phòng tự động trước 5-10 phút. Có phụ thu khi trả phòng trễ.</p>
             </motion.div>
 
             <motion.div
@@ -222,7 +222,7 @@ export default function LandingPage() {
               className="py-6 border-y border-[#1C1A17]/10 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6"
             >
               <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#1C1A17] sm:w-1/3">Hoàn hủy</h4>
-              <p className="text-xs md:text-sm text-gray-600 font-light sm:w-2/3">Miễn phí hủy trước 48h. Hỗ trợ dời lịch linh hoạt.</p>
+              <p className="text-xs md:text-sm text-gray-600 font-light sm:w-2/3">Hỗ trợ dời lịch trước 48h miễn phí. Không hoàn cọc khi hủy phòng.</p>
             </motion.div>
           </div>
         </div>
