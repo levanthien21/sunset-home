@@ -138,14 +138,33 @@ function StaffDashboard() {
     }
     // END OVERLAP CHECK
     
+    // Tự động cộng phụ thu cuối tuần nếu staff quên
+    let finalTotal = manualForm.total;
+    const d = new Date(manualForm.bookingDate);
+    if (d.getDay() === 0 || d.getDay() === 6) {
+      // Check if total already seems to include the 50k (hard to guess if they typed it manually, but if it matches base price, we add it)
+      const selectedRoom = roomsList.find((r: any) => r.name === manualForm.roomName);
+      const combo = selectedRoom?.combos?.[manualForm.selectedComboIndex];
+      const basePrice = combo ? combo.price : 0;
+      const extraHours = manualForm.extraHours || 0;
+      const extraPrice = extraHours * (selectedRoom?.extraHourPrice || 50000);
+      const expectedWithoutWeekend = basePrice + extraPrice;
+      if (finalTotal === expectedWithoutWeekend) {
+        finalTotal += 50000;
+        alert("Đã tự động cộng thêm 50.000đ phụ thu cuối tuần vào tổng tiền.");
+      }
+    }
+    
+    const uniqueId = Date.now().toString();
     const newBooking = {
-      bookingId: "M" + Date.now().toString().slice(-6),
+      id: uniqueId,
+      bookingId: "M" + uniqueId.slice(-6),
       roomName: manualForm.roomName,
       customerName: manualForm.customerName || "Khách vãng lai",
       phone: manualForm.phone,
       checkIn: manualForm.bookingDate + " " + manualForm.expectedTime,
       checkOut: checkOutStr,
-      total: manualForm.total,
+      total: finalTotal,
       paymentMethod: manualForm.paymentMethod,
       status: manualForm.status,
       addons: []
@@ -196,7 +215,7 @@ function StaffDashboard() {
 
   const getBookedSlotsForRoom = (roomName: string, date: string) => {
     return bookings
-      .filter(b => b.roomName === roomName && b.checkIn?.startsWith(date) && b.status !== 'cancelled' && b.status !== 'completed' && b.status !== 'checked_out_dirty')
+      .filter(b => b.roomName === roomName && b.checkIn?.startsWith(date) && b.status !== 'cancelled')
       .map(b => {
         const timeStr = b.checkIn.split(' ')[1] || '';
         let endStr = 'N/A';
@@ -422,10 +441,19 @@ function StaffDashboard() {
                         e.stopPropagation();
                         setSelectedBooking(s.bookingInfo);
                       }}
-                      className={`flex items-center justify-between py-2 px-3 rounded-xl text-sm shadow-sm hover:scale-[1.02] transition-all ${s.status === "checked_in" ? "bg-red-50 text-red-900 border border-red-100" : "bg-white text-blue-900 border border-gray-100"}`}
+                      className={`flex flex-col py-2 px-3 rounded-xl text-sm shadow-sm hover:scale-[1.02] transition-all ${
+                        s.status === "checked_in" ? "bg-red-50 text-red-900 border border-red-100" 
+                        : s.status === "completed" || s.status === "checked_out_dirty" ? "bg-gray-100 text-gray-500 border border-gray-200 opacity-80"
+                        : "bg-white text-blue-900 border border-gray-100"
+                      }`}
                     >
-                      <span className="font-mono font-bold text-xs">{s.time}</span>
-                      <span className="font-bold text-[11px] truncate ml-2 max-w-[120px] opacity-80">{s.customer}</span>
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono font-bold text-xs">{s.time}</span>
+                        <span className={`font-bold text-[10px] px-1.5 rounded-sm ${s.status === "completed" || s.status === "checked_out_dirty" ? "bg-gray-200 text-gray-600" : s.status === "checked_in" ? "bg-red-200 text-red-800" : "bg-blue-100 text-blue-800"}`}>
+                          {s.status === "completed" || s.status === "checked_out_dirty" ? "ĐÃ TRẢ PHÒNG" : s.status === "checked_in" ? "ĐANG Ở" : "CHƯA NHẬN"}
+                        </span>
+                      </div>
+                      <span className="font-bold text-[11px] truncate mt-1 max-w-[140px] opacity-90">{s.customer}</span>
                     </div>
                   )) : (
                     <div className="text-sm font-medium text-gray-400 italic py-4 text-center rounded-xl border-2 border-dashed border-gray-200">
