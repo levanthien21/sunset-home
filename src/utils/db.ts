@@ -35,7 +35,7 @@ export const addBooking = async (booking: any) => {
         const extraMatch = booking.checkOut.match(/\(\+(\d+)h\)/);
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
         let end = new Date(start.getTime());
-        const hourMatch = booking.checkOut.match(/(\d+)\s*(h|gi[oờ])/i);
+        const hourMatch = booking.checkOut.match(/(\d+)\s*(h|gi[oờ]|ti[eế]ng)/i);
         if (hourMatch) {
           end = new Date(start.getTime() + (parseInt(hourMatch[1]) + extra) * 3600000);
         } else if (booking.checkOut.toLowerCase().includes("m") && booking.checkOut.toLowerCase().includes("m") && (booking.checkOut.includes("đêm") || booking.checkOut.includes("dem") || booking.checkOut.includes("m"))) {

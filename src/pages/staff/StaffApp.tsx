@@ -116,7 +116,7 @@ function StaffDashboard() {
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
         let end = new Date(start.getTime());
         
-        const match = co.match(/(\d+)\s*(h|giờ)/i);
+        const match = co.match(/(\d+)\s*(h|giờ|tiếng)/i);
         if (match) {
           end = new Date(start.getTime() + (parseInt(match[1]) + extra) * 60 * 60 * 1000);
         } else if (co.toLowerCase().includes('đêm')) {
@@ -222,7 +222,7 @@ function StaffDashboard() {
         const extraMatch = b.checkOut.match(/\(\+(\d+)h\)/);
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
         
-        const match = b.checkOut.match(/(\d+)\s*(h|giờ)/i);
+        const match = b.checkOut.match(/(\d+)\s*(h|giờ|tiếng)/i);
         if (match) {
           const end = new Date(start.getTime() + (parseInt(match[1]) + extra) * 60 * 60 * 1000);
           endStr = end.toTimeString().substring(0, 5);
@@ -327,7 +327,7 @@ function StaffDashboard() {
             let end = new Date(start.getTime());
             
             let baseHours = 1;
-            const hourMatch = b.checkOut.match(/(\d+)\s*(H|giờ)/i);
+            const hourMatch = b.checkOut.match(/(\d+)\s*(h|giờ|tiếng)/i);
             if (hourMatch) baseHours = parseInt(hourMatch[1]);
             end = b.end_time ? new Date(b.end_time) : new Date(start.getTime() + (baseHours + extra) * 3600000);
             if (!end || isNaN(end.getTime())) return null;
@@ -526,7 +526,7 @@ function StaffDashboard() {
                              let currentEnd = new Date(currentStart.getTime());
                              
                              let baseHours = 1;
-                             const hourMatch = selectedBooking.checkOut.match(/(\d+)\s*(H|giờ)/i);
+                             const hourMatch = selectedBooking.checkOut.match(/(\d+)\s*(h|giờ|tiếng)/i);
                              if (hourMatch) baseHours = parseInt(hourMatch[1]);
                              currentEnd = selectedBooking.end_time ? new Date(selectedBooking.end_time) : new Date(currentStart.getTime() + (baseHours + currentExtra) * 3600000);
                              
@@ -753,7 +753,7 @@ function StaffDashboard() {
                         let end = new Date(start.getTime());
                         const co = combo.name;
                         const extraHours = manualForm.extraHours || 0;
-                        const match = co.match(/(\d+)\s*(h|giờ)/i);
+                        const match = co.match(/(\d+)\s*(h|giờ|tiếng)/i);
                         if (match) {
                           end = new Date(start.getTime() + (parseInt(match[1]) + extraHours) * 60 * 60 * 1000);
                         } else if (co.toLowerCase().includes('đêm')) {

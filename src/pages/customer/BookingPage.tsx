@@ -171,7 +171,7 @@ export default function BookingPage() {
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
         let end = new Date(start.getTime());
         
-        const match = checkOutStr.match(/(\d+)\s*(h|giờ)/i);
+        const match = checkOutStr.match(/(\d+)\s*(h|giờ|tiếng)/i);
         if (match) {
           end = new Date(start.getTime() + (parseInt(match[1]) + extra) * 60 * 60 * 1000);
         } else if (checkOutStr.toLowerCase().includes('đêm')) {
@@ -269,7 +269,7 @@ export default function BookingPage() {
         const extraMatch = b.checkOut.match(/\(\+(\d+)h\)/);
         const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
         
-        const match = b.checkOut.match(/(\d+)\s*(h|giờ)/i);
+        const match = b.checkOut.match(/(\d+)\s*(h|giờ|tiếng)/i);
         if (match) {
           const end = new Date(start.getTime() + (parseInt(match[1]) + extra) * 60 * 60 * 1000);
           endStr = end.toTimeString().substring(0, 5);
@@ -609,9 +609,6 @@ export default function BookingPage() {
                                 <option value={0}>Không thêm</option>
                                 <option value={1}>+ 1 giờ</option>
                                 <option value={2}>+ 2 giờ</option>
-                                <option value={3}>+ 3 giờ</option>
-                                <option value={4}>+ 4 giờ</option>
-                                <option value={5}>+ 5 giờ</option>
                               </select>
                             </div>
                           </div>
@@ -624,7 +621,7 @@ export default function BookingPage() {
                                     const start = new Date(`${bookingDate}T${expectedTime}`);
                                     let end = new Date(start.getTime());
                                     const co = selectedComboDetails.name;
-                                    const match = co.match(/(\d+)\s*(h|giờ)/i);
+                                    const match = co.match(/(\d+)\s*(h|giờ|tiếng)/i);
                                     if (match) {
                                       end = new Date(start.getTime() + (parseInt(match[1]) + extraHours) * 60 * 60 * 1000);
                                     } else if (co.toLowerCase().includes('đêm')) {
@@ -686,7 +683,7 @@ export default function BookingPage() {
                                   const extra = extraMatch ? parseInt(extraMatch[1]) : 0;
                                   let end = new Date(start.getTime());
                                   
-                                  const match = coStr.match(/(\d+)\s*(h|giờ)/i);
+                                  const match = coStr.match(/(\d+)\s*(h|giờ|tiếng)/i);
                                   if (match) {
                                     end = new Date(start.getTime() + (parseInt(match[1]) + extra) * 60 * 60 * 1000);
                                   } else if (coStr.toLowerCase().includes('đêm')) {
@@ -744,12 +741,12 @@ export default function BookingPage() {
                       <div className="flex items-center justify-between p-3 md:p-4 border border-stone-200 rounded-xl bg-stone-50">
                         <div>
                           <p className="font-semibold text-stone-900 text-xs md:text-sm">Số khách</p>
-                          <p className="text-[10px] md:text-xs text-stone-500 mt-0.5">Phụ thu 100k từ người thứ 3</p>
+                          <p className="text-[10px] md:text-xs text-stone-500 mt-0.5">Phụ thu 100k từ người thứ 3 (Tối đa 1 khách thêm)</p>
                         </div>
                         <div className="flex items-center bg-white p-1 rounded-lg border border-stone-200 shadow-sm">
                           <button onClick={() => guests > 1 && setGuests(guests - 1)} className="w-7 h-7 md:w-9 md:h-9 rounded-md flex items-center justify-center font-bold text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors">-</button>
                           <span className="w-8 md:w-10 text-center font-bold text-stone-900 text-sm md:text-base">{guests}</span>
-                          <button onClick={() => setGuests(guests + 1)} className="w-7 h-7 md:w-9 md:h-9 rounded-md flex items-center justify-center font-bold text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors">+</button>
+                          <button onClick={() => guests < 3 && setGuests(guests + 1)} className="w-7 h-7 md:w-9 md:h-9 rounded-md flex items-center justify-center font-bold text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors">+</button>
                         </div>
                       </div>
                     </div>
