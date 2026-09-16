@@ -150,7 +150,7 @@ export default function CustomerApp() {
               </li>
               <li className="flex items-start">
                 <span className="w-16 flex-shrink-0 font-medium text-white/40">Email:</span>
-                <a href="mailto:hello@sunsethome.vn" className="hover:text-[#B8860B] transition-colors">hello@sunsethome.vn</a>
+                <a href="mailto:sunsethomestay2026@gmail.com" className="hover:text-[#B8860B] transition-colors">sunsethomestay2026@gmail.com</a>
               </li>
               <li className="flex items-start">
                 <span className="w-16 flex-shrink-0 font-medium text-white/40">Zalo:</span>
@@ -165,8 +165,8 @@ export default function CustomerApp() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 mt-16 md:mt-20 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/40 text-[9px] md:text-[10px] tracking-widest uppercase gap-4">
           <p>© 2024 Sunset Homestay. All rights reserved.</p>
           <div className="flex space-x-6">
-            <a href="#" className="hover:text-white transition-colors">Instagram</a>
             <a href="#" className="hover:text-white transition-colors">Facebook</a>
+            <a href="https://zalo.me/0364135809" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Zalo</a>
             <a href="https://www.tiktok.com/@sunset_homestay?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">TikTok</a>
           </div>
         </div>
