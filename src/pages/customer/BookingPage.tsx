@@ -449,7 +449,16 @@ export default function BookingPage() {
                                 </span>
                                 <span className="text-stone-300">•</span>
                                 <button 
-                                  onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails?.address || ''), '_blank')}
+                                  onClick={() => {
+                                    const branchName = selectedBranchDetails?.name?.toLowerCase() || '';
+                                    let mapLink = 'https://maps.google.com/?q=' + encodeURIComponent(selectedBranchDetails?.address || '');
+                                    if (branchName.includes('hậu nghĩa')) {
+                                      mapLink = 'https://maps.app.goo.gl/Sn7rKgrzJVcLsTfT9';
+                                    } else if (branchName.includes('bến lức')) {
+                                      mapLink = 'https://maps.app.goo.gl/XM9gRbw6W1piX9NQ9';
+                                    }
+                                    window.open(mapLink, '_blank');
+                                  }}
                                   className="text-blue-600 font-medium hover:underline flex items-center"
                                 >
                                   Xem bản đồ <ChevronRight className="w-3 h-3 ml-0.5" />

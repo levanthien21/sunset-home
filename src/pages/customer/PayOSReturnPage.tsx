@@ -76,7 +76,14 @@ export default function PayOSReturnPage() {
                     check_out: bookingDetails.checkOut,
                     total_price: Number(bookingDetails.total).toLocaleString() + 'đ',
                     amount_paid: Number(bookingDetails.amountPaid).toLocaleString() + 'đ',
-                    amount_due: (Number(bookingDetails.total) - Number(bookingDetails.amountPaid)).toLocaleString() + 'đ'
+                    amount_due: (Number(bookingDetails.total) - Number(bookingDetails.amountPaid)).toLocaleString() + 'đ',
+                    maps_link: bookingDetails.branchName?.toLowerCase().includes("hậu nghĩa") 
+                      ? "https://maps.app.goo.gl/Sn7rKgrzJVcLsTfT9"
+                      : bookingDetails.branchName?.toLowerCase().includes("bến lức")
+                        ? "https://maps.app.goo.gl/XM9gRbw6W1piX9NQ9"
+                        : "https://maps.google.com/?q=" + encodeURIComponent(bookingDetails.branchName || ""),
+                    cccd: bookingDetails.cccd || "Không có",
+                    cccd_date: bookingDetails.cccdDate || "Không có"
                   },
                   import.meta.env.VITE_EMAILJS_PUBLIC_KEY
                 );
