@@ -30,6 +30,10 @@ export default function RoleSelection() {
       const role = profile?.role || 'customer';
       
       localStorage.setItem('auth_role', role);
+      if (role === 'superadmin') {
+        navigate('/admin');
+        return;
+      }
       setLoading(false);
       
       if (role.includes('banned')) {

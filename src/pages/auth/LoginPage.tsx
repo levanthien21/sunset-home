@@ -65,7 +65,7 @@ export default function LoginPage() {
           setError('Tài khoản của bạn đã bị khóa bởi Quản trị viên.');
           return;
         }
-        if (role.includes('admin')) navigate('/admin');
+        if (role === 'superadmin' || role.includes('admin')) navigate('/admin');
         else if (role.includes('staff')) navigate('/staff');
         else navigate('/');
       } else {

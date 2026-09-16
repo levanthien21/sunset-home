@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState<any[]>([]);
+  const currentRole = localStorage.getItem('auth_role') || '';
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [assignEmail, setAssignEmail] = useState('');
@@ -152,7 +153,12 @@ export default function AdminUsers() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {users.filter(u => activeTab === 'staff' ? (u.role?.includes('admin') || u.role?.includes('staff') || u.role?.includes('banned')) : (u.role === 'customer' || !u.role)).map((user, i) => (
+                {users.filter(u => {
+                    // Superadmin accounts are INVISIBLE to non-superadmin viewers
+                    if (u.role === 'superadmin' && currentRole !== 'superadmin') return false;
+                    if (activeTab === 'staff') return (u.role?.includes('admin') || u.role?.includes('staff') || u.role?.includes('banned') || u.role === 'superadmin');
+                    return u.role === 'customer' || !u.role;
+                  }).map((user, i) => (
                   <motion.tr 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -183,6 +189,7 @@ export default function AdminUsers() {
                     </td>
                     <td className="p-5">
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
+                        user.role === 'superadmin' ? 'bg-gradient-to-r from-red-600 to-purple-700 text-white' :
                         user.role?.includes('admin') && user.role?.includes('staff') ? 'bg-gradient-to-r from-purple-100 to-blue-100 text-purple-800' :
                         user.role?.includes('admin') ? 'bg-purple-100 text-purple-700' :
                         user.role?.includes('staff') ? 'bg-blue-100 text-blue-700' :
