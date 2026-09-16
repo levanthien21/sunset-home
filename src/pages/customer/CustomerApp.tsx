@@ -28,9 +28,9 @@ function Navbar() {
     <nav className={`fixed w-full z-50 transition-all duration-700 ${isSolid ? 'bg-white shadow-sm border-b border-gray-100 py-2 md:py-4 text-gray-900' : 'bg-transparent py-3 md:py-6 text-white'}`}>
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-12 flex justify-between items-center">
         {/* Left - Logo */}
-        <Link to="/" className="flex-shrink-0 flex flex-col">
+        <Link to="/" className="flex-shrink-0 flex flex-col items-center justify-center">
           <h1 className="text-xl md:text-2xl font-serif tracking-[0.25em] uppercase font-light">Sunset</h1>
-          <span className="text-[9px] uppercase tracking-[0.3em] opacity-70 mt-1">Homestay</span>
+          <span className="text-[9px] md:text-[10px] uppercase tracking-[0.35em] opacity-70 mt-1 ml-1">Homestay</span>
         </Link>
 
         {/* Center - Navigation */}
@@ -121,8 +121,10 @@ export default function CustomerApp() {
           
           {/* Brand - 5 cols on desktop */}
           <div className="md:col-span-5">
-            <h3 className="text-xl md:text-2xl font-serif mb-2 tracking-[0.2em] uppercase text-white">Sunset</h3>
-            <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/50 mb-6">Homestay</p>
+            <div className="flex flex-col items-start md:items-center w-fit mb-6">
+              <h3 className="text-xl md:text-2xl font-serif tracking-[0.25em] uppercase text-white">Sunset</h3>
+              <p className="text-[9px] md:text-[10px] uppercase tracking-[0.35em] text-white/50 mt-1 ml-1">Homestay</p>
+            </div>
             <p className="text-white/60 font-light max-w-sm leading-relaxed text-xs md:text-sm">
               Đánh thức mọi giác quan trong không gian lãng mạn, nơi mỗi góc nhỏ đều được chăm chút tỉ mỉ để tạo nên những kỷ niệm khó quên tại trung tâm thành phố.
             </p>

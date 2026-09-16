@@ -99,9 +99,9 @@ export default function LoginPage() {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-stone-100 overflow-hidden p-8 md:p-10"
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-serif text-stone-900 tracking-widest uppercase mb-2">Sunset</h1>
-          <p className="text-xs text-yellow-600 tracking-widest uppercase font-bold">Chào mừng trở lại</p>
+        <div className="text-center mb-8 flex flex-col items-center">
+          <h1 className="text-3xl font-serif text-stone-900 tracking-[0.25em] uppercase mb-2">Sunset</h1>
+          <p className="text-[10px] text-yellow-600 tracking-[0.3em] uppercase font-bold ml-1">Chào mừng trở lại</p>
         </div>
         
         {error && (

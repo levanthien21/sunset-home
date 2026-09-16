@@ -466,9 +466,9 @@ export default function AdminApp() {
     <div className="flex h-screen bg-[#F9F8F6] font-sans">
       {/* Desktop Sidebar */}
       <div className="hidden md:flex w-64 bg-gray-900 text-white flex-col flex-shrink-0">
-        <div className="p-8 border-b border-gray-800">
-          <h2 className="text-2xl font-serif text-white tracking-widest uppercase">Sunset</h2>
-          <p className="text-xs text-yellow-500 tracking-widest uppercase mt-1">Admin Portal</p>
+        <div className="p-8 border-b border-gray-800 flex flex-col items-center">
+          <h2 className="text-2xl font-serif text-white tracking-[0.25em] uppercase">Sunset</h2>
+          <p className="text-[10px] text-yellow-500 tracking-[0.35em] uppercase mt-1 ml-1">Admin</p>
         </div>
         <nav className="flex-1 px-4 space-y-2 mt-8">
           {navItems.map(item => (
