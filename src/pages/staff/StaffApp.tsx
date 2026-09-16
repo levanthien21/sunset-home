@@ -23,6 +23,7 @@ function StaffDashboard() {
     selectedComboIndex: -1,
     extraHours: 0,
     total: 0,
+    weekendSurcharge: 0,
     paymentMethod: "transfer",
     status: "approved",
   });
@@ -50,16 +51,30 @@ function StaffDashboard() {
   }, []);
 
   useEffect(() => {
-    const selectedRoom = roomsList.find(r => r.name === manualForm.roomName);
+    const selectedRoom = roomsList.find((r: any) => r.name === manualForm.roomName);
     if (selectedRoom && selectedRoom.combos && manualForm.selectedComboIndex >= 0) {
       const combo = selectedRoom.combos[manualForm.selectedComboIndex];
       if (combo) {
         const comboPrice = combo.price || 0;
-        const extraHoursPrice = (manualForm.extraHours || 0) * (selectedRoom.extra_hour_price || 50000);
-        setManualForm(prev => ({ ...prev, total: comboPrice + extraHoursPrice }));
+        const extraHoursPrice = (manualForm.extraHours || 0) * (selectedRoom.extra_hour_price || selectedRoom.extraHourPrice || 50000);
+        
+        // Phụ thu cuối tuần
+        let weekendSurcharge = 0;
+        if (manualForm.bookingDate) {
+          const d = new Date(manualForm.bookingDate);
+          if (d.getDay() === 0 || d.getDay() === 6) {
+            weekendSurcharge = 50000;
+          }
+        }
+        
+        setManualForm(prev => ({ 
+          ...prev, 
+          total: comboPrice + extraHoursPrice + weekendSurcharge,
+          weekendSurcharge 
+        }));
       }
     }
-  }, [manualForm.roomName, manualForm.selectedComboIndex, manualForm.extraHours, roomsList]);
+  }, [manualForm.roomName, manualForm.selectedComboIndex, manualForm.extraHours, manualForm.bookingDate, roomsList]);
 
   const handleUpdateStatus = async (id: string, newStatus: string) => {
     try {
@@ -137,24 +152,7 @@ function StaffDashboard() {
       return;
     }
     // END OVERLAP CHECK
-    
-    // Tự động cộng phụ thu cuối tuần nếu staff quên
     let finalTotal = manualForm.total;
-    const d = new Date(manualForm.bookingDate);
-    if (d.getDay() === 0 || d.getDay() === 6) {
-      // Check if total already seems to include the 50k (hard to guess if they typed it manually, but if it matches base price, we add it)
-      const selectedRoom = roomsList.find((r: any) => r.name === manualForm.roomName);
-      const combo = selectedRoom?.combos?.[manualForm.selectedComboIndex];
-      const basePrice = combo ? combo.price : 0;
-      const extraHours = manualForm.extraHours || 0;
-      const extraPrice = extraHours * (selectedRoom?.extraHourPrice || 50000);
-      const expectedWithoutWeekend = basePrice + extraPrice;
-      if (finalTotal === expectedWithoutWeekend) {
-        finalTotal += 50000;
-        alert("Đã tự động cộng thêm 50.000đ phụ thu cuối tuần vào tổng tiền.");
-      }
-    }
-    
     const uniqueId = Date.now().toString();
     const newBooking = {
       id: uniqueId,
@@ -842,8 +840,15 @@ function StaffDashboard() {
             </div>
 
             <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
-              <div className="text-2xl font-black text-red-600">
-                {manualForm.total.toLocaleString("vi-VN")} đ
+              <div className="flex flex-col">
+                <div className="text-2xl font-black text-red-600">
+                  {manualForm.total.toLocaleString("vi-VN")} đ
+                </div>
+                {manualForm.weekendSurcharge > 0 && (
+                  <div className="text-xs font-bold text-gray-500 mt-1">
+                    (Đã bao gồm <span className="text-red-500">{manualForm.weekendSurcharge.toLocaleString("vi-VN")}đ</span> phụ thu cuối tuần)
+                  </div>
+                )}
               </div>
               <div className="flex gap-4">
                 <button onClick={() => setShowAddModal(false)} className="px-6 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-300">Hủy</button>

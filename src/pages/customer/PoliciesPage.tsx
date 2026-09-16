@@ -17,19 +17,16 @@ export default function PoliciesPage() {
         <section>
           <h2 className="text-xl font-bold uppercase tracking-widest text-yellow-600 mb-6 border-b border-gray-200 pb-2">1. Thời gian nhận & trả phòng</h2>
           <ul className="space-y-4 font-light text-gray-600">
-            <li><strong className="font-semibold text-gray-900">Nhận phòng (Check-in):</strong> Từ 14:00. Nếu có phòng trống sớm hơn, chúng tôi sẽ hỗ trợ không phụ thu.</li>
-            <li><strong className="font-semibold text-gray-900">Trả phòng (Check-out):</strong> Trước 12:00 trưa ngày hôm sau.</li>
-            <li>Phụ thu trả phòng trễ: 100.000đ/giờ (từ 12:00 đến 18:00). Trả phòng sau 18:00 sẽ tính 100% tiền phòng 1 đêm.</li>
+            <li><strong className="font-semibold text-gray-900">Check in:</strong> Trước 5-10 phút checkin home sẽ tự động hướng dẫn bạn cách nhận phòng và mật khẩu để bạn checkin ạ.</li>
+            <li><strong className="font-semibold text-gray-900">Check out:</strong> Khi out trễ quá 5 phút home phụ thu 50k, quá 10 phút home phụ thu 100k ạ. Trường hợp thêm giờ bạn báo trước home 30 phút nhé.</li>
           </ul>
         </section>
 
         <section>
           <h2 className="text-xl font-bold uppercase tracking-widest text-yellow-600 mb-6 border-b border-gray-200 pb-2">2. Chính sách hoàn & hủy phòng</h2>
           <ul className="space-y-4 font-light text-gray-600">
-            <li>Hủy trước 07 ngày so với ngày check-in: Hoàn 100% tiền cọc.</li>
-            <li>Hủy trước 03-06 ngày: Hoàn 50% tiền cọc.</li>
-            <li>Hủy trong vòng 48 giờ hoặc Không đến (No-show): Không hoàn tiền cọc.</li>
-            <li>Trong trường hợp bất khả kháng (dịch bệnh, bão lũ), Sunset Home sẽ hỗ trợ bảo lưu tiền cọc cho lần đặt sau.</li>
+            <li>Hỗ trợ dời lịch trước 48h đặt miễn phí (lần đầu).</li>
+            <li>Trường hợp hủy phòng sẽ không hoàn tiền cọc.</li>
           </ul>
         </section>
 
