@@ -52,7 +52,7 @@ export default function AdminUsers() {
           <Users className="text-yellow-600 w-5 h-5" />
           <div>
             <div className="text-xs text-gray-400 font-bold uppercase tracking-wider">Tổng tài khoản</div>
-            <div className="text-xl font-bold text-gray-900">{users.length}</div>
+            <div className="text-xl font-bold text-gray-900">{users.filter(u => u.role !== 'superadmin').length}</div>
           </div>
         </div>
       </div>
