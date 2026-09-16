@@ -483,6 +483,9 @@ function StaffDashboard() {
                 <div className="space-y-3 text-sm">
                   <p><span className="text-gray-500 w-24 inline-block">Khách hàng:</span> <span className="font-bold">{selectedBooking.customerName || "Khách vãng lai"}</span></p>
                   <p><span className="text-gray-500 w-24 inline-block">Số ĐT:</span> <span className="font-bold">{selectedBooking.phone || "Không có"}</span></p>
+                  {selectedBooking.cccd && (
+                    <p><span className="text-gray-500 w-24 inline-block">CCCD:</span> <span className="font-bold">{selectedBooking.cccd} ({selectedBooking.cccdDate})</span></p>
+                  )}
                   <p><span className="text-gray-500 w-24 inline-block">Nhận phòng:</span> <span className="font-bold text-blue-600">{selectedBooking.checkIn}</span></p>
                   <p><span className="text-gray-500 w-24 inline-block">Gói (Trả):</span> <span className="font-bold text-red-600">{selectedBooking.checkOut}</span></p>
                   <p><span className="text-gray-500 w-24 inline-block">Thanh toán:</span> 

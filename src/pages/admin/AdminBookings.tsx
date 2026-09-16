@@ -149,6 +149,7 @@ export default function AdminBookings() {
                     <div className="font-bold text-gray-900">{b.customerName || 'Khách vãng lai'}</div>
                     <div className="text-sm text-gray-500">{b.phone || '—'}</div>
                     <div className="text-xs text-gray-400 mt-0.5">{b.email || ''}</div>
+                    {b.cccd && <div className="text-xs text-gray-600 mt-1">CCCD: {b.cccd} <span className="text-gray-400">({b.cccdDate})</span></div>}
                   </td>
                   <td className="p-4">
                     <div className="font-semibold text-gray-800">{b.roomName}</div>
