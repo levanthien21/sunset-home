@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, X, ChevronRight, BedDouble, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, MapPin, Users, Clock, CalendarDays, PlusCircle, X, ChevronRight, BedDouble, Check, Wifi, Snowflake, Droplets } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -469,27 +469,34 @@ export default function BookingPage() {
                             {/* Sức chứa & Giường */}
                             <div className="flex flex-wrap gap-2">
                               <span className="text-[10px] md:text-[11px] font-medium bg-stone-100 text-stone-700 px-2 py-1 md:px-2.5 md:py-1.5 rounded-md flex items-center border border-stone-200/60">
-                                <Users className="w-3 h-3 mr-1 text-stone-500" /> Tối đa 4 Khách
+                                <Users className="w-3 h-3 mr-1 text-stone-500" /> Tối đa 3 Khách
                               </span>
                               <span className="text-[10px] md:text-[11px] font-medium bg-stone-100 text-stone-700 px-2 py-1 md:px-2.5 md:py-1.5 rounded-md flex items-center border border-stone-200/60">
                                 <BedDouble className="w-3 h-3 mr-1 text-stone-500" /> 1 Giường lớn
                               </span>
                             </div>
 
-                            {/* Tiện ích phòng (chỉ hiện 4 cái đầu cho gọn) */}
-                            {r.features && r.features.length > 0 && (
-                              <div className="flex flex-wrap gap-x-3 gap-y-1.5">
-                                {r.features.slice(0, 4).map((f: any, i: any) => (
-                                  <div key={i} className="flex items-center text-[10px] md:text-[11px] text-stone-600">
-                                    <CheckCircle2 className="w-3 h-3 text-stone-400 mr-1" />
-                                    <span className="truncate max-w-[120px]">{f}</span>
-                                  </div>
-                                ))}
-                                {r.features.length > 4 && (
-                                  <span className="text-[10px] md:text-[11px] text-stone-400">+{r.features.length - 4} tiện ích</span>
-                                )}
+                            {/* Tiện ích phòng */}
+                            <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                              <div className="flex items-center text-[10px] md:text-[11px] text-stone-600">
+                                <Wifi className="w-3 h-3 text-stone-400 mr-1" />
+                                <span>Wifi miễn phí</span>
                               </div>
-                            )}
+                              <div className="flex items-center text-[10px] md:text-[11px] text-stone-600">
+                                <Snowflake className="w-3 h-3 text-stone-400 mr-1" />
+                                <span>Điều hòa</span>
+                              </div>
+                              <div className="flex items-center text-[10px] md:text-[11px] text-stone-600">
+                                <Droplets className="w-3 h-3 text-stone-400 mr-1" />
+                                <span>Nước nóng lạnh</span>
+                              </div>
+                              {r.features && r.features.length > 0 && r.features.slice(0, 2).map((f: any, i: any) => (
+                                <div key={i} className="flex items-center text-[10px] md:text-[11px] text-stone-600">
+                                  <CheckCircle2 className="w-3 h-3 text-stone-400 mr-1" />
+                                  <span className="truncate max-w-[120px]">{f}</span>
+                                </div>
+                              ))}
+                            </div>
 
                             {/* Lợi ích */}
                             <div className="flex flex-col gap-1 mt-1">
