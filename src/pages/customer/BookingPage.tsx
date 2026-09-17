@@ -38,6 +38,7 @@ export default function BookingPage() {
   const [email, setEmail] = useState('');
   const [cccd, setCccd] = useState('');
   const [cccdDate, setCccdDate] = useState('');
+  const [dob, setDob] = useState('');
   const [note, setNote] = useState('');
   
   const [bookingId, setBookingId] = useState('');
@@ -148,7 +149,7 @@ export default function BookingPage() {
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isCccdValid = /^[0-9]{9,12}$/.test(cccd);
   const isStep2Valid = bookingDate && expectedTime && combo && isTimeValid;
-  const isStep3Valid = name.trim().length > 2 && isPhoneValid && isEmailValid && isCccdValid && cccdDate;
+  const isStep3Valid = name.trim().length > 2 && isPhoneValid && isEmailValid && isCccdValid && cccdDate && dob;
 
   const handlePaymentSubmit = async () => {
     setIsProcessing(true);
@@ -231,7 +232,8 @@ export default function BookingPage() {
         paymentMethod: 'qr',
         user_id: user?.id || null,
         cccd,
-        cccdDate
+        cccdDate,
+        dob
       };
       
       await addBooking(newBooking);
@@ -809,14 +811,25 @@ export default function BookingPage() {
                             className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
                           />
                         </div>
-                        <div>
-                          <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Ngày cấp *</label>
-                          <input
-                            type="date"
-                            value={cccdDate}
-                            onChange={(e) => setCccdDate(e.target.value)}
-                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
-                          />
+                        <div className="grid grid-cols-2 gap-3 md:gap-4">
+                          <div>
+                            <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Ngày cấp *</label>
+                            <input
+                              type="date"
+                              value={cccdDate}
+                              onChange={(e) => setCccdDate(e.target.value)}
+                              className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Ngày sinh *</label>
+                            <input
+                              type="date"
+                              value={dob}
+                              onChange={(e) => setDob(e.target.value)}
+                              className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
+                            />
+                          </div>
                         </div>
                       </div>
                       <div>

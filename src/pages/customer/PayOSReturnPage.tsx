@@ -83,7 +83,8 @@ export default function PayOSReturnPage() {
                         ? "https://maps.app.goo.gl/XM9gRbw6W1piX9NQ9"
                         : "https://maps.google.com/?q=" + encodeURIComponent(bookingDetails.branchName || ""),
                     cccd: bookingDetails.cccd || "Không có",
-                    cccd_date: bookingDetails.cccdDate || "Không có"
+                    cccd_date: bookingDetails.cccdDate || "Không có",
+                    dob: bookingDetails.dob || "Không có"
                   },
                   import.meta.env.VITE_EMAILJS_PUBLIC_KEY
                 );
