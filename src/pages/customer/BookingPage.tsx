@@ -800,8 +800,8 @@ export default function BookingPage() {
                           />
                         </div>
                       </div>
-                      <div className="grid md:grid-cols-2 gap-3 md:gap-4">
-                        <div>
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4">
+                        <div className="md:col-span-6">
                           <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Số CCCD *</label>
                           <input
                             type="text"
@@ -811,25 +811,23 @@ export default function BookingPage() {
                             className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
                           />
                         </div>
-                        <div className="grid grid-cols-2 gap-3 md:gap-4">
-                          <div>
-                            <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Ngày cấp *</label>
-                            <input
-                              type="date"
-                              value={cccdDate}
-                              onChange={(e) => setCccdDate(e.target.value)}
-                              className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Ngày sinh *</label>
-                            <input
-                              type="date"
-                              value={dob}
-                              onChange={(e) => setDob(e.target.value)}
-                              className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
-                            />
-                          </div>
+                        <div className="md:col-span-3">
+                          <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Ngày cấp *</label>
+                          <input
+                            type="date"
+                            value={cccdDate}
+                            onChange={(e) => setCccdDate(e.target.value)}
+                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
+                          />
+                        </div>
+                        <div className="md:col-span-3">
+                          <label className="block text-xs md:text-sm font-semibold text-stone-700 mb-1.5 md:mb-2">Ngày sinh *</label>
+                          <input
+                            type="date"
+                            value={dob}
+                            onChange={(e) => setDob(e.target.value)}
+                            className="w-full px-3 md:px-4 py-2.5 md:py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 outline-none transition-all text-base"
+                          />
                         </div>
                       </div>
                       <div>
