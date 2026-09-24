@@ -186,6 +186,7 @@ export default function BookingPage() {
         } else {
           end = new Date(start.getTime() + (1 + extra) * 60 * 60 * 1000);
         }
+        end = new Date(end.getTime() + 30 * 60 * 1000);
         return { start, end };
       };
 
